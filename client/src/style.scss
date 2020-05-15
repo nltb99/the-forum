@@ -1,0 +1,10 @@
+@import './styling/home.scss';
+@import './styling/specificquestion.scss';
+
+*::before,
+*::after,
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}

@@ -1,0 +1,29 @@
+{
+    "name": "firstMernStack",
+    "version": "1.0.0",
+    "description": "",
+    "main": "server.js",
+    "dependencies": {
+        "compression": "^1.7.4",
+        "concurrently": "^5.2.0",
+        "cors": "^2.8.5",
+        "dotenv": "^8.2.0",
+        "express": "^4.17.1",
+        "mongoose": "^5.9.11",
+        "morgan": "^1.10.0",
+        "slugify": "^1.4.0"
+    },
+    "devDependencies": {
+        "nodemon": "^2.0.3"
+    },
+    "scripts": {
+        "start": "node server.js",
+        "devServer": "nodemon server.js",
+        "devClient": "npm run start --prefix client",
+        "devConcurrently": "concurrently \"npm run devClient\" \"npm run devServer\"",
+        "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC"
+}

@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AAAA,WAAY,CACR,MAAM,CAAE,SAAS,CACjB,MAAM,CAAE,gBAAgB,CACxB,OAAO,CAAE,IAAI,CAGjB,qBAAsB,CAClB,MAAM,CAAE,OAAO,CACf,eAAe,CAAE,SAAS,CCR9B,kBAAmB,CACf,MAAM,CAAE,gBAAgB,CACxB,MAAM,CAAE,SAAS,CACjB,OAAO,CAAE,IAAI,CCAjB,oBAEE,CACE,MAAM,CAAE,CAAC,CACT,OAAO,CAAE,CAAC,CACV,UAAU,CAAE,UAAU",
+"sources": ["styling/home.scss","styling/specificquestion.scss","style.scss"],
+"names": [],
+"file": "App.css"
+}
