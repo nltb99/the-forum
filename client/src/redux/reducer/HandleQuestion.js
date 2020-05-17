@@ -4,6 +4,7 @@ import {
     GETQUESTION,
     COUNTQUESTION,
     ISLOADING,
+    ISDARKMODE,
 } from '../actions/actions.js'
 
 const initialState = {
@@ -11,6 +12,7 @@ const initialState = {
     comments: [],
     counting: null,
     isLoading: false,
+    isDarkmode: false,
 }
 
 export const HandleQuestion = (state = initialState, action) => {
@@ -41,6 +43,11 @@ export const HandleQuestion = (state = initialState, action) => {
             return {
                 ...state,
                 isLoading: true,
+            }
+        case ISDARKMODE:
+            return {
+                ...state,
+                isDarkmode: !state.isDarkmode,
             }
         default:
             return state

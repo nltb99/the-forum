@@ -1,7 +1,1 @@
-{
-"version": 3,
-"mappings": "AAAA,WAAY,CACR,MAAM,CAAE,SAAS,CACjB,MAAM,CAAE,gBAAgB,CACxB,OAAO,CAAE,IAAI,CAGjB,qBAAsB,CAClB,MAAM,CAAE,OAAO,CACf,eAAe,CAAE,SAAS,CCR9B,kBAAmB,CACf,MAAM,CAAE,gBAAgB,CACxB,MAAM,CAAE,SAAS,CACjB,OAAO,CAAE,IAAI,CCAjB,oBAEE,CACE,MAAM,CAAE,CAAC,CACT,OAAO,CAAE,CAAC,CACV,UAAU,CAAE,UAAU",
-"sources": ["styling/home.scss","styling/specificquestion.scss","style.scss"],
-"names": [],
-"file": "App.css"
-}
+{"version":3,"sourceRoot":"","sources":["styling/home.scss","styling/specificquestion.scss","styling/newquestions.scss","styling/switchmode.scss","style.scss"],"names":[],"mappings":"AAAA,YACI,iBACA,wBACA,aAGJ,eACI,aAGJ,wBACI,gBACA,kBACA,iBAEJ,yBACI,mBACA,kBACA,iBAGJ,WACI,WAGJ,YACI,WC1BJ,mBACI,wBACA,iBACA,aAGJ,YACI,gBCPJ,cACI,iBACA,wBACA,aCHJ,oBACI,aACA,mBACA,6BACA,YACA,wBACI,WACA,YAIR,UACI,gBACA,WACA,cAGJ,WACI,gBACA,WACA,cAGJ,iBACI,gBACA,cAGJ,OACI,2BACA,cCzBJ,qBAGI,SACA,UACA","file":"App.css"}

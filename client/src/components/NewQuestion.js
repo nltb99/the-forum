@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { addQuestion, getAllQuestion } from '../redux/actions/actionTypes.js'
 import PropTypes from 'prop-types'
+import classNames from 'classnames'
 
 function NewQuestion({ history }) {
     const dispatch = useDispatch()
@@ -14,6 +15,8 @@ function NewQuestion({ history }) {
     })
 
     const allQuestions = useSelector((state) => state.questions)
+
+    const isDarkMode = useSelector((state) => state.switchMode)
 
     useEffect(() => {
         dispatch(getAllQuestion())
@@ -61,11 +64,18 @@ function NewQuestion({ history }) {
         await history.push('/')
     }
 
+    const classStylingForm = classNames({
+        container: true,
+        'new-question': true,
+        darkColor: !isDarkMode,
+        whiteColor: isDarkMode,
+    })
+
     return (
-        <form className="container" onSubmit={handleSubmit}>
+        <form className={classStylingForm} onSubmit={handleSubmit}>
             <h1>New Question</h1>
             <div className="form-group">
-                <label>Question</label>
+                <h3>Question</h3>
                 <input
                     className="form-control"
                     name="value"

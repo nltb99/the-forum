@@ -1,10 +1,28 @@
 .home-route {
     margin: 20px auto;
-    border: 1.2px solid #333;
+    border: 1.2px solid #666;
     padding: 15px;
 }
 
-.button-account:hover {
-    cursor: pointer;
-    text-decoration: underline;
+.question-each {
+    display: flex;
+}
+
+.background-common-dark {
+    background: #444;
+    border-radius: 3px;
+    padding: 5px 15px;
+}
+.background-common-light {
+    background: lightgray;
+    border-radius: 3px;
+    padding: 5px 15px;
+}
+
+.darkColor {
+    color: #333;
+}
+
+.whiteColor {
+    color: #fff;
 }

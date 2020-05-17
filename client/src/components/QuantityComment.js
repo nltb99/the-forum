@@ -1,18 +1,12 @@
-import React, { useState, useEffect } from 'react'
-import axios from 'axios'
+import React from 'react'
+import useFetchData from '../customeHooks/useFetchData'
 
-function QuantityComment({ slug }) {
-    const [quantity, setQuantity] = useState('')
-
-    useEffect(() => {
-        fetch(`/api/comment/quantity/${slug}`)
-            .then((res) => res.json())
-            .then((data) => setQuantity(data))
-    }, [])
+function QuantityComment({ slug, isDarkMode }) {
+    const quantity = useFetchData(`/api/comment/quantity/${slug}`)
 
     return (
-        <small>
-            {'   '}
+        <small className={isDarkMode ? 'whiteColor' : 'darkColor'}>
+            {'     '}
             {quantity} comments
         </small>
     )

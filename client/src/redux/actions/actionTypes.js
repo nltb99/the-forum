@@ -6,8 +6,8 @@ import {
     ADDCOMMENT,
     GETCOMMENT,
     DELETECOMMENT,
-    GETQUANTITYOFCOMMENT,
     ISLOADING,
+    ISDARKMODE,
 } from './actions.js'
 import axios from 'axios'
 
@@ -88,5 +88,12 @@ export const deleteComment = (id) => async (dispatch) => {
 export const isLoading = () => {
     return {
         type: ISLOADING,
+    }
+}
+
+// Check is Dark Mode
+export const isDarkmode = () => {
+    return {
+        type: ISDARKMODE,
     }
 }

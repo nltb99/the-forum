@@ -9,6 +9,8 @@ import {
 import { useDispatch } from 'react-redux'
 import PropTypes from 'prop-types'
 import moment from 'moment'
+import axios from 'axios'
+import classNames from 'classnames'
 
 function SpecificQuestion({ match, location }) {
     const dispatch = useDispatch()
@@ -17,8 +19,11 @@ function SpecificQuestion({ match, location }) {
     const detailQuestions = useSelector((state) => state.questions)
     const detailComments = useSelector((state) => state.comments)
 
-    const [actionFetchData, setActionFetchData] = useState(true)
-    const [actionFetchComment, setActionFetchComment] = useState(false)
+    const [userComments, setUserComments] = useState([])
+
+    const [submitComment, setSubmitComment] = useState(true)
+
+    const isDarkMode = useSelector((state) => state.switchMode)
 
     let specific = detailQuestions.questions.find((cell) => {
         return cell._id == match.params.id
@@ -36,24 +41,8 @@ function SpecificQuestion({ match, location }) {
         let userInfo = JSON.parse(localStorage.getItem('user'))
         dispatch(addComment(slug, comment))
         contentComment.current.value = ''
-        setActionFetchData((n) => n === true)
+        setSubmitComment(true)
     }
-
-    useEffect(() => {
-        const fetch = async () => {
-            await dispatch(getAllQuestion())
-            if (specific != null && actionFetchData) {
-                await dispatch(getComment(specific.slug))
-                await setActionFetchComment((n) => n === true)
-                console.log(actionFetchComment)
-            }
-        }
-        fetch()
-        return () => {
-            setActionFetchData((n) => n === false)
-            setActionFetchComment((n) => n === false)
-        }
-    }, [detailComments.comments, setActionFetchComment])
 
     function formatDateToString(date) {
         let output = moment(date)
@@ -62,19 +51,41 @@ function SpecificQuestion({ match, location }) {
         return output
     }
 
+    //Handle Comment
+    useEffect(() => {
+        const fetchData = async () => {
+            await dispatch(getAllQuestion())
+            if (specific != null && submitComment) {
+                const dataFetching = await axios.get(`/api/comment/${specific.slug}`)
+                await setUserComments(dataFetching.data)
+            }
+        }
+        fetchData()
+        return () => {
+            setSubmitComment(false)
+        }
+    }, [submitComment, userComments])
+
+    const classStylingSpecific = classNames({
+        container: true,
+        'specific-question': true,
+        darkColor: !isDarkMode,
+        whiteColor: isDarkMode,
+    })
+
     return (
-        <div className="container specific-question">
+        <div className={classStylingSpecific}>
             {specific != null && (
                 <div>
                     <h1>Title: {specific.title}</h1>
-                    <hr />
-                    <h4>Detail: {specific.detail}</h4>
+                    <hr className="hr-styling" />
+                    <h5>Detail: {specific.detail}</h5>
                 </div>
             )}
-            <hr />
+            <hr className="hr-styling" />
             <div className="container-user-comment">
-                {!actionFetchComment && detailComments.comments != null ? (
-                    detailComments.comments.map((comment, index) => (
+                {!submitComment ? (
+                    userComments.map((comment, index) => (
                         <div key={index}>
                             <h5>
                                 {comment.comment}
@@ -86,7 +97,7 @@ function SpecificQuestion({ match, location }) {
                             <button
                                 onClick={() => {
                                     dispatch(deleteComment(comment._id))
-                                    setActionFetchData((n) => n === true)
+                                    setSubmitComment(true)
                                 }}
                                 className="btn btn-danger btn-sm">
                                 Delete
@@ -97,7 +108,7 @@ function SpecificQuestion({ match, location }) {
                     <h1>Loading...</h1>
                 )}
             </div>
-            <hr />
+            <hr className="hr-styling" />
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
                     <label htmlFor="comment-user">Your Answer: </label>
@@ -121,50 +132,3 @@ SpecificQuestion.propTypes = {
 }
 
 export default SpecificQuestion
-
-// {detailComments.comments != null &&
-//     detailComments.comments.map((comment, index) => (
-//         <div key={index}>
-//             <h5>
-//                 {comment.comment}
-//                 <small className="text-info">
-//                     {'   '}
-//                     {formatDateToString(comment.createAt)}
-//                 </small>
-//             </h5>
-//             <button
-//                 onClick={() => {
-//                     dispatch(deleteComment(comment._id))
-//                     setActionFetchData((n) => n === true)
-//                 }}
-//                 className="btn btn-danger btn-sm">
-//                 Delete
-//             </button>
-//         </div>
-//     ))}
-
-// {
-//     !actionFetchComment && detailComments.comments != null ? (
-//         detailComments.comments.map((comment, index) => (
-//             <div key={index}>
-//                 <h5>
-//                     {comment.comment}
-//                     <small className="text-info">
-//                         {'   '}
-//                         {formatDateToString(comment.createAt)}
-//                     </small>
-//                 </h5>
-//                 <button
-//                     onClick={() => {
-//                         dispatch(deleteComment(comment._id))
-//                         setActionFetchData((n) => n === true)
-//                     }}
-//                     className="btn btn-danger btn-sm">
-//                     Delete
-//                 </button>
-//             </div>
-//         ))
-//     ) : (
-//         <h1>Loading...</h1>
-//     )
-// }
