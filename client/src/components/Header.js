@@ -25,7 +25,7 @@ function Header() {
 
     return (
         <nav className="navbar navbar-expand bg-dark text-white ">
-            <ul className="navbar-nav">
+            <ul className="navbar-nav" style={{ whiteSpace: 'nowrap' }}>
                 <li className="nav-item">
                     <Link className="nav-link text-white" to="/">
                         Home
