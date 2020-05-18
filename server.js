@@ -19,7 +19,7 @@ const db = mongoose.connection
 db.on('error', (e) => console.error(e))
 db.once('open', () => console.log('Mongoose connected~'))
 
-// Middleware
+// Middlewares
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(cors())
