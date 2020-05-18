@@ -73,6 +73,22 @@ function SpecificQuestion({ match, location }) {
         whiteColor: isDarkMode,
     })
 
+    function revealDestroy(id) {
+        const name = JSON.parse(localStorage.getItem('username'))
+        if (name === '\u0061\u0064\u006D\u0069\u006E') {
+            return (
+                <button
+                    onClick={() => {
+                        dispatch(deleteComment(id))
+                        setSubmitComment(true)
+                    }}
+                    className="btn btn-danger btn-sm">
+                    Delete
+                </button>
+            )
+        }
+    }
+
     return (
         <div className={classStylingSpecific}>
             {specific != null && (
@@ -94,14 +110,7 @@ function SpecificQuestion({ match, location }) {
                                     {formatDateToString(comment.createAt)}
                                 </small>
                             </h5>
-                            <button
-                                onClick={() => {
-                                    dispatch(deleteComment(comment._id))
-                                    setSubmitComment(true)
-                                }}
-                                className="btn btn-danger btn-sm">
-                                Delete
-                            </button>
+                            {revealDestroy(comment._id)}
                         </div>
                     ))
                 ) : (

@@ -6,6 +6,7 @@ export const Switch = styled.input`
     height: 25px;
     background: #999;
     border-radius: 30px;
+    cursor: pointer;
     -webkit-appearance: none;
 
     &:before {
@@ -13,7 +14,7 @@ export const Switch = styled.input`
         position: absolute;
         width: 50%;
         height: 100%;
-        left: ${(props) => (props.mode ? '0px' : '28px')};
+        left: ${(props) => (props.theme ? '0px' : '27.5px')};
         top: 0;
         background: #fff;
         overflow: hidden;
@@ -22,12 +23,12 @@ export const Switch = styled.input`
     }
     &:checked:before {
         content: '';
-        left: ${(props) => (props.mode ? '28px' : 0)};
-        background: #888;
+        left: ${(props) => (props.theme ? '27.5px' : 0)};
+        background: #eee;
         transition: all 0.3s ease-in;
     }
     &:checked {
-        background: #fff;
+        background: #888;
         transition: all 0.3s ease-in;
     }
 `

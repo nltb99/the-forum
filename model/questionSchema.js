@@ -25,6 +25,10 @@ const questionSchema = mongoose.Schema({
         type: Number,
         required: true,
     },
+    author: {
+        type: String,
+        required: true,
+    },
 })
 
 questionSchema.pre('validate', function(next) {
@@ -32,7 +36,6 @@ questionSchema.pre('validate', function(next) {
         this.slug = slugify(this.title, { lower: true, strict: true })
         this.counting = 1
     }
-
     next()
 })
 

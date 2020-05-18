@@ -25,8 +25,8 @@ function NewQuestion({ history }) {
     const handleSubmit = async (e) => {
         e.preventDefault()
 
-        let title = tittleRef.current.value
-        let detail = detailRef.current.value
+        let title = await tittleRef.current.value
+        let detail = await detailRef.current.value
 
         if (allQuestions != null) {
             allQuestions.questions.map((cell) => {
@@ -53,14 +53,28 @@ function NewQuestion({ history }) {
                         <button type="button" className="close" data-dismiss="alert">
                             &times;
                         </button>
-                        Empty value
+                        Please fill all fields
                     </div>
                 ),
             })
             return
         }
-        let userInfo = JSON.parse(localStorage.getItem('user'))
-        await dispatch(addQuestion(title, detail))
+        if (localStorage.getItem('username') == null) {
+            setCoincident({
+                output: (
+                    <div className="alert alert-danger alert-dismissible fade show">
+                        <button type="button" className="close" data-dismiss="alert">
+                            &times;
+                        </button>
+                        Please login first
+                    </div>
+                ),
+            })
+            return
+        }
+        let author = await JSON.parse(localStorage.getItem('username'))
+
+        await dispatch(addQuestion(title, detail, author))
         await history.push('/')
     }
 

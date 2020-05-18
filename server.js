@@ -29,6 +29,7 @@ app.use(morgan('combined'))
 // Route
 app.use('/api', require('./controllers/questions'))
 app.use('/api', require('./controllers/comments'))
+app.use('/api/user', require('./controllers/user'))
 
 // Serve static files in production
 if (process.env.NODE_ENV === 'production') {

@@ -4,6 +4,7 @@ import { deleteQuestion, getAllQuestion, countQuestion } from '../redux/actions/
 import { Link } from 'react-router-dom'
 import moment from 'moment'
 import classNames from 'classnames'
+import InfoQuestion from './StyledComponents/home'
 
 // Impor amount of comment
 import QuantityComment from './QuantityComment.js'
@@ -37,6 +38,22 @@ function Home() {
         'background-common-dark': isDarkMode,
     })
 
+    function revealDestroy(id, slug) {
+        const name = JSON.parse(localStorage.getItem('username'))
+        if (name === '\u0061\u0064\u006D\u0069\u006E') {
+            return (
+                <button
+                    className="btn btn-danger btn-sm"
+                    onClick={() => {
+                        setActionFetchData(!actionFetchData)
+                        dispatch(deleteQuestion(id, slug))
+                    }}>
+                    Delete
+                </button>
+            )
+        }
+    }
+
     return (
         <div className="container home-route">
             <h1 className={isDarkMode ? 'text-white' : 'text-dark'}>
@@ -50,18 +67,17 @@ function Home() {
                                 Q: {cell.title}
                             </Link>
                             <QuantityComment isDarkMode={isDarkMode} slug={cell.slug} />
-                            <h5 className={isDarkMode ? 'whiteColor' : 'darkColor'}>
-                                {formatDateToString(cell.createAt)}
-                            </h5>
+                            <InfoQuestion isDarkMode={isDarkMode}>
+                                <p>
+                                    {cell.author}
+                                    {'  |'}
+                                </p>
+                                <p className={isDarkMode ? 'whiteColor' : 'darkColor'}>
+                                    {formatDateToString(cell.createAt)}
+                                </p>
+                            </InfoQuestion>
                         </div>
-                        <button
-                            className="btn btn-danger btn-sm"
-                            onClick={() => {
-                                setActionFetchData(!actionFetchData)
-                                dispatch(deleteQuestion(cell._id, cell.slug))
-                            }}>
-                            Delete
-                        </button>
+                        {revealDestroy(cell._id, cell.slug)}
                     </div>
                 ))}
         </div>

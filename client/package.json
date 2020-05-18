@@ -27,8 +27,7 @@
         "start": "react-scripts start",
         "build": "react-scripts build",
         "test": "react-scripts test",
-        "eject": "react-scripts eject",
-        "testJest": "jest"
+        "eject": "react-scripts eject"
     },
     "eslintConfig": {
         "extends": "react-app"
@@ -46,5 +45,8 @@
         ]
     },
     "proxy": "http://localhost:5000",
-    "devDependencies": {}
+    "devDependencies": {
+        "enzyme": "^3.11.0",
+        "enzyme-adapter-react-16": "^1.15.2"
+    }
 }

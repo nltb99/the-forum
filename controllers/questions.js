@@ -2,6 +2,8 @@ const express = require('express')
 const route = express.Router()
 const QuestionSchema = require('../model/questionSchema.js')
 
+const authToken = require('./verifyToken/token')
+
 // Handle question route
 route.get('/question', async (req, res) => {
     try {
@@ -36,6 +38,7 @@ route.post('/question', async (req, res) => {
         const question = {
             title: req.body.title,
             detail: req.body.detail,
+            author: req.body.author,
         }
         const schema = await new QuestionSchema(question)
         await schema.save()
