@@ -105,7 +105,7 @@ function NewQuestion({ history }) {
                     className="form-control"></textarea>
             </div>
             {coincident.output}
-            <button type="submit" className="btn btn-success btn-block">
+            <button type="submit" className="btn btn-info btn-block">
                 Submit
             </button>
         </form>

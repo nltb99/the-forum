@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { deleteQuestion, getAllQuestion, countQuestion } from '../redux/actions/actionTypes.js'
 import { Link } from 'react-router-dom'
 import moment from 'moment'
 import classNames from 'classnames'
 import InfoQuestion from './StyledComponents/home'
+
+import lottie from 'lottie-web'
+import animationLoading from '../images/loading.json'
 
 // Impor amount of comment
 import QuantityComment from './QuantityComment.js'
@@ -16,6 +19,18 @@ function Home() {
     const dispatch = useDispatch()
 
     const isDarkMode = useSelector((state) => state.switchMode)
+
+    //lottie
+    const _el = useRef()
+    useEffect(() => {
+        lottie.loadAnimation({
+            container: _el.current,
+            renderer: 'svg',
+            loop: true,
+            autoplay: true,
+            animationData: animationLoading,
+        })
+    }, [])
 
     useEffect(() => {
         dispatch(getAllQuestion())
@@ -59,7 +74,7 @@ function Home() {
             <h1 className={isDarkMode ? 'text-white' : 'text-dark'}>
                 Questions ({state.counting && state.counting})
             </h1>
-            {state.questions &&
+            {state.questions.length !== 0 ? (
                 state.questions.map((cell, index) => (
                     <div className={styleEachQuestion} key={index}>
                         <div>
@@ -79,7 +94,10 @@ function Home() {
                         </div>
                         {revealDestroy(cell._id, cell.slug)}
                     </div>
-                ))}
+                ))
+            ) : (
+                <div style={{ width: '100px', textAlign: 'center' }} ref={_el}></div>
+            )}
         </div>
     )
 }

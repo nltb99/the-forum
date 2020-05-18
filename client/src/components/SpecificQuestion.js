@@ -12,6 +12,9 @@ import moment from 'moment'
 import axios from 'axios'
 import classNames from 'classnames'
 
+import lottie from 'lottie-web'
+import animationLoading from '../images/loading.json'
+
 function SpecificQuestion({ match, location }) {
     const dispatch = useDispatch()
     const contentComment = useRef('')
@@ -89,6 +92,18 @@ function SpecificQuestion({ match, location }) {
         }
     }
 
+    //lottie
+    const _el = useRef()
+    useEffect(() => {
+        lottie.loadAnimation({
+            container: _el.current,
+            renderer: 'svg',
+            loop: true,
+            autoplay: true,
+            animationData: animationLoading,
+        })
+    }, [])
+
     return (
         <div className={classStylingSpecific}>
             {specific != null && (
@@ -114,7 +129,7 @@ function SpecificQuestion({ match, location }) {
                         </div>
                     ))
                 ) : (
-                    <h1>Loading...</h1>
+                    <div style={{ width: '100px', textAlign: 'center' }} ref={_el}></div>
                 )}
             </div>
             <hr className="hr-styling" />
