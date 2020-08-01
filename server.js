@@ -6,7 +6,9 @@ const express = require('express'),
     cors = require('cors'),
     path = require('path'),
     compression = require('compression'),
-    morgan = require('morgan')
+    morgan = require('morgan'),
+    // redis = require('redis'),
+    PORT = process.env.PORT || 5000
 
 // Handle models database
 mongoose.connect(process.env.DATABASE_URL, {
@@ -24,7 +26,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(cors())
 app.use(compression())
-app.use(morgan('combined'))
+// app.use(morgan('combined'))
 
 // Route
 app.use('/api', require('./controllers/questions'))
@@ -42,5 +44,4 @@ if (process.env.NODE_ENV === 'production') {
     })
 }
 
-const PORT = process.env.PORT || 5000
 app.listen(PORT, () => console.log(`Running at ${PORT}`))

@@ -74,28 +74,27 @@ function Home() {
             <h1 className={isDarkMode ? 'text-white' : 'text-dark'}>
                 Questions ({state.counting && state.counting})
             </h1>
-            {state.questions.length !== 0 ? (
-                state.questions.map((cell, index) => (
-                    <div className={styleEachQuestion} key={index}>
-                        <div>
-                            <Link to={`/question/${cell._id}`} className="text-info">
-                                Q: {cell.title}
-                            </Link>
-                            <QuantityComment isDarkMode={isDarkMode} slug={cell.slug} />
-                            <InfoQuestion isDarkMode={isDarkMode}>
-                                <p>
-                                    {cell.author}
-                                    {'  |'}
-                                </p>
-                                <p className={isDarkMode ? 'whiteColor' : 'darkColor'}>
-                                    {formatDateToString(cell.createAt)}
-                                </p>
-                            </InfoQuestion>
-                        </div>
-                        {revealDestroy(cell._id, cell.slug)}
+            {state?.questions?.map((cell, index) => (
+                <div className={styleEachQuestion} key={index}>
+                    <div>
+                        <Link to={`/question/${cell._id}`} className="text-info">
+                            Q: {cell.title}
+                        </Link>
+                        <QuantityComment isDarkMode={isDarkMode} slug={cell.slug} />
+                        <InfoQuestion isDarkMode={isDarkMode}>
+                            <p>
+                                {cell.author}
+                                {'  |'}
+                            </p>
+                            <p className={isDarkMode ? 'whiteColor' : 'darkColor'}>
+                                {formatDateToString(cell.createAt)}
+                            </p>
+                        </InfoQuestion>
                     </div>
-                ))
-            ) : (
+                    {revealDestroy(cell._id, cell.slug)}
+                </div>
+            ))}
+            {state.questions.length === 0 && (
                 <div style={{ width: '100px', textAlign: 'center' }} ref={_el}></div>
             )}
         </div>

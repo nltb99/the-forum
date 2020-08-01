@@ -5,10 +5,15 @@ import App from './App'
 import * as serviceWorker from './serviceWorker'
 import { Provider } from 'react-redux'
 import store from './redux/store.js'
+import { SWRConfig } from 'swr'
+
+const fetcher = (...args) => fetch(...args).then((res) => res.json())
 
 ReactDOM.render(
     <Provider store={store}>
-        <App />
+        <SWRConfig value={{ dedupingInterval: 5000, fetcher }}>
+            <App />
+        </SWRConfig>
     </Provider>,
     document.getElementById('root'),
 )

@@ -13,8 +13,11 @@
         "jsonwebtoken": "^8.5.1",
         "mongoose": "^5.9.11",
         "morgan": "^1.10.0",
+        "node-gyp": "^7.0.0",
         "passport": "^0.4.1",
-        "slugify": "^1.4.0"
+        "redis": "^3.0.2",
+        "slugify": "^1.4.0",
+        "uuid": "^8.1.0"
     },
     "devDependencies": {
         "nodemon": "^2.0.3"

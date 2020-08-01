@@ -20,7 +20,7 @@ function SpecificQuestion({ match, location }) {
     const contentComment = useRef('')
 
     const detailQuestions = useSelector((state) => state.questions)
-    const detailComments = useSelector((state) => state.comments)
+    // const detailComments = useSelector((state) => state.comments)
 
     const [userComments, setUserComments] = useState([])
 
@@ -41,7 +41,7 @@ function SpecificQuestion({ match, location }) {
             slug = specific.slug
         }
 
-        let userInfo = JSON.parse(localStorage.getItem('user'))
+        // let userInfo = JSON.parse(localStorage.getItem('user'))
         dispatch(addComment(slug, comment))
         contentComment.current.value = ''
         setSubmitComment(true)
@@ -67,7 +67,7 @@ function SpecificQuestion({ match, location }) {
         return () => {
             setSubmitComment(false)
         }
-    }, [submitComment, userComments])
+    }, [submitComment, userComments, setUserComments])
 
     const classStylingSpecific = classNames({
         container: true,
@@ -115,8 +115,8 @@ function SpecificQuestion({ match, location }) {
             )}
             <hr className="hr-styling" />
             <div className="container-user-comment">
-                {!submitComment ? (
-                    userComments.map((comment, index) => (
+                {!submitComment &&
+                    userComments?.map((comment, index) => (
                         <div key={index}>
                             <h5>
                                 {comment.comment}
@@ -127,10 +127,7 @@ function SpecificQuestion({ match, location }) {
                             </h5>
                             {revealDestroy(comment._id)}
                         </div>
-                    ))
-                ) : (
-                    <div style={{ width: '100px', textAlign: 'center' }} ref={_el}></div>
-                )}
+                    ))}
             </div>
             <hr className="hr-styling" />
             <form onSubmit={handleSubmit}>
@@ -156,3 +153,5 @@ SpecificQuestion.propTypes = {
 }
 
 export default SpecificQuestion
+
+// <div style={{ width: '100px', textAlign: 'center' }} ref={_el}></div> // for loading comments
