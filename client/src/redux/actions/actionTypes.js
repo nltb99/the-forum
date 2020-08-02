@@ -4,7 +4,6 @@ import {
     DELETEQUESTION,
     GETQUESTION,
     ADDCOMMENT,
-    GETCOMMENT,
     DELETECOMMENT,
     ISLOADING,
     ISDARKMODE,
@@ -27,16 +26,16 @@ export const addQuestion = (title, detail, author) => {
     }
 }
 
-export const countQuestion = (counting) => {
-    return async function(dispatch) {
-        await axios.get(`/api/question/quantity/${counting}`).then((res) =>
-            dispatch({
-                type: COUNTQUESTION,
-                payload: res.data,
-            }),
-        )
-    }
-}
+// export const countQuestion = (counting) => {
+//     return async function(dispatch) {
+//         await axios.get(`/api/question/quantity/${counting}`).then((res) =>
+//             dispatch({
+//                 type: COUNTQUESTION,
+//                 payload: res.data,
+//             }),
+//         )
+//     }
+// }
 
 export const deleteQuestion = (id, slug) => {
     return async function(dispatch) {

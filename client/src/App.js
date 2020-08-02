@@ -17,7 +17,7 @@ function App() {
             <Switch>
                 <Route exact path="/" component={Home}></Route>
                 <Route path="/question/new" component={NewQuestion}></Route>
-                <Route path="/question/:id" component={SpecificQuestion}></Route>
+                <Route path="/question" component={SpecificQuestion}></Route>
                 <Route path="/user/login" component={Login}></Route>
                 <Route path="/user/register" component={Register}></Route>
                 <Route exact path="*" component={MissingRoute}></Route>

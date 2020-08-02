@@ -11,7 +11,7 @@ const fetcher = (...args) => fetch(...args).then((res) => res.json())
 
 ReactDOM.render(
     <Provider store={store}>
-        <SWRConfig value={{ dedupingInterval: 5000, fetcher }}>
+        <SWRConfig value={{ dedupingInterval: 1000, refreshWhenHidden: true, fetcher }}>
             <App />
         </SWRConfig>
     </Provider>,

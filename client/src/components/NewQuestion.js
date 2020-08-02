@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { addQuestion, getAllQuestion } from '../redux/actions/actionTypes.js'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
+import useSWR, { mutate } from 'swr'
 
 function NewQuestion({ history }) {
     const dispatch = useDispatch()
@@ -14,13 +15,10 @@ function NewQuestion({ history }) {
         output: '',
     })
 
-    const allQuestions = useSelector((state) => state.questions)
+    //SWR
+    const swrFetchQuestions = useSWR(`/api/question`)
 
     const isDarkMode = useSelector((state) => state.switchMode)
-
-    useEffect(() => {
-        dispatch(getAllQuestion())
-    }, [])
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -28,23 +26,21 @@ function NewQuestion({ history }) {
         let title = await tittleRef.current.value
         let detail = await detailRef.current.value
 
-        if (allQuestions != null) {
-            allQuestions.questions.map((cell) => {
-                if (cell.title == title) {
-                    setCoincident({
-                        output: (
-                            <div className="alert alert-warning alert-dismissible fade show">
-                                <button type="button" className="close" data-dismiss="alert">
-                                    &times;
-                                </button>
-                                That title of question already have!
-                            </div>
-                        ),
-                    })
-                    return
-                }
-            })
-        }
+        swrFetchQuestions.data.map((cell) => {
+            if (cell.title == title) {
+                setCoincident({
+                    output: (
+                        <div className="alert alert-warning alert-dismissible fade show">
+                            <button type="button" className="close" data-dismiss="alert">
+                                &times;
+                            </button>
+                            That title of question already have!
+                        </div>
+                    ),
+                })
+                return
+            }
+        })
 
         if (!title.trim() || !detail.trim()) {
             setCoincident({

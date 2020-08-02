@@ -1,16 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux'
-import {
-    getAllQuestion,
-    getComment,
-    addComment,
-    deleteComment,
-} from '../redux/actions/actionTypes.js'
+import { addComment, deleteComment } from '../redux/actions/actionTypes.js'
 import { useDispatch } from 'react-redux'
 import PropTypes from 'prop-types'
 import moment from 'moment'
-import axios from 'axios'
 import classNames from 'classnames'
+import useSWR, { mutate } from 'swr'
 
 import lottie from 'lottie-web'
 import animationLoading from '../images/loading.json'
@@ -19,32 +14,26 @@ function SpecificQuestion({ match, location }) {
     const dispatch = useDispatch()
     const contentComment = useRef('')
 
-    const detailQuestions = useSelector((state) => state.questions)
-    // const detailComments = useSelector((state) => state.comments)
-
-    const [userComments, setUserComments] = useState([])
-
-    const [submitComment, setSubmitComment] = useState(true)
+    const id = location.search.match(/((?<=id=).+(?=\&))/g)[0]
+    const slug = location.search.match(/((?<=slug=).*)/g)[0]
 
     const isDarkMode = useSelector((state) => state.switchMode)
 
-    let specific = detailQuestions.questions.find((cell) => {
-        return cell._id == match.params.id
-    })
+    //SWR
+    const swrFetchQuestion = useSWR(`/api/question/${id}`)
+    const swrFetchComments = useSWR(`/api/comment/${slug}`)
 
-    const handleSubmit = (e) => {
+    console.log('haha')
+
+    const handleSubmit = async (e) => {
         e.preventDefault()
         let comment = contentComment.current.value
-        let slug = ''
 
-        if (specific != null) {
-            slug = specific.slug
-        }
-
-        // let userInfo = JSON.parse(localStorage.getItem('user'))
-        dispatch(addComment(slug, comment))
+        //swr
+        mutate(`/api/comment/${slug}`, [...swrFetchComments.data, comment], false)
+        await dispatch(addComment(slug, comment))
+        mutate(`/api/comment/${slug}`)
         contentComment.current.value = ''
-        setSubmitComment(true)
     }
 
     function formatDateToString(date) {
@@ -53,21 +42,6 @@ function SpecificQuestion({ match, location }) {
             .fromNow()
         return output
     }
-
-    //Handle Comment
-    useEffect(() => {
-        const fetchData = async () => {
-            await dispatch(getAllQuestion())
-            if (specific != null && submitComment) {
-                const dataFetching = await axios.get(`/api/comment/${specific.slug}`)
-                await setUserComments(dataFetching.data)
-            }
-        }
-        fetchData()
-        return () => {
-            setSubmitComment(false)
-        }
-    }, [submitComment, userComments, setUserComments])
 
     const classStylingSpecific = classNames({
         container: true,
@@ -81,9 +55,15 @@ function SpecificQuestion({ match, location }) {
         if (name === '\u0061\u0064\u006D\u0069\u006E') {
             return (
                 <button
-                    onClick={() => {
-                        dispatch(deleteComment(id))
-                        setSubmitComment(true)
+                    onClick={async () => {
+                        const url = `/api/comment/${slug}`
+                        mutate(
+                            url,
+                            swrFetchComments?.data?.filter((e) => e._id !== id),
+                            false,
+                        )
+                        await dispatch(deleteComment(id))
+                        mutate(url)
                     }}
                     className="btn btn-danger btn-sm">
                     Delete
@@ -106,28 +86,27 @@ function SpecificQuestion({ match, location }) {
 
     return (
         <div className={classStylingSpecific}>
-            {specific != null && (
+            {
                 <div>
-                    <h1>Title: {specific.title}</h1>
+                    <h1>Title: {swrFetchQuestion?.data?.title}</h1>
                     <hr className="hr-styling" />
-                    <h5>Detail: {specific.detail}</h5>
+                    <h5>Detail: {swrFetchQuestion?.data?.detail}</h5>
                 </div>
-            )}
+            }
             <hr className="hr-styling" />
             <div className="container-user-comment">
-                {!submitComment &&
-                    userComments?.map((comment, index) => (
-                        <div key={index}>
-                            <h5>
-                                {comment.comment}
-                                <small className="text-info">
-                                    {'   '}
-                                    {formatDateToString(comment.createAt)}
-                                </small>
-                            </h5>
-                            {revealDestroy(comment._id)}
-                        </div>
-                    ))}
+                {swrFetchComments?.data?.map((comment, index) => (
+                    <div key={index}>
+                        <h5>
+                            {comment.comment}
+                            <small className="text-info">
+                                {'   '}
+                                {formatDateToString(comment.createAt)}
+                            </small>
+                        </h5>
+                        {revealDestroy(comment._id)}
+                    </div>
+                ))}
             </div>
             <hr className="hr-styling" />
             <form onSubmit={handleSubmit}>

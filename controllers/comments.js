@@ -5,19 +5,6 @@ const CommentSchema = require('../model/commentSchema.js')
 const client = require('./redis/redisClient')
 
 // Cache middleware
-function cacheQuantityOfComents(req, res, next) {
-    const { slug } = req.params
-
-    client.get(slug + 'quantity', (err, data) => {
-        if (err) throw err
-        if (data !== null) {
-            return res.json(JSON.parse(data))
-        } else {
-            next()
-        }
-    })
-}
-
 function cacheWholeComments(req, res, next) {
     const { slug } = req.params
 
@@ -61,13 +48,9 @@ route.get('/comment/:slug', async (req, res) => {
     }
 })
 
-route.get('/comment/quantity/:slug', cacheQuantityOfComents, async (req, res) => {
+route.get('/comment/quantity/:slug', async (req, res) => {
     try {
         const quantity = await CommentSchema.countDocuments({ slug: req.params.slug })
-
-        // Set data to Redis
-        const { slug } = req.params
-        client.setex(slug + 'quantity', 2000, JSON.stringify(quantity))
         return res.json(quantity)
     } catch (e) {
         console.log(e)
@@ -88,13 +71,6 @@ route.post('/comment', async (req, res) => {
             let parsedData = JSON.parse(data)
             parsedData.push(newComment)
             client.setex('wholeComments', 2000, JSON.stringify(parsedData))
-            // Update amount
-            let newFilterParsedData = parsedData.filter((data) => data.slug === newComment.slug)
-            client.setex(
-                newComment.slug + 'quantity',
-                2000,
-                JSON.stringify(newFilterParsedData.length),
-            )
         })
 
         await newComment.save()
@@ -116,16 +92,6 @@ route.delete('/comment/specific/:id', checkMatchIdComment, async (req, res) => {
             let parsedData = JSON.parse(data)
             let newArrayAfterDelete = parsedData.filter((data) => data._id !== id)
             client.setex('wholeComments', 2000, JSON.stringify(newArrayAfterDelete))
-            // Update amount
-            let filterSlug = parsedData.filter((data) => data._id === id)
-            let newFilterParsedData = parsedData.filter((data) => data.slug === filterSlug[0].slug)
-            client.setex(
-                filterSlug[0].slug + 'quantity',
-                2000,
-                JSON.stringify(newFilterParsedData.length),
-            )
-            console.log(filterSlug[0].slug)
-            console.log(newFilterParsedData)
         })
 
         return res.status(200).json({ msg: 'Delete Succeed' })

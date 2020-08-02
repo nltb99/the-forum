@@ -1,13 +1,15 @@
 import React from 'react'
 import useFetchData from '../customeHooks/useFetchData'
+import useSWR from 'swr'
 
 function QuantityComment({ slug, isDarkMode }) {
-    const quantity = useFetchData(`/api/comment/quantity/${slug}`)
+    //SWR
+    const swrFetchCountQuantityOfComments = useSWR(`/api/comment/quantity/${slug}`)
 
     return (
         <small className={isDarkMode ? 'whiteColor' : 'darkColor'}>
             {'     '}
-            {quantity} comments
+            {swrFetchCountQuantityOfComments?.data || 0} comments
         </small>
     )
 }
