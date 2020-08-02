@@ -29,6 +29,14 @@ function Register({ history }) {
             });
             return;
         }
+        if (!password.match(/.{6,}/g)) {
+            checkValid = false;
+            await setRegisterFail({
+                isError: true,
+                message: 'Password length must greater than 6',
+            });
+            return;
+        }
         if (password.includes(username)) {
             checkValid = false;
             await setRegisterFail({

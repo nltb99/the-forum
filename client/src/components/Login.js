@@ -23,33 +23,35 @@ function Login({ history }) {
         e.preventDefault();
         const username = usernameInput.current.value;
         const password = passwordInput.current.value;
-        let checkValid = true;
         if (username.length === 0 || password.length === 0) {
-            checkValid = false;
             await setAuthInput({
                 isError: true,
                 message: 'Input must not null',
             });
             return;
         }
-        await axios.get('/api/user/users').then((res) => {
-            if (res.data.every((e) => e.username !== username)) {
-                checkValid = false;
+        const configs = {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        };
+        await axios.post('/api/user/login', { username, password }, configs).then((res) => {
+            if (res.status === 200) {
+                localStorage.setItem('username', JSON.stringify(username));
+                history.push('/');
+                window.location.reload(true);
+            } else if (res.status === 204) {
                 setAuthInput({
                     isError: true,
-                    message: 'Username not exists',
+                    message: 'Username does not exists',
                 });
-                return;
+            } else if (res.status === 206) {
+                setAuthInput({
+                    isError: true,
+                    message: 'Password is not match',
+                });
             }
         });
-
-        if (checkValid) {
-            await dispatch(userLogin(username, password));
-            if (localStorage.getItem('username') !== null) {
-                await history.push('/');
-                await window.location.reload(true);
-            }
-        }
     };
 
     const classStylingForm = classNames({
