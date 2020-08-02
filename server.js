@@ -26,6 +26,7 @@ app.use(express.urlencoded({ extended: false }))
 app.use(cors())
 app.use(compression())
 // app.use(morgan('combined'))
+//
 
 // Route
 app.use('/api', require('./controllers/questions'))
