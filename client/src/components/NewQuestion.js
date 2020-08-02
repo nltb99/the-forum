@@ -75,7 +75,7 @@ function NewQuestion({ history }) {
 
     useEffect(() => {
         const theme = JSON.parse(localStorage.getItem('whitemode'))
-        setIsWhiteMode(theme)
+        if (theme) setIsWhiteMode(theme)
     }, [])
 
     const classStylingForm = classNames({

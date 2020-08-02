@@ -45,7 +45,7 @@ function Home({ initialQuestions }) {
 
     useEffect(() => {
         const theme = JSON.parse(localStorage.getItem('whitemode'))
-        setIsWhiteMode(theme)
+        if (theme) setIsWhiteMode(theme)
     }, [])
 
     function revealDestroy(id, slug) {

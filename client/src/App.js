@@ -17,9 +17,9 @@ function App() {
     useEffect(() => {
         const isWhiteMode = JSON.parse(localStorage.getItem('whitemode'))
         setTheme(isWhiteMode)
-        if (isWhiteMode === 'true') {
+        if (isWhiteMode && isWhiteMode === 'true') {
             localStorage.setItem('whitemode', JSON.stringify('true'))
-        } else if (isWhiteMode === null) {
+        } else if (!isWhiteMode) {
             localStorage.setItem('whitemode', JSON.stringify('false'))
         }
     }, [])

@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useRef } from 'react'
-import { useSelector } from 'react-redux'
 import { addComment, deleteComment } from '../redux/actions/actionTypes.js'
 import { useDispatch } from 'react-redux'
 import PropTypes from 'prop-types'
