@@ -6,8 +6,11 @@ import * as serviceWorker from './serviceWorker'
 import { Provider } from 'react-redux'
 import store from './redux/store.js'
 import { SWRConfig } from 'swr'
+import axios from 'axios'
 
-const fetcher = (...args) => fetch(...args).then((res) => res.json())
+axios.defaults.baseURL = 'http://localhost:5000'
+
+const fetcher = (...args) => axios(...args).then((res) => res.data)
 
 ReactDOM.render(
     <Provider store={store}>
