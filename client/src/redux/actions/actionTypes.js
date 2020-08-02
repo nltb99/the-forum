@@ -12,8 +12,8 @@ import {
     USERREGISTER,
     LOADCREDENTIAL,
     LOGINFAIL,
-} from './actions.js'
-import axios from 'axios'
+} from './actions.js';
+import axios from 'axios';
 
 // Question Action
 export const addQuestion = (title, detail, author) => {
@@ -23,9 +23,9 @@ export const addQuestion = (title, detail, author) => {
                 type: ADDQUESTION,
                 payload: res.data,
             }),
-        )
-    }
-}
+        );
+    };
+};
 
 // export const countQuestion = (counting) => {
 //     return async function(dispatch) {
@@ -50,23 +50,23 @@ export const deleteQuestion = (id, slug) => {
                             id,
                             slug,
                         },
-                    })
+                    });
                 }),
-            )
-    }
-}
+            );
+    };
+};
 
 export const getAllQuestion = () => {
     return async function(dispatch) {
-        await dispatch(isLoading())
+        await dispatch(isLoading());
         await axios.get('/api/question').then((res) =>
             dispatch({
                 type: GETQUESTION,
                 payload: res.data,
             }),
-        )
-    }
-}
+        );
+    };
+};
 
 // Comment Action
 // export const getComment = (slug) => async (dispatch) => {
@@ -85,9 +85,9 @@ export const addComment = (title, comment) => {
                 type: ADDCOMMENT,
                 payload: res.data,
             }),
-        )
-    }
-}
+        );
+    };
+};
 
 export const deleteComment = (id) => {
     return async function(dispatch) {
@@ -96,29 +96,29 @@ export const deleteComment = (id) => {
                 type: DELETECOMMENT,
                 payload: id,
             }),
-        )
-    }
-}
+        );
+    };
+};
 
 // Handle is loading
 export const isLoading = () => {
     return {
         type: ISLOADING,
-    }
-}
+    };
+};
 
 // Check theme
 export const isDarkmode = () => {
     return {
         type: ISDARKMODE,
-    }
-}
+    };
+};
 
 export const isWhiteMode = () => {
     return {
         type: ISWHITEMODE,
-    }
-}
+    };
+};
 
 // Check authen token user
 export const userRegister = (username, password) => {
@@ -127,15 +127,15 @@ export const userRegister = (username, password) => {
             headers: {
                 'Content-Type': 'application/json',
             },
-        }
+        };
         axios.post('/api/user/register', { username, password }, configs).then((res) =>
             dispatch({
                 type: USERREGISTER,
                 payload: res.data,
             }),
-        )
-    }
-}
+        );
+    };
+};
 
 export const userLogin = (username, password) => {
     return async function(dispatch) {
@@ -143,26 +143,26 @@ export const userLogin = (username, password) => {
             headers: {
                 'Content-Type': 'application/json',
             },
-        }
+        };
         await axios
             .post('/api/user/login', { username, password }, configs)
             .then((res) => {
                 dispatch({
                     type: USERLOGIN,
                     payload: res.data,
-                })
+                });
             })
             .catch((err) => {
                 dispatch({
                     type: LOGINFAIL,
                     payload: 'Password does not match',
-                })
-            })
-    }
-}
+                });
+            });
+    };
+};
 
 export const loadCredential = () => {
     return {
         type: LOADCREDENTIAL,
-    }
-}
+    };
+};

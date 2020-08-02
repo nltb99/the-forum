@@ -1,29 +1,29 @@
-import React, { useEffect, useState, useRef } from 'react'
-import { useDispatch } from 'react-redux'
-import { deleteQuestion } from '../redux/actions/actionTypes.js'
-import { Link } from 'react-router-dom'
-import moment from 'moment'
-import classNames from 'classnames'
-import InfoQuestion from './StyledComponents/home'
-import useSWR, { mutate } from 'swr'
-import axios from 'axios'
+import React, { useEffect, useState, useRef } from 'react';
+import { useDispatch } from 'react-redux';
+import { deleteQuestion } from '../redux/actions/actionTypes.js';
+import { Link } from 'react-router-dom';
+import moment from 'moment';
+import classNames from 'classnames';
+import InfoQuestion from './StyledComponents/home';
+import useSWR, { mutate } from 'swr';
+import axios from 'axios';
 
-import lottie from 'lottie-web'
-import animationLoading from '../images/loading.json'
+import lottie from 'lottie-web';
+import animationLoading from '../images/loading.json';
 
-import QuantityComment from './QuantityComment.js'
+import QuantityComment from './QuantityComment.js';
 
 function Home({ initialQuestions }) {
-    const [actionFetchData, setActionFetchData] = useState(false)
+    const [actionFetchData, setActionFetchData] = useState(false);
 
-    const [isWhiteMode, setIsWhiteMode] = useState('false')
+    const [isWhiteMode, setIsWhiteMode] = useState('false');
 
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
 
-    const questions = useSWR(`/api/question`, { initialData: initialQuestions })
+    const questions = useSWR(`/api/question`, { initialData: initialQuestions });
 
     //lottie
-    const _el = useRef()
+    const _el = useRef();
     useEffect(() => {
         lottie.loadAnimation({
             container: _el.current,
@@ -31,44 +31,44 @@ function Home({ initialQuestions }) {
             loop: true,
             autoplay: true,
             animationData: animationLoading,
-        })
-    }, [])
+        });
+    }, []);
 
     function formatDateToString(date) {
         if (date != null) {
             let output = moment(date)
                 .startOf('minute')
-                .fromNow()
-            return output
+                .fromNow();
+            return output;
         }
     }
 
     useEffect(() => {
-        const theme = JSON.parse(localStorage.getItem('whitemode'))
-        if (theme) setIsWhiteMode(theme)
-    }, [])
+        const theme = JSON.parse(localStorage.getItem('whitemode'));
+        if (theme) setIsWhiteMode(theme);
+    }, []);
 
     function revealDestroy(id, slug) {
-        const name = JSON.parse(localStorage.getItem('username'))
+        const name = JSON.parse(localStorage.getItem('username'));
         if (name === '\u0061\u0064\u006D\u0069\u006E') {
             return (
                 <button
                     className="btn btn-danger btn-sm"
                     onClick={async () => {
-                        setActionFetchData(!actionFetchData)
+                        setActionFetchData(!actionFetchData);
 
-                        const url = `/api/question`
+                        const url = `/api/question`;
                         mutate(
                             url,
                             questions?.data?.filter((e) => e._id !== id),
                             false,
-                        )
-                        await dispatch(deleteQuestion(id, slug))
-                        mutate(url)
+                        );
+                        await dispatch(deleteQuestion(id, slug));
+                        mutate(url);
                     }}>
                     Delete
                 </button>
-            )
+            );
         }
     }
 
@@ -77,7 +77,7 @@ function Home({ initialQuestions }) {
         'question-each': true,
         'background-common-light': isWhiteMode === 'true',
         'background-common-dark': isWhiteMode === 'false',
-    })
+    });
 
     return (
         <div className="container home-route">
@@ -116,13 +116,13 @@ function Home({ initialQuestions }) {
                 <div style={{ width: '100px', textAlign: 'center' }} ref={_el}></div>
             )}
         </div>
-    )
+    );
 }
 
-export default Home
+export default Home;
 
 Home.getInitialProps = async (ctx) => {
-    const res = await axios('/api/question')
-    const json = res.data
-    return { initialQuestions: json }
-}
+    const res = await axios('/api/question');
+    const json = res.data;
+    return { initialQuestions: json };
+};

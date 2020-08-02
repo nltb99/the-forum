@@ -1,29 +1,29 @@
-import React, { useState, useEffect, useRef } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { addQuestion, getAllQuestion } from '../redux/actions/actionTypes.js'
-import PropTypes from 'prop-types'
-import classNames from 'classnames'
-import useSWR, { mutate } from 'swr'
+import React, { useState, useEffect, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { addQuestion, getAllQuestion } from '../redux/actions/actionTypes.js';
+import PropTypes from 'prop-types';
+import classNames from 'classnames';
+import useSWR, { mutate } from 'swr';
 
 function NewQuestion({ history }) {
-    const dispatch = useDispatch()
-    const [isWhiteMode, setIsWhiteMode] = useState('false')
+    const dispatch = useDispatch();
+    const [isWhiteMode, setIsWhiteMode] = useState('false');
 
-    const tittleRef = useRef('')
-    const detailRef = useRef('')
+    const tittleRef = useRef('');
+    const detailRef = useRef('');
 
     const [coincident, setCoincident] = useState({
         output: '',
-    })
+    });
 
     //SWR
-    const swrFetchQuestions = useSWR(`/api/question`)
+    const swrFetchQuestions = useSWR(`/api/question`);
 
     const handleSubmit = async (e) => {
-        e.preventDefault()
+        e.preventDefault();
 
-        let title = await tittleRef.current.value
-        let detail = await detailRef.current.value
+        let title = await tittleRef.current.value;
+        let detail = await detailRef.current.value;
 
         swrFetchQuestions.data.map((cell) => {
             if (cell.title == title) {
@@ -36,10 +36,10 @@ function NewQuestion({ history }) {
                             That title of question already have!
                         </div>
                     ),
-                })
-                return
+                });
+                return;
             }
-        })
+        });
 
         if (!title.trim() || !detail.trim()) {
             setCoincident({
@@ -51,8 +51,8 @@ function NewQuestion({ history }) {
                         Please fill all fields
                     </div>
                 ),
-            })
-            return
+            });
+            return;
         }
         if (localStorage.getItem('username') === null) {
             setCoincident({
@@ -64,26 +64,26 @@ function NewQuestion({ history }) {
                         Please login first
                     </div>
                 ),
-            })
-            return
+            });
+            return;
         }
-        let author = await JSON.parse(localStorage.getItem('username'))
+        let author = await JSON.parse(localStorage.getItem('username'));
 
-        await dispatch(addQuestion(title, detail, author))
-        await history.push('/')
-    }
+        await dispatch(addQuestion(title, detail, author));
+        await history.push('/');
+    };
 
     useEffect(() => {
-        const theme = JSON.parse(localStorage.getItem('whitemode'))
-        if (theme) setIsWhiteMode(theme)
-    }, [])
+        const theme = JSON.parse(localStorage.getItem('whitemode'));
+        if (theme) setIsWhiteMode(theme);
+    }, []);
 
     const classStylingForm = classNames({
         container: true,
         'new-question': true,
         darkColor: isWhiteMode === 'true',
         whiteColor: isWhiteMode === 'false',
-    })
+    });
 
     return (
         <form className={classStylingForm} onSubmit={handleSubmit}>
@@ -109,12 +109,12 @@ function NewQuestion({ history }) {
                 Submit
             </button>
         </form>
-    )
+    );
 }
 
 NewQuestion.propTypes = {
     title: PropTypes.string,
     detail: PropTypes.string,
-}
+};
 
-export default NewQuestion
+export default NewQuestion;

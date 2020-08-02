@@ -1,12 +1,12 @@
-import { ISDARKMODE } from '../actions/actions'
+import { ISDARKMODE } from '../actions/actions';
 
 const HandleSwitchMode = (state = true, action) => {
     switch (action.type) {
         case ISDARKMODE:
-            return !state
+            return !state;
         default:
-            return state
+            return state;
     }
-}
+};
 
-export default HandleSwitchMode
+export default HandleSwitchMode;

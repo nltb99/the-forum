@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
-import { Switch } from './StyledComponents/switchMode'
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { Switch } from './StyledComponents/switchMode';
 
 function Header() {
-    const [isWhiteMode, setIsWhiteMode] = useState('')
+    const [isWhiteMode, setIsWhiteMode] = useState('');
 
     useEffect(() => {
-        const theme = JSON.parse(localStorage.getItem('whitemode'))
-        if (theme) setIsWhiteMode(theme)
-    }, [])
+        const theme = JSON.parse(localStorage.getItem('whitemode'));
+        if (theme) setIsWhiteMode(theme);
+    }, []);
 
     // function displayUsername() {
     //     if (localStorage.getItem('username') == null) return
@@ -37,11 +37,11 @@ function Header() {
                     type="checkbox"
                     theme={isWhiteMode}
                     onClick={() => {
-                        let isWhiteMode = JSON.parse(localStorage.getItem('whitemode'))
-                        if (isWhiteMode === 'false') isWhiteMode = 'true'
-                        else if (isWhiteMode === 'true') isWhiteMode = 'false'
-                        localStorage.setItem('whitemode', JSON.stringify(isWhiteMode))
-                        window.location.reload(true)
+                        let isWhiteMode = JSON.parse(localStorage.getItem('whitemode'));
+                        if (isWhiteMode === 'false') isWhiteMode = 'true';
+                        else if (isWhiteMode === 'true') isWhiteMode = 'false';
+                        localStorage.setItem('whitemode', JSON.stringify(isWhiteMode));
+                        window.location.reload(true);
                     }}
                 />
                 <img src={require('../images/sun.png')} alt="" />
@@ -54,8 +54,8 @@ function Header() {
                     <Link to="/">
                         <h5
                             onClick={() => {
-                                localStorage.removeItem('username')
-                                window.location.reload(true)
+                                localStorage.removeItem('username');
+                                window.location.reload(true);
                             }}>
                             Logout
                         </h5>
@@ -67,7 +67,7 @@ function Header() {
                 </Link>
             </div>
         </nav>
-    )
+    );
 }
 
-export default Header
+export default Header;

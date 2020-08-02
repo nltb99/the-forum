@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled from 'styled-components';
 
 const InfoQuestion = styled.div`
     display: flex;
@@ -11,6 +11,6 @@ const InfoQuestion = styled.div`
         border-right: 2px solid white;
         height: 20px;
     }
-`
+`;
 
-export default InfoQuestion
+export default InfoQuestion;

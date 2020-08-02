@@ -1,64 +1,64 @@
-import React, { useRef, useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
-import classNames from 'classnames'
-import { userRegister } from '../redux/actions/actionTypes'
-import axios from 'axios'
+import React, { useRef, useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import classNames from 'classnames';
+import { userRegister } from '../redux/actions/actionTypes';
+import axios from 'axios';
 
 function Register({ history }) {
-    const dispatch = useDispatch()
-    const [isWhiteMode, setIsWhiteMode] = useState('false')
+    const dispatch = useDispatch();
+    const [isWhiteMode, setIsWhiteMode] = useState('false');
 
     let [registerFail, setRegisterFail] = useState({
         isError: false,
         message: '',
-    })
+    });
 
-    const usernameInput = useRef()
-    const passwordInput = useRef()
+    const usernameInput = useRef();
+    const passwordInput = useRef();
 
     const handleSubmit = async (e) => {
-        e.preventDefault()
-        let checkValid = true
-        const username = usernameInput.current.value
-        const password = passwordInput.current.value
+        e.preventDefault();
+        let checkValid = true;
+        const username = usernameInput.current.value;
+        const password = passwordInput.current.value;
         if (username.length === 0 || password.length === 0) {
-            checkValid = false
+            checkValid = false;
             await setRegisterFail({
                 isError: true,
                 message: 'Input must not null',
-            })
-            return
+            });
+            return;
         }
         if (password.includes(username)) {
-            checkValid = false
+            checkValid = false;
             await setRegisterFail({
                 isError: true,
                 message: 'Password is too similar to Username',
-            })
-            return
+            });
+            return;
         }
         await axios.get('/api/user/users').then((res) => {
             if (res.data.some((e) => e.username === username)) {
-                checkValid = false
+                checkValid = false;
                 setRegisterFail({
                     isError: true,
                     message: 'Username already exists',
-                })
-                return
+                });
+                return;
             }
-        })
+        });
         if (checkValid) {
-            await dispatch(userRegister(username, password))
-            await history.push('/user/login')
-            window.location.reload(true)
+            await dispatch(userRegister(username, password));
+            await history.push('/user/login');
+            window.location.reload(true);
         }
-    }
+    };
 
     function removeErrorMessage() {
         setRegisterFail({
             isError: false,
             message: '',
-        })
+        });
     }
 
     const classStylingForm = classNames({
@@ -66,12 +66,12 @@ function Register({ history }) {
         'auth-form': true,
         whiteColor: isWhiteMode === 'false',
         darkColor: isWhiteMode === 'true',
-    })
+    });
 
     useEffect(() => {
-        const theme = JSON.parse(localStorage.getItem('whitemode'))
-        setIsWhiteMode(theme)
-    }, [])
+        const theme = JSON.parse(localStorage.getItem('whitemode'));
+        setIsWhiteMode(theme);
+    }, []);
 
     return (
         <form className={classStylingForm} onSubmit={handleSubmit}>
@@ -102,7 +102,7 @@ function Register({ history }) {
                 Submit
             </button>
         </form>
-    )
+    );
 }
 
-export default Register
+export default Register;

@@ -1,72 +1,72 @@
-import React, { useEffect, useState, useRef } from 'react'
-import { addComment, deleteComment } from '../redux/actions/actionTypes.js'
-import { useDispatch } from 'react-redux'
-import PropTypes from 'prop-types'
-import moment from 'moment'
-import classNames from 'classnames'
-import useSWR, { mutate } from 'swr'
+import React, { useEffect, useState, useRef } from 'react';
+import { addComment, deleteComment } from '../redux/actions/actionTypes.js';
+import { useDispatch } from 'react-redux';
+import PropTypes from 'prop-types';
+import moment from 'moment';
+import classNames from 'classnames';
+import useSWR, { mutate } from 'swr';
 
-import lottie from 'lottie-web'
-import animationLoading from '../images/loading.json'
+import lottie from 'lottie-web';
+import animationLoading from '../images/loading.json';
 
 function SpecificQuestion({ match, location }) {
-    const dispatch = useDispatch()
-    const contentComment = useRef('')
+    const dispatch = useDispatch();
+    const contentComment = useRef('');
 
-    const id = location.search.match(/((?<=id=).+(?=\&))/g)[0]
-    const slug = location.search.match(/((?<=slug=).*)/g)[0]
+    const id = location.search.match(/((?<=id=).+(?=\&))/g)[0];
+    const slug = location.search.match(/((?<=slug=).*)/g)[0];
 
-    const [isWhiteMode, setIsWhiteMode] = useState('false')
+    const [isWhiteMode, setIsWhiteMode] = useState('false');
 
-    const questions = useSWR(`/api/question/${id}`)
-    const comments = useSWR(`/api/comment/${slug}`)
+    const questions = useSWR(`/api/question/${id}`);
+    const comments = useSWR(`/api/comment/${slug}`);
 
     const handleSubmit = async (e) => {
-        e.preventDefault()
-        let comment = contentComment.current.value
+        e.preventDefault();
+        let comment = contentComment.current.value;
 
-        mutate(`/api/comment/${slug}`, [...comments.data, comment], false)
-        await dispatch(addComment(slug, comment))
-        mutate(`/api/comment/${slug}`)
-        contentComment.current.value = ''
-    }
+        mutate(`/api/comment/${slug}`, [...comments.data, comment], false);
+        await dispatch(addComment(slug, comment));
+        mutate(`/api/comment/${slug}`);
+        contentComment.current.value = '';
+    };
 
     function formatDateToString(date) {
         let output = moment(date)
             .startOf('minute')
-            .fromNow()
-        return output
+            .fromNow();
+        return output;
     }
 
     function revealDestroy(id) {
-        const name = JSON.parse(localStorage.getItem('username'))
+        const name = JSON.parse(localStorage.getItem('username'));
         if (name === '\u0061\u0064\u006D\u0069\u006E') {
             return (
                 <button
                     onClick={async () => {
-                        const url = `/api/comment/${slug}`
+                        const url = `/api/comment/${slug}`;
                         mutate(
                             url,
                             comments?.data?.filter((e) => e._id !== id),
                             false,
-                        )
-                        await dispatch(deleteComment(id))
-                        mutate(url)
+                        );
+                        await dispatch(deleteComment(id));
+                        mutate(url);
                     }}
                     className="btn btn-danger btn-sm">
                     Delete
                 </button>
-            )
+            );
         }
     }
 
     useEffect(() => {
-        const theme = JSON.parse(localStorage.getItem('whitemode'))
-        setIsWhiteMode(theme)
-    }, [])
+        const theme = JSON.parse(localStorage.getItem('whitemode'));
+        setIsWhiteMode(theme);
+    }, []);
 
     //lottie
-    const _el = useRef()
+    const _el = useRef();
     useEffect(() => {
         lottie.loadAnimation({
             container: _el.current,
@@ -74,15 +74,15 @@ function SpecificQuestion({ match, location }) {
             loop: true,
             autoplay: true,
             animationData: animationLoading,
-        })
-    }, [])
+        });
+    }, []);
 
     const classStylingSpecific = classNames({
         container: true,
         'specific-question': true,
         whiteColor: isWhiteMode === 'false',
         darkColor: isWhiteMode === 'true',
-    })
+    });
 
     return (
         <div className={classStylingSpecific}>
@@ -129,15 +129,15 @@ function SpecificQuestion({ match, location }) {
                 </div>
             )}
         </div>
-    )
+    );
 }
 
 SpecificQuestion.propTypes = {
     _id: PropTypes.number,
     title: PropTypes.string,
     detail: PropTypes.string,
-}
+};
 
-export default SpecificQuestion
+export default SpecificQuestion;
 
 // <div style={{ width: '100px', textAlign: 'center' }} ref={_el}></div> // for loading comments

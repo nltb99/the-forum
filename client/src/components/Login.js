@@ -1,80 +1,80 @@
-import React, { useState, useEffect, useRef } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import classNames from 'classnames'
-import { userLogin } from '../redux/actions/actionTypes'
-import axios from 'axios'
+import React, { useState, useEffect, useRef } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import classNames from 'classnames';
+import { userLogin } from '../redux/actions/actionTypes';
+import axios from 'axios';
 
 function Login({ history }) {
-    const [isWhiteMode, setIsWhiteMode] = useState('false')
+    const [isWhiteMode, setIsWhiteMode] = useState('false');
 
-    const authPassword = useSelector((state) => state.credentialsFalse)
+    const authPassword = useSelector((state) => state.credentialsFalse);
 
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
 
     let [authInput, setAuthInput] = useState({
         isError: false,
         message: '',
-    })
+    });
 
-    const usernameInput = useRef()
-    const passwordInput = useRef()
+    const usernameInput = useRef();
+    const passwordInput = useRef();
 
     const handleSubmit = async (e) => {
-        e.preventDefault()
-        const username = usernameInput.current.value
-        const password = passwordInput.current.value
-        let checkValid = true
+        e.preventDefault();
+        const username = usernameInput.current.value;
+        const password = passwordInput.current.value;
+        let checkValid = true;
         if (username.length === 0 || password.length === 0) {
-            checkValid = false
+            checkValid = false;
             await setAuthInput({
                 isError: true,
                 message: 'Input must not null',
-            })
-            return
+            });
+            return;
         }
         await axios.get('/api/user/users').then((res) => {
             if (res.data.every((e) => e.username !== username)) {
-                checkValid = false
+                checkValid = false;
                 setAuthInput({
                     isError: true,
                     message: 'Username not exists',
-                })
-                return
+                });
+                return;
             }
-        })
+        });
 
         if (checkValid) {
-            await dispatch(userLogin(username, password))
+            await dispatch(userLogin(username, password));
             if (localStorage.getItem('username') !== null) {
-                await history.push('/')
-                await window.location.reload(true)
+                await history.push('/');
+                await window.location.reload(true);
             }
         }
-    }
+    };
 
     const classStylingForm = classNames({
         container: true,
         'auth-form': true,
         whiteColor: isWhiteMode === 'false',
         darkColor: isWhiteMode === 'true',
-    })
+    });
 
     useEffect(() => {
-        const theme = JSON.parse(localStorage.getItem('whitemode'))
-        setIsWhiteMode(theme)
-        const isLogged = JSON.parse(localStorage.getItem('username'))
+        const theme = JSON.parse(localStorage.getItem('whitemode'));
+        setIsWhiteMode(theme);
+        const isLogged = JSON.parse(localStorage.getItem('username'));
         if (isLogged !== null) {
-            history.push('/')
-            window.location.reload(true)
+            history.push('/');
+            window.location.reload(true);
         }
-    }, [])
+    }, []);
 
     function removeErrorMessage() {
         setAuthInput({
             isError: false,
             message: '',
-        })
-        authPassword.msg = ''
+        });
+        authPassword.msg = '';
     }
 
     return (
@@ -120,7 +120,7 @@ function Login({ history }) {
                 Submit
             </button>
         </form>
-    )
+    );
 }
 
-export default Login
+export default Login;

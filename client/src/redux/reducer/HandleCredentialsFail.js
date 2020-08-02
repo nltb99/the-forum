@@ -1,7 +1,7 @@
-import { LOGINFAIL } from '../actions/actions'
+import { LOGINFAIL } from '../actions/actions';
 const initialState = {
     msg: '',
-}
+};
 
 const HandleCredentialFail = (state = initialState, action) => {
     switch (action.type) {
@@ -9,10 +9,10 @@ const HandleCredentialFail = (state = initialState, action) => {
             return {
                 ...state,
                 msg: action.payload,
-            }
+            };
         default:
-            return state
+            return state;
     }
-}
+};
 
-export default HandleCredentialFail
+export default HandleCredentialFail;

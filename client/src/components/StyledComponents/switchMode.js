@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled from 'styled-components';
 
 export const Switch = styled.input`
     position: relative;
@@ -31,8 +31,8 @@ export const Switch = styled.input`
         background: #888;
         transition: all 0.3s ease-in;
     }
-`
+`;
 
 export const Day = styled.body`
     background-color: red;
-`
+`;
