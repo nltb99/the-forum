@@ -7,6 +7,7 @@ import {
     DELETECOMMENT,
     ISLOADING,
     ISDARKMODE,
+    ISWHITEMODE,
     USERLOGIN,
     USERREGISTER,
     LOADCREDENTIAL,
@@ -110,6 +111,12 @@ export const isLoading = () => {
 export const isDarkmode = () => {
     return {
         type: ISDARKMODE,
+    }
+}
+
+export const isWhiteMode = () => {
+    return {
+        type: ISWHITEMODE,
     }
 }
 

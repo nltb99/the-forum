@@ -16,14 +16,12 @@ import QuantityComment from './QuantityComment.js'
 function Home() {
     const [actionFetchData, setActionFetchData] = useState(false)
 
-    const dispatch = useDispatch()
+    const [isWhiteMode, setIsWhiteMode] = useState('false')
 
-    const isDarkMode = useSelector((state) => state.switchMode)
+    const dispatch = useDispatch()
 
     //SWR
     const swrFetchQuestions = useSWR(`/api/question`)
-
-    console.log('ad')
 
     //lottie
     const _el = useRef()
@@ -46,12 +44,10 @@ function Home() {
         }
     }
 
-    const styleEachQuestion = classNames({
-        'my-4': true,
-        'question-each': true,
-        'background-common-light': !isDarkMode,
-        'background-common-dark': isDarkMode,
-    })
+    useEffect(() => {
+        const theme = JSON.parse(localStorage.getItem('whitemode'))
+        setIsWhiteMode(theme)
+    }, [])
 
     function revealDestroy(id, slug) {
         const name = JSON.parse(localStorage.getItem('username'))
@@ -77,43 +73,51 @@ function Home() {
         }
     }
 
+    const styleEachQuestion = classNames({
+        'my-4': true,
+        'question-each': true,
+        'background-common-light': isWhiteMode === 'true',
+        'background-common-dark': isWhiteMode === 'false',
+    })
+
     return (
         <div className="container home-route">
-            <h1 className={isDarkMode ? 'text-white' : 'text-dark'}>
+            <h1 className={isWhiteMode === 'false' ? 'text-white' : 'text-dark'}>
                 Questions ({swrFetchQuestions?.data?.length})
             </h1>
-            {swrFetchQuestions?.data?.map((cell, index) => (
-                <div className={styleEachQuestion} key={index}>
-                    <div>
-                        <Link
-                            to={(location) => ({
-                                ...location,
-                                pathname: `/question`,
-                                search: `?id=${cell._id}&slug=${cell.slug}`,
-                            })}
-                            className="text-info">
-                            Q: {cell.title}
-                        </Link>
-                        <QuantityComment isDarkMode={isDarkMode} slug={cell.slug} />
-                        <InfoQuestion isDarkMode={isDarkMode}>
-                            <p>
-                                {cell.author}
-                                {'  |'}
-                            </p>
-                            <p className={isDarkMode ? 'whiteColor' : 'darkColor'}>
-                                {formatDateToString(cell.createAt)}
-                            </p>
-                        </InfoQuestion>
+            <React.Fragment>
+                {swrFetchQuestions?.data?.map((cell, index) => (
+                    <div className={styleEachQuestion} key={index}>
+                        <div>
+                            <Link
+                                to={(location) => ({
+                                    ...location,
+                                    pathname: `/question`,
+                                    search: `?id=${cell._id}&slug=${cell.slug}`,
+                                })}
+                                className="text-info">
+                                Q: {cell.title}
+                            </Link>
+                            <QuantityComment isWhiteMode={isWhiteMode} slug={cell.slug} />
+                            <InfoQuestion isWhiteMode={isWhiteMode}>
+                                <p>
+                                    {cell.author}
+                                    {'  |'}
+                                </p>
+                                <p className={isWhiteMode === 'false' ? 'whiteColor' : 'darkColor'}>
+                                    {formatDateToString(cell.createAt)}
+                                </p>
+                            </InfoQuestion>
+                        </div>
+                        {revealDestroy(cell._id, cell.slug)}
                     </div>
-                    {revealDestroy(cell._id, cell.slug)}
-                </div>
-            ))}
+                ))}
+            </React.Fragment>
+            {!swrFetchQuestions.data && (
+                <div style={{ width: '100px', textAlign: 'center' }} ref={_el}></div>
+            )}
         </div>
     )
 }
 
 export default Home
-
-// {state.questions.length === 0 && (
-//     <div style={{ width: '100px', textAlign: 'center' }} ref={_el}></div>
-// )}

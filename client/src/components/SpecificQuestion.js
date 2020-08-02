@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { useSelector } from 'react-redux'
 import { addComment, deleteComment } from '../redux/actions/actionTypes.js'
 import { useDispatch } from 'react-redux'
@@ -17,13 +17,11 @@ function SpecificQuestion({ match, location }) {
     const id = location.search.match(/((?<=id=).+(?=\&))/g)[0]
     const slug = location.search.match(/((?<=slug=).*)/g)[0]
 
-    const isDarkMode = useSelector((state) => state.switchMode)
+    const [isWhiteMode, setIsWhiteMode] = useState('false')
 
     //SWR
     const swrFetchQuestion = useSWR(`/api/question/${id}`)
     const swrFetchComments = useSWR(`/api/comment/${slug}`)
-
-    console.log('haha')
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -42,13 +40,6 @@ function SpecificQuestion({ match, location }) {
             .fromNow()
         return output
     }
-
-    const classStylingSpecific = classNames({
-        container: true,
-        'specific-question': true,
-        darkColor: !isDarkMode,
-        whiteColor: isDarkMode,
-    })
 
     function revealDestroy(id) {
         const name = JSON.parse(localStorage.getItem('username'))
@@ -72,6 +63,11 @@ function SpecificQuestion({ match, location }) {
         }
     }
 
+    useEffect(() => {
+        const theme = JSON.parse(localStorage.getItem('whitemode'))
+        setIsWhiteMode(theme)
+    }, [])
+
     //lottie
     const _el = useRef()
     useEffect(() => {
@@ -84,43 +80,59 @@ function SpecificQuestion({ match, location }) {
         })
     }, [])
 
+    const classStylingSpecific = classNames({
+        container: true,
+        'specific-question': true,
+        whiteColor: isWhiteMode === 'false',
+        darkColor: isWhiteMode === 'true',
+    })
+
     return (
         <div className={classStylingSpecific}>
-            {
-                <div>
-                    <h1>Title: {swrFetchQuestion?.data?.title}</h1>
-                    <hr className="hr-styling" />
-                    <h5>Detail: {swrFetchQuestion?.data?.detail}</h5>
-                </div>
-            }
-            <hr className="hr-styling" />
-            <div className="container-user-comment">
-                {swrFetchComments?.data?.map((comment, index) => (
-                    <div key={index}>
-                        <h5>
-                            {comment.comment}
-                            <small className="text-info">
-                                {'   '}
-                                {formatDateToString(comment.createAt)}
-                            </small>
-                        </h5>
-                        {revealDestroy(comment._id)}
+            {swrFetchQuestion.data && swrFetchComments.data ? (
+                <React.Fragment>
+                    <div>
+                        <h1>Title: {swrFetchQuestion?.data?.title}</h1>
+                        <hr className="hr-styling" />
+                        <h5>Detail: {swrFetchQuestion?.data?.detail}</h5>
                     </div>
-                ))}
-            </div>
-            <hr className="hr-styling" />
-            <form onSubmit={handleSubmit}>
-                <div className="form-group">
-                    <label htmlFor="comment-user">Your Answer: </label>
-                    <textarea
-                        ref={contentComment}
-                        name="comment-user"
-                        className="form-control"></textarea>
+                    <hr className="hr-styling" />
+                    <div className="container-user-comment">
+                        {swrFetchComments?.data?.map((comment, index) => (
+                            <div key={index}>
+                                <h5>
+                                    {comment.comment}
+                                    <small className="text-info">
+                                        {'   '}
+                                        {formatDateToString(comment.createAt)}
+                                    </small>
+                                </h5>
+                                {revealDestroy(comment._id)}
+                            </div>
+                        ))}
+                    </div>
+                    <hr className="hr-styling" />
+                    <form onSubmit={handleSubmit}>
+                        <div className="form-group">
+                            <label htmlFor="comment-user">Your Answer: </label>
+                            <textarea
+                                ref={contentComment}
+                                name="comment-user"
+                                className="form-control"></textarea>
+                        </div>
+                        <button type="submit" className="btn btn-info btn-block">
+                            Submit
+                        </button>
+                    </form>
+                </React.Fragment>
+            ) : (
+                <div className="waiting-specific-question">
+                    <br />
+                    <br />
+                    <br />
+                    <hr className="hr-styling" />
                 </div>
-                <button type="submit" className="btn btn-info btn-block">
-                    Submit
-                </button>
-            </form>
+            )}
         </div>
     )
 }

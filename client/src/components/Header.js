@@ -1,21 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
 import { Switch } from './StyledComponents/switchMode'
-import { isDarkmode } from '../redux/actions/actionTypes'
 
 function Header() {
-    const dispatch = useDispatch()
-    const isDarkMode = useSelector((state) => state.switchMode)
+    const [isWhiteMode, setIsWhiteMode] = useState('')
 
     useEffect(() => {
-        if (isDarkMode) {
-            document.body.style.background = '#262626'
-        }
-        if (!isDarkMode) {
-            document.body.style.background = '#fff'
-        }
-    }, [isDarkMode])
+        const theme = JSON.parse(localStorage.getItem('whitemode'))
+        setIsWhiteMode(theme)
+    }, [])
 
     // function displayUsername() {
     //     if (localStorage.getItem('username') == null) return
@@ -42,9 +35,16 @@ function Header() {
                 <img src={require('../images/moon.png')} alt="" />
                 <Switch
                     type="checkbox"
-                    theme={isDarkMode}
+                    theme={isWhiteMode}
                     onClick={() => {
-                        dispatch(isDarkmode())
+                        let isWhiteMode = JSON.parse(localStorage.getItem('whitemode'))
+                        if (isWhiteMode === 'false') {
+                            isWhiteMode = 'true'
+                        } else if (isWhiteMode === 'true') {
+                            isWhiteMode = 'false'
+                        }
+                        localStorage.setItem('whitemode', JSON.stringify(isWhiteMode))
+                        window.location.reload(true)
                     }}
                 />
                 <img src={require('../images/sun.png')} alt="" />

@@ -19,7 +19,6 @@ const HandleCredentials = (state = initialsState, action) => {
                 msg: 'Register Succeed',
             }
         case USERLOGIN:
-            // localStorage.setItem('token', action.payload.token)
             localStorage.setItem('username', JSON.stringify(action.payload.user.username))
             return {
                 ...state,

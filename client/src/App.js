@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import './App.css'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 
@@ -9,10 +9,23 @@ import SpecificQuestion from './components/SpecificQuestion.js'
 import Login from './components/Login'
 import Register from './components/Register'
 import MissingRoute from './components/MissingRoute.js'
+import WholeBody from './components/StyledComponents/wholebody'
 
 function App() {
+    const [theme, setTheme] = useState('')
+
+    useEffect(() => {
+        const isWhiteMode = JSON.parse(localStorage.getItem('whitemode'))
+        setTheme(isWhiteMode)
+        if (isWhiteMode === 'true') {
+            localStorage.setItem('whitemode', JSON.stringify('true'))
+        } else if (isWhiteMode === null) {
+            localStorage.setItem('whitemode', JSON.stringify('false'))
+        }
+    }, [])
     return (
         <Router>
+            <WholeBody theme={theme} />
             <Header />
             <Switch>
                 <Route exact path="/" component={Home}></Route>

@@ -7,6 +7,7 @@ import useSWR, { mutate } from 'swr'
 
 function NewQuestion({ history }) {
     const dispatch = useDispatch()
+    const [isWhiteMode, setIsWhiteMode] = useState('false')
 
     const tittleRef = useRef('')
     const detailRef = useRef('')
@@ -17,8 +18,6 @@ function NewQuestion({ history }) {
 
     //SWR
     const swrFetchQuestions = useSWR(`/api/question`)
-
-    const isDarkMode = useSelector((state) => state.switchMode)
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -74,11 +73,16 @@ function NewQuestion({ history }) {
         await history.push('/')
     }
 
+    useEffect(() => {
+        const theme = JSON.parse(localStorage.getItem('whitemode'))
+        setIsWhiteMode(theme)
+    }, [])
+
     const classStylingForm = classNames({
         container: true,
         'new-question': true,
-        darkColor: !isDarkMode,
-        whiteColor: isDarkMode,
+        darkColor: isWhiteMode === 'true',
+        whiteColor: isWhiteMode === 'false',
     })
 
     return (
