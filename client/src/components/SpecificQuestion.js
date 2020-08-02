@@ -19,16 +19,14 @@ function SpecificQuestion({ match, location }) {
 
     const [isWhiteMode, setIsWhiteMode] = useState('false')
 
-    //SWR
-    const swrFetchQuestion = useSWR(`/api/question/${id}`)
-    const swrFetchComments = useSWR(`/api/comment/${slug}`)
+    const questions = useSWR(`/api/question/${id}`)
+    const comments = useSWR(`/api/comment/${slug}`)
 
     const handleSubmit = async (e) => {
         e.preventDefault()
         let comment = contentComment.current.value
 
-        //swr
-        mutate(`/api/comment/${slug}`, [...swrFetchComments.data, comment], false)
+        mutate(`/api/comment/${slug}`, [...comments.data, comment], false)
         await dispatch(addComment(slug, comment))
         mutate(`/api/comment/${slug}`)
         contentComment.current.value = ''
@@ -50,7 +48,7 @@ function SpecificQuestion({ match, location }) {
                         const url = `/api/comment/${slug}`
                         mutate(
                             url,
-                            swrFetchComments?.data?.filter((e) => e._id !== id),
+                            comments?.data?.filter((e) => e._id !== id),
                             false,
                         )
                         await dispatch(deleteComment(id))
@@ -89,16 +87,16 @@ function SpecificQuestion({ match, location }) {
 
     return (
         <div className={classStylingSpecific}>
-            {swrFetchQuestion.data && swrFetchComments.data ? (
+            {questions.data && comments.data ? (
                 <React.Fragment>
                     <div>
-                        <h1>Title: {swrFetchQuestion?.data?.title}</h1>
+                        <h1>Title: {questions?.data?.title}</h1>
                         <hr className="hr-styling" />
-                        <h5>Detail: {swrFetchQuestion?.data?.detail}</h5>
+                        <h5>Detail: {questions?.data?.detail}</h5>
                     </div>
                     <hr className="hr-styling" />
                     <div className="container-user-comment">
-                        {swrFetchComments?.data?.map((comment, index) => (
+                        {comments?.data?.map((comment, index) => (
                             <div key={index}>
                                 <h5>
                                     {comment.comment}

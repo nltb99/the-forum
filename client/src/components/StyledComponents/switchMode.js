@@ -14,7 +14,7 @@ export const Switch = styled.input`
         position: absolute;
         width: 50%;
         height: 100%;
-        left: ${(props) => (props.theme ? '0px' : '27.5px')};
+        left: ${(props) => (props.theme === 'true' ? '27.5px' : '0px')};
         top: 0;
         background: #fff;
         overflow: hidden;
@@ -23,7 +23,7 @@ export const Switch = styled.input`
     }
     &:checked:before {
         content: '';
-        left: ${(props) => (props.theme ? '27.5px' : 0)};
+        left: ${(props) => (props.theme === 'true' ? '27.5px' : 0)};
         background: #eee;
         transition: all 0.3s ease-in;
     }

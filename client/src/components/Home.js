@@ -1,27 +1,26 @@
 import React, { useEffect, useState, useRef } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { deleteQuestion } from '../redux/actions/actionTypes.js'
 import { Link } from 'react-router-dom'
 import moment from 'moment'
 import classNames from 'classnames'
 import InfoQuestion from './StyledComponents/home'
 import useSWR, { mutate } from 'swr'
+import axios from 'axios'
 
 import lottie from 'lottie-web'
 import animationLoading from '../images/loading.json'
 
-// Impor amount of comment
 import QuantityComment from './QuantityComment.js'
 
-function Home() {
+function Home({ initialQuestions }) {
     const [actionFetchData, setActionFetchData] = useState(false)
 
     const [isWhiteMode, setIsWhiteMode] = useState('false')
 
     const dispatch = useDispatch()
 
-    //SWR
-    const swrFetchQuestions = useSWR(`/api/question`)
+    const questions = useSWR(`/api/question`, { initialData: initialQuestions })
 
     //lottie
     const _el = useRef()
@@ -61,7 +60,7 @@ function Home() {
                         const url = `/api/question`
                         mutate(
                             url,
-                            swrFetchQuestions?.data?.filter((e) => e._id !== id),
+                            questions?.data?.filter((e) => e._id !== id),
                             false,
                         )
                         await dispatch(deleteQuestion(id, slug))
@@ -83,10 +82,10 @@ function Home() {
     return (
         <div className="container home-route">
             <h1 className={isWhiteMode === 'false' ? 'text-white' : 'text-dark'}>
-                Questions ({swrFetchQuestions?.data?.length})
+                Questions ({questions?.data?.length})
             </h1>
             <React.Fragment>
-                {swrFetchQuestions?.data?.map((cell, index) => (
+                {questions?.data?.map((cell, index) => (
                     <div className={styleEachQuestion} key={index}>
                         <div>
                             <Link
@@ -113,7 +112,7 @@ function Home() {
                     </div>
                 ))}
             </React.Fragment>
-            {!swrFetchQuestions.data && (
+            {!questions.data && (
                 <div style={{ width: '100px', textAlign: 'center' }} ref={_el}></div>
             )}
         </div>
@@ -121,3 +120,9 @@ function Home() {
 }
 
 export default Home
+
+Home.getInitialProps = async (ctx) => {
+    const res = await axios('/api/question')
+    const json = res.data
+    return { initialQuestions: json }
+}
