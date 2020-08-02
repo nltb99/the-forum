@@ -7,7 +7,6 @@ const express = require('express'),
     path = require('path'),
     compression = require('compression'),
     morgan = require('morgan'),
-    // redis = require('redis'),
     PORT = process.env.PORT || 5000
 
 // Handle models database

@@ -38,11 +38,8 @@ function Header() {
                     theme={isWhiteMode}
                     onClick={() => {
                         let isWhiteMode = JSON.parse(localStorage.getItem('whitemode'))
-                        if (isWhiteMode === 'false') {
-                            isWhiteMode = 'true'
-                        } else if (isWhiteMode === 'true') {
-                            isWhiteMode = 'false'
-                        }
+                        if (isWhiteMode === 'false') isWhiteMode = 'true'
+                        else if (isWhiteMode === 'true') isWhiteMode = 'false'
                         localStorage.setItem('whitemode', JSON.stringify(isWhiteMode))
                         window.location.reload(true)
                     }}

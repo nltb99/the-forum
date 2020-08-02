@@ -155,7 +155,7 @@ export const userLogin = (username, password) => {
             .catch((err) => {
                 dispatch({
                     type: LOGINFAIL,
-                    payload: 'Username or Password does not match',
+                    payload: 'Password does not match',
                 })
             })
     }

@@ -42,7 +42,7 @@ function Register({ history }) {
                 checkValid = false
                 setRegisterFail({
                     isError: true,
-                    message: 'Username is already exists',
+                    message: 'Username already exists',
                 })
                 return
             }

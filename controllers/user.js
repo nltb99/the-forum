@@ -22,13 +22,19 @@ route.post('/register', (req, res) => {
 
         const newUser = await new UserQandASchema({ username, password })
         await newUser.save().then((user) => {
-            jwt.sign({ _id: user._id }, 'sirbao', { expiresIn: 60 * 60 }, (err, token) => {
-                if (err) throw err
-                res.json({
-                    token,
-                    user,
-                })
-            })
+            jwt.sign(
+                { _id: user._id },
+                process.env.SECRET_JWT,
+                { expiresIn: 60 * 60 },
+                (err, token) => {
+                    if (err) throw err
+                    const obj = {
+                        token: token,
+                        username: user.username,
+                    }
+                    res.json(obj)
+                },
+            )
         })
     })
 })
@@ -48,10 +54,19 @@ route.post('/login', (req, res) => {
                 return res.json({ msg: 'Password does not matchs' })
             }
             if (results) {
-                jwt.sign({ _id: user._id }, 'sirbao', { expiresIn: 60 * 60 }, (err, token) => {
-                    if (err) throw err
-                    res.json({ token, user })
-                })
+                jwt.sign(
+                    { _id: user._id },
+                    process.env.SECRET_JWT,
+                    { expiresIn: 60 * 60 },
+                    (err, token) => {
+                        if (err) throw err
+                        const obj = {
+                            token: token,
+                            username: user.username,
+                        }
+                        res.json(obj)
+                    },
+                )
             }
         })
     })

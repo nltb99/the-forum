@@ -54,7 +54,7 @@ function NewQuestion({ history }) {
             })
             return
         }
-        if (localStorage.getItem('username') == null) {
+        if (localStorage.getItem('username') === null) {
             setCoincident({
                 output: (
                     <div className="alert alert-danger alert-dismissible fade show">

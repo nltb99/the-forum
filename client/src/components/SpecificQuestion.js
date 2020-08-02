@@ -128,8 +128,6 @@ function SpecificQuestion({ match, location }) {
             ) : (
                 <div className="waiting-specific-question">
                     <br />
-                    <br />
-                    <br />
                     <hr className="hr-styling" />
                 </div>
             )}
