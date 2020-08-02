@@ -8,7 +8,7 @@ import store from './redux/store.js'
 import { SWRConfig } from 'swr'
 import axios from 'axios'
 
-axios.defaults.baseURL = 'http://localhost:5000'
+// axios.defaults.baseURL = 'http://localhost:5000'
 
 const fetcher = (...args) => axios(...args).then((res) => res.data)
 
