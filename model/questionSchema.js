@@ -1,6 +1,6 @@
-const express = require('express')
-const mongoose = require('mongoose')
-const slugify = require('slugify')
+const express = require('express');
+const mongoose = require('mongoose');
+const slugify = require('slugify');
 
 const questionSchema = mongoose.Schema({
     title: {
@@ -21,22 +21,17 @@ const questionSchema = mongoose.Schema({
         type: String,
         required: true,
     },
-    counting: {
-        type: Number,
-        required: true,
-    },
     author: {
         type: String,
         required: true,
     },
-})
+});
 
 questionSchema.pre('validate', function(next) {
     if (this.title) {
-        this.slug = slugify(this.title, { lower: true, strict: true })
-        this.counting = 1
+        this.slug = slugify(this.title, { lower: true, strict: true });
     }
-    next()
-})
+    next();
+});
 
-module.exports = mongoose.model('QuestionSchema', questionSchema)
+module.exports = mongoose.model('QuestionSchema', questionSchema);

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { addComment, deleteComment } from '../redux/actions/actionTypes.js';
+import { addComment, deleteComment, getCookie } from '../redux/actions/actionTypes.js';
 import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import moment from 'moment';
@@ -39,8 +39,7 @@ function SpecificQuestion({ match, location }) {
     }
 
     function revealDestroy(id) {
-        const name = JSON.parse(localStorage.getItem('username'));
-        if (name === '\u0061\u0064\u006D\u0069\u006E') {
+        if (getCookie('username') === '\u0061\u0064\u006D\u0069\u006E') {
             return (
                 <button
                     onClick={async () => {

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Switch } from './StyledComponents/switchMode';
+import { getCookie } from '../redux/actions/actionTypes.js';
 
 function Header() {
     const [isWhiteMode, setIsWhiteMode] = useState('');
@@ -45,12 +46,12 @@ function Header() {
                     }}
                 />
                 <img src={require('../images/sun.png')} alt="" />
-                {localStorage.getItem('username') == null && (
+                {getCookie('\u0075\u0073\u0065\u0072\u006E\u0061\u006D\u0065') !== null && (
                     <Link to="/user/login">
                         <h5>Login</h5>
                     </Link>
                 )}
-                {localStorage.getItem('username') != null && (
+                {getCookie('\u0075\u0073\u0065\u0072\u006E\u0061\u006D\u0065') !== null && (
                     <Link to="/">
                         <h5
                             onClick={() => {

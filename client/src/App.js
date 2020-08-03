@@ -8,6 +8,8 @@ import Home from './components/Home.js';
 import SpecificQuestion from './components/SpecificQuestion.js';
 import Login from './components/Login';
 import Register from './components/Register';
+import EmailReset from './components/EmailReset';
+import ResetPassword from './components/ResetPassword';
 import MissingRoute from './components/MissingRoute.js';
 import WholeBody from './components/StyledComponents/wholebody';
 
@@ -33,6 +35,8 @@ function App() {
                 <Route path="/question" component={SpecificQuestion}></Route>
                 <Route path="/user/login" component={Login}></Route>
                 <Route path="/user/register" component={Register}></Route>
+                <Route path="/user/emailreset" component={EmailReset}></Route>
+                <Route path="/user/resetpassword" component={ResetPassword}></Route>
                 <Route exact path="*" component={MissingRoute}></Route>
             </Switch>
         </Router>

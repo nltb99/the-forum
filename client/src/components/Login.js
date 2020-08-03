@@ -1,15 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import classNames from 'classnames';
-import { userLogin } from '../redux/actions/actionTypes';
 import axios from 'axios';
+import jwt from 'jsonwebtoken';
+import { Link } from 'react-router-dom';
 
 function Login({ history }) {
     const [isWhiteMode, setIsWhiteMode] = useState('false');
 
     const authPassword = useSelector((state) => state.credentialsFalse);
-
-    const dispatch = useDispatch();
 
     let [authInput, setAuthInput] = useState({
         isError: false,
@@ -20,38 +19,47 @@ function Login({ history }) {
     const passwordInput = useRef();
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
-        const username = usernameInput.current.value;
-        const password = passwordInput.current.value;
-        if (username.length === 0 || password.length === 0) {
-            await setAuthInput({
-                isError: true,
-                message: 'Input must not null',
-            });
-            return;
-        }
-        const configs = {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        };
-        await axios.post('/api/user/login', { username, password }, configs).then((res) => {
-            if (res.status === 200) {
-                localStorage.setItem('username', JSON.stringify(username));
-                history.push('/');
-                window.location.reload(true);
-            } else if (res.status === 204) {
-                setAuthInput({
+        try {
+            e.preventDefault();
+            const username = usernameInput.current.value;
+            const password = passwordInput.current.value;
+            if (username.length === 0 || password.length === 0) {
+                await setAuthInput({
                     isError: true,
-                    message: 'Username does not exists',
+                    message: 'Input must not null',
                 });
-            } else if (res.status === 206) {
-                setAuthInput({
-                    isError: true,
-                    message: 'Password is not match',
-                });
+                return;
             }
-        });
+            const configs = {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            };
+            await axios.post('/api/user/login', { username, password }, configs).then((res) => {
+                if (res.status === 200) {
+                    jwt.verify(res.data.token, 'access', (err, payload) => {
+                        if (err) throw err;
+                        const { _id, username } = payload;
+                        document.cookie = `username=${username}; max-age=${60 * 60 * 24 * 3}`;
+                        document.cookie = `id=${_id}; max-age=${60 * 60 * 24 * 3}`;
+                        history.push('/');
+                        window.location.reload(true);
+                    });
+                } else if (res.status === 204) {
+                    setAuthInput({
+                        isError: true,
+                        message: 'Username does not exists',
+                    });
+                } else if (res.status === 206) {
+                    setAuthInput({
+                        isError: true,
+                        message: 'Password is not match',
+                    });
+                }
+            });
+        } catch (e) {
+            console.log(e);
+        }
     };
 
     const classStylingForm = classNames({
@@ -64,11 +72,11 @@ function Login({ history }) {
     useEffect(() => {
         const theme = JSON.parse(localStorage.getItem('whitemode'));
         setIsWhiteMode(theme);
-        const isLogged = JSON.parse(localStorage.getItem('username'));
-        if (isLogged !== null) {
-            history.push('/');
-            window.location.reload(true);
-        }
+        // const parsedCookie = window.document.cookie.toString().length;
+        // if (parsedCookie !== 0) {
+        //     history.push('/');
+        //     window.location.reload(true);
+        // }
     }, []);
 
     function removeErrorMessage() {
@@ -118,6 +126,9 @@ function Login({ history }) {
                     </div>
                 )}
             </div>
+            <Link to="/user/emailreset">
+                <h3>Forgot your password?</h3>
+            </Link>
             <button type="submit" className="btn btn-info btn-block mt-4">
                 Submit
             </button>

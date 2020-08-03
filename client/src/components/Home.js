@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useDispatch } from 'react-redux';
-import { deleteQuestion } from '../redux/actions/actionTypes.js';
+import { deleteQuestion, getCookie } from '../redux/actions/actionTypes.js';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 import classNames from 'classnames';
@@ -49,8 +49,7 @@ function Home({ initialQuestions }) {
     }, []);
 
     function revealDestroy(id, slug) {
-        const name = JSON.parse(localStorage.getItem('username'));
-        if (name === '\u0061\u0064\u006D\u0069\u006E') {
+        if (getCookie('username') === '\u0061\u0064\u006D\u0069\u006E') {
             return (
                 <button
                     className="btn btn-danger btn-sm"

@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { addQuestion, getAllQuestion } from '../redux/actions/actionTypes.js';
+import { useDispatch } from 'react-redux';
+import { addQuestion, getCookie } from '../redux/actions/actionTypes.js';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import useSWR, { mutate } from 'swr';
+import useSWR from 'swr';
 
 function NewQuestion({ history }) {
     const dispatch = useDispatch();
@@ -67,9 +67,13 @@ function NewQuestion({ history }) {
             });
             return;
         }
-        let author = await JSON.parse(localStorage.getItem('username'));
-
-        await dispatch(addQuestion(title, detail, author));
+        await dispatch(
+            addQuestion(
+                title,
+                detail,
+                getCookie('\u0075\u0073\u0065\u0072\u006E\u0061\u006D\u0065'),
+            ),
+        );
         await history.push('/');
     };
 
