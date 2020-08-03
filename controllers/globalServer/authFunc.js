@@ -3,13 +3,15 @@ const jwt = require('jsonwebtoken');
 // Auth token
 function authPrivilege(req, res, next) {
     const authHeader = req.headers['authorization'];
-    const token = authHeader && authHeader.split(' ')[1];
-    if (token === null) return res.sendStatus(401);
+    if (!authHeader) {
+        return res.status(401).json({ msg: 'Token must be provided' });
+    }
+    const token = authHeader.split(' ')[1];
+    if (token === null) return res.status(401).json({ msg: 'Token not found' });
 
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, payload) => {
         if (err) throw err;
-        const { _id, username } = payload;
-        req.idUser = _id;
+        const { username } = payload;
         req.username = username;
         next();
     });

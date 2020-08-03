@@ -2,31 +2,53 @@ import React, { useRef, useEffect, useState } from 'react';
 import classNames from 'classnames';
 import axios from 'axios';
 
-function EmailReset({ history }) {
+function EmailReset() {
     const [isWhiteMode, setIsWhiteMode] = useState('false');
 
-    let [registerFail, setRegisterFail] = useState({
+    let [validInput, setValidInput] = useState({
         isError: false,
+        isSuccess: false,
         message: '',
     });
 
     const emailInput = useRef();
     const usernameInput = useRef();
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
+        const email = emailInput.current.value,
+            username = usernameInput.current.value;
+        if (email.length === 0) {
+            setValidInput({
+                isError: true,
+                message: 'Input must not be null',
+            });
+            return;
+        }
+        if (!email.match(/^[a-z][a-z0-9_\.]{4,32}@[a-z0-9]{2,}(\.[a-z0-9]{2,5}){1,2}$/g)) {
+            setValidInput({
+                isError: true,
+                message: 'Email is not valid!',
+            });
+            return;
+        }
         axios
             .post('/api/user/resetpassword', {
-                username: usernameInput.current.value,
-                email: emailInput.current.value,
+                username: username.trim(),
+                email: email.trim(),
             })
             .then((res) => {
-                console.log(res.data);
+                if (res.status === 200) {
+                    setValidInput({
+                        isSuccess: true,
+                        message: 'Your email has been sent',
+                    });
+                }
             });
     };
 
     function removeErrorMessage() {
-        setRegisterFail({
+        setValidInput({
             isError: false,
             message: '',
         });
@@ -66,7 +88,7 @@ function EmailReset({ history }) {
                 />
             </div>
             <div>
-                {registerFail.isError && (
+                {validInput.isError && (
                     <div className="alert alert-danger alert-dismissible my-4 fade show">
                         <button
                             type="button"
@@ -75,7 +97,21 @@ function EmailReset({ history }) {
                             onClick={removeErrorMessage}>
                             &times;
                         </button>
-                        {registerFail.message}
+                        {validInput.message}
+                    </div>
+                )}
+            </div>
+            <div>
+                {validInput.isSuccess && (
+                    <div className="alert alert-success alert-dismissible my-4 fade show">
+                        <button
+                            type="button"
+                            className="close"
+                            data-dismiss="alert"
+                            onClick={removeErrorMessage}>
+                            &times;
+                        </button>
+                        {validInput.message}
                     </div>
                 )}
             </div>

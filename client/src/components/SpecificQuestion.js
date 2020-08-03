@@ -25,6 +25,8 @@ function SpecificQuestion({ match, location }) {
         e.preventDefault();
         let comment = contentComment.current.value;
 
+        if (comment.length === 0) return;
+
         mutate(`/api/comment/${slug}`, [...comments.data, comment], false);
         await dispatch(addComment(slug, comment));
         mutate(`/api/comment/${slug}`);

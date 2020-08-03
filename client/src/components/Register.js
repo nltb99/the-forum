@@ -8,7 +8,7 @@ function Register({ history }) {
     const dispatch = useDispatch();
     const [isWhiteMode, setIsWhiteMode] = useState('false');
 
-    let [registerFail, setRegisterFail] = useState({
+    let [validRegister, setValidRegister] = useState({
         isError: false,
         message: '',
     });
@@ -16,54 +16,47 @@ function Register({ history }) {
     const usernameInput = useRef();
     const passwordInput = useRef();
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
-        let checkValid = true;
         const username = usernameInput.current.value;
         const password = passwordInput.current.value;
         if (username.length === 0 || password.length === 0) {
-            checkValid = false;
-            await setRegisterFail({
+            setValidRegister({
                 isError: true,
-                message: 'Input must not null',
+                message: 'Input must not be null',
             });
             return;
         }
         if (!password.match(/.{6,}/g)) {
-            checkValid = false;
-            await setRegisterFail({
+            setValidRegister({
                 isError: true,
-                message: 'Password length must greater than 6',
+                message: 'Password must contain at least six characters',
             });
             return;
         }
         if (password.includes(username)) {
-            checkValid = false;
-            await setRegisterFail({
+            setValidRegister({
                 isError: true,
                 message: 'Password is too similar to Username',
             });
             return;
         }
-        await axios.get('/api/user/users').then((res) => {
+        axios.get('/api/user/users').then((res) => {
             if (res.data.some((e) => e.username === username)) {
-                checkValid = false;
-                setRegisterFail({
+                setValidRegister({
                     isError: true,
-                    message: 'Username already exists',
+                    message: 'Username is already taken',
                 });
                 return;
             }
         });
-        if (checkValid) {
-            await dispatch(userRegister(username, password));
-            await history.push('/user/login');
-            window.location.reload(true);
-        }
+        dispatch(userRegister(username, password));
+        history.push('/user/login');
+        window.location.reload(true);
     };
 
     function removeErrorMessage() {
-        setRegisterFail({
+        setValidRegister({
             isError: false,
             message: '',
         });
@@ -93,7 +86,7 @@ function Register({ history }) {
                 <input ref={passwordInput} className="form-control" type="password" />
             </div>
             <div>
-                {registerFail.isError && (
+                {validRegister.isError && (
                     <div className="alert alert-danger alert-dismissible my-4 fade show">
                         <button
                             type="button"
@@ -102,7 +95,7 @@ function Register({ history }) {
                             onClick={removeErrorMessage}>
                             &times;
                         </button>
-                        {registerFail.message}
+                        {validRegister.message}
                     </div>
                 )}
             </div>

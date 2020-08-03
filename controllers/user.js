@@ -64,7 +64,6 @@ route.post('/login', (req, res) => {
                         if (err) throw err;
                         const obj = {
                             token: token,
-                            username: user.username,
                         };
                         return res.status(200).json(obj);
                     },
@@ -139,9 +138,8 @@ route.post('/resetpassword', generateResetToken, async (req, res) => {
                 html: outputMail,
             },
             (err, data) => {
-                if (err) console.log('Error');
+                if (err) throw err;
                 else {
-                    console.log('Email sent!!');
                     return res.status(200).json({ msg: 'Email sent' });
                 }
             },

@@ -18,48 +18,45 @@ function Login({ history }) {
     const usernameInput = useRef();
     const passwordInput = useRef();
 
-    const handleSubmit = async (e) => {
-        try {
-            e.preventDefault();
-            const username = usernameInput.current.value;
-            const password = passwordInput.current.value;
-            if (username.length === 0 || password.length === 0) {
-                await setAuthInput({
-                    isError: true,
-                    message: 'Input must not null',
-                });
-                return;
-            }
-            const configs = {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            };
-            await axios.post('/api/user/login', { username, password }, configs).then((res) => {
-                if (res.status === 200) {
-                    jwt.verify(res.data.token, 'access', (err, payload) => {
-                        if (err) throw err;
-                        const { _id, username } = payload;
-                        document.cookie = `username=${username}; max-age=${60 * 60 * 24 * 3}`;
-                        document.cookie = `id=${_id}; max-age=${60 * 60 * 24 * 3}`;
-                        history.push('/');
-                        window.location.reload(true);
-                    });
-                } else if (res.status === 204) {
-                    setAuthInput({
-                        isError: true,
-                        message: 'Username does not exists',
-                    });
-                } else if (res.status === 206) {
-                    setAuthInput({
-                        isError: true,
-                        message: 'Password is not match',
-                    });
-                }
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const username = usernameInput.current.value;
+        const password = passwordInput.current.value;
+        if (username.length === 0 || password.length === 0) {
+            setAuthInput({
+                isError: true,
+                message: 'Input must not be null',
             });
-        } catch (e) {
-            console.log(e);
+            return;
         }
+        const configs = {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        };
+        axios.post('/api/user/login', { username, password }, configs).then((res) => {
+            if (res.status === 200) {
+                jwt.verify(res.data.token, 'access', (err, payload) => {
+                    if (err) throw err;
+                    const { _id, username } = payload;
+                    document.cookie = `username=${username}; max-age=${60 * 60 * 24 * 3}`;
+                    document.cookie = `id=${_id}; max-age=${60 * 60 * 24 * 3}`;
+                    document.cookie = `tk=${res.data.token}; max-age=${60 * 60 * 24 * 3}`;
+                    history.push('/');
+                    // window.location.reload(true);
+                });
+            } else if (res.status === 204) {
+                setAuthInput({
+                    isError: true,
+                    message: 'Username does not exists',
+                });
+            } else if (res.status === 206) {
+                setAuthInput({
+                    isError: true,
+                    message: 'Password does not match',
+                });
+            }
+        });
     };
 
     const classStylingForm = classNames({

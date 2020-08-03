@@ -53,7 +53,7 @@ function Home({ initialQuestions }) {
             return (
                 <button
                     className="btn btn-danger btn-sm"
-                    onClick={async () => {
+                    onClick={() => {
                         setActionFetchData(!actionFetchData);
 
                         const url = `/api/question`;
@@ -62,7 +62,19 @@ function Home({ initialQuestions }) {
                             questions?.data?.filter((e) => e._id !== id),
                             false,
                         );
-                        await dispatch(deleteQuestion(id, slug));
+                        const configs = {
+                            'Content-Type': 'application/json',
+                            headers: { Authorization: `Bearer ${getCookie('tk')}` },
+                        };
+                        axios
+                            .delete('/api/question', { id }, configs)
+                            .then((res) => {
+                                console.log(res.data);
+                            })
+                            .catch((err) => {
+                                console.log(err.response.data);
+                            });
+                        // dispatch(deleteQuestion(id, slug));
                         mutate(url);
                     }}>
                     Delete

@@ -4,20 +4,20 @@ const express = require('express'),
     jwt = require('jsonwebtoken'),
     UserQandASchema = require('../model/user'),
     { authPrivilege } = require('./globalServer/authFunc'),
-    authToken = require('./verifyToken/token'),
-    client = require('./globalServer/redisClient');
+    authToken = require('./verifyToken/token');
+// client = require('./globalServer/redisClient');
 
 // Cache middleware
-function cacheAllQuestion(req, res, next) {
-    client.get('fetchAllQuestions', (err, data) => {
-        if (err) throw err;
-        if (data !== null) {
-            res.json(JSON.parse(data));
-        } else {
-            next();
-        }
-    });
-}
+// function cacheAllQuestion(req, res, next) {
+//     client.get('fetchAllQuestions', (err, data) => {
+//         if (err) throw err;
+//         if (data !== null) {
+//             res.json(JSON.parse(data));
+//         } else {
+//             next();
+//         }
+//     });
+// }
 
 /////////////////////////////////
 
@@ -27,7 +27,7 @@ route.get('/question', async (req, res) => {
         const questions = await QuestionSchema.find({}).sort({ createAt: -1 });
 
         // Set data to Redis
-        client.setex('fetchAllQuestions', 2000, JSON.stringify(questions));
+        // client.setex('fetchAllQuestions', 2000, JSON.stringify(questions));
         res.json(questions);
     } catch (e) {
         console.log(e);
@@ -65,12 +65,12 @@ route.post('/question', authPrivilege, async (req, res) => {
         await schema.save();
 
         // Update fetchAllQuestions
-        await client.get('fetchAllQuestions', (err, data) => {
-            if (err) throw err;
-            let parsedData = JSON.parse(data);
-            parsedData.push(schema);
-            client.setex('fetchAllQuestions', 2000, JSON.stringify(parsedData));
-        });
+        // await client.get('fetchAllQuestions', (err, data) => {
+        //     if (err) throw err;
+        //     let parsedData = JSON.parse(data);
+        //     parsedData.push(schema);
+        //     client.setex('fetchAllQuestions', 2000, JSON.stringify(parsedData));
+        // });
 
         res.send('success');
     } catch (e) {
@@ -79,22 +79,23 @@ route.post('/question', authPrivilege, async (req, res) => {
     }
 });
 
-route.delete('/question/:id', authPrivilege, checkMatchId, async (req, res) => {
+route.delete('/question', authPrivilege, async (req, res) => {
     try {
-        await QuestionSchema.findById(req.params.id).then((question) => {
-            if (question.author != req.username) {
+        await QuestionSchema.findById(req.body.id).then((question) => {
+            if (!question) return res.status(404).json({ msg: 'Question not exists' });
+            if (question.author !== req.username) {
                 return res.status(403).json({ msg: 'Not Allow To Delete' });
             } else {
                 // Delete question in redis
-                let { id } = req.params;
-                client.get('fetchAllQuestions', (err, data) => {
-                    if (err) throw err;
-                    let parsedData = JSON.parse(data);
-                    let newParsedDataArray = parsedData.filter((data) => data._id !== id);
-                    client.setex('fetchAllQuestions', 2000, JSON.stringify(newParsedDataArray));
-                });
+                // let { id } = req.params;
+                // client.get('fetchAllQuestions', (err, data) => {
+                //     if (err) throw err;
+                //     let parsedData = JSON.parse(data);
+                //     let newParsedDataArray = parsedData.filter((data) => data._id !== id);
+                //     client.setex('fetchAllQuestions', 2000, JSON.stringify(newParsedDataArray));
+                // });
 
-                req.question.remove();
+                question.remove();
                 return res.json({ msg: 'Delete succeed!' });
             }
         });
