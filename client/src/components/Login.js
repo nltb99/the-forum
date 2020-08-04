@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import classNames from 'classnames';
+import { getCookie } from '../redux/actions/actionTypes';
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
 import { Link } from 'react-router-dom';
@@ -20,8 +21,8 @@ function Login({ history }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const username = usernameInput.current.value;
-        const password = passwordInput.current.value;
+        const username = usernameInput.current.value.trim();
+        const password = passwordInput.current.value.trim();
         if (!username || !password) {
             setValidInput({
                 isError: true,
@@ -29,17 +30,27 @@ function Login({ history }) {
             });
             return;
         }
-        !validInput.isError && axios.post('/api/user/login', { username, password }).then((res) => {
+        axios.post('/api/user/login', { username, password }).then((res) => {
             if (res.status === 200) {
-                jwt.verify(res.data.token, 'access', async (err, payload) => {
-                    if (err) throw err;
-                    const { _id, username } = await payload;
-                    document.cookie = await `username=${username}; path=/; max-age=${60 * 60 * 24 * 3}; secure; samesite=lax`;
-                    document.cookie = await `id=${_id}; path=/; max-age=${60 * 60 * 24 * 3}; secure; samesite=lax`;
-                    document.cookie = await `tk=${res.data.token}; path=/; max-age=${60 * 60 * 24 * 3}; secure; samesite=lax`;
-                    await history.push('/');
-                    await window.location.reload(true);
-                });
+                jwt.verify(
+                    res.data.token,
+                    '\u0061\u0063\u0063\u0065\u0073\u0073',
+                    async (err, payload) => {
+                        if (err) throw err;
+                        const { _id, username } = await payload;
+                        document.cookie = await `username=${username}; path=/; max-age=${60 *
+                            60 *
+                            24 *
+                            2}`;
+                        document.cookie = await `id=${_id}; path=/; max-age=${60 * 60 * 24 * 3}`;
+                        document.cookie = await `tk=${res.data.token}; path=/; max-age=${60 *
+                            60 *
+                            24 *
+                            2}`;
+                        await history.push('/');
+                        await window.location.reload(true);
+                    },
+                );
             } else if (res.status === 204) {
                 setValidInput({
                     isError: true,
@@ -64,9 +75,9 @@ function Login({ history }) {
     useEffect(() => {
         const theme = JSON.parse(localStorage.getItem('whitemode'));
         setIsWhiteMode(theme);
-        // if (typeof getCookie('id') === 'undefined') {
-        //     history.push('/');
-        // }
+        if (typeof getCookie('id') !== 'undefined') {
+            history.push('/');
+        }
     }, []);
 
     function removeErrorMessage() {
@@ -81,11 +92,11 @@ function Login({ history }) {
         <form className={classStylingForm} onSubmit={handleSubmit}>
             <h1>Login</h1>
             <div>
-                <label>Username</label>
+                <h5>Username</h5>
                 <input ref={usernameInput} className="form-control" type="text" />
             </div>
             <div>
-                <label>Password</label>
+                <h5>Password</h5>
                 <input ref={passwordInput} className="form-control" type="password" />
             </div>
             <div>
@@ -117,7 +128,7 @@ function Login({ history }) {
                 )}
             </div>
             <Link to="/user/emailreset">
-                <h3>Forgot password?</h3>
+                <h3 style={{ marginTop: 20, fontSize: 20 }}>{'  '}Forgot password?</h3>
             </Link>
             <button type="submit" className="btn btn-info btn-block mt-4">
                 Submit

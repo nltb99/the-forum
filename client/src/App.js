@@ -15,7 +15,6 @@ import WholeBody from './components/StyledComponents/wholebody';
 
 function App() {
     const [theme, setTheme] = useState('');
-
     useEffect(() => {
         const isWhiteMode = JSON.parse(localStorage.getItem('whitemode'));
         setTheme(isWhiteMode);
@@ -26,20 +25,22 @@ function App() {
         }
     }, []);
     return (
-        <Router>
-            <WholeBody theme={theme} />
-            <Header />
-            <Switch>
-                <Route exact path="/" component={Home}></Route>
-                <Route path="/question/new" component={NewQuestion}></Route>
-                <Route path="/question" component={SpecificQuestion}></Route>
-                <Route path="/user/login" component={Login}></Route>
-                <Route path="/user/register" component={Register}></Route>
-                <Route path="/user/emailreset" component={EmailReset}></Route>
-                <Route path="/user/resetpassword" component={ResetPassword}></Route>
-                <Route exact path="*" component={MissingRoute}></Route>
-            </Switch>
-        </Router>
+        <React.Fragment>
+            <Router>
+                <WholeBody theme={theme} />
+                <Header />
+                <Switch>
+                    <Route exact path="/" component={Home}></Route>
+                    <Route path="/question/new" component={NewQuestion}></Route>
+                    <Route path="/question" component={SpecificQuestion}></Route>
+                    <Route path="/user/login" component={Login}></Route>
+                    <Route path="/user/register" component={Register}></Route>
+                    <Route path="/user/emailreset" component={EmailReset}></Route>
+                    <Route path="/user/resetpassword" component={ResetPassword}></Route>
+                    <Route exact path="*" component={MissingRoute}></Route>
+                </Switch>
+            </Router>
+        </React.Fragment>
     );
 }
 

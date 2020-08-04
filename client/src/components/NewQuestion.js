@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { getCookie } from '../redux/actions/actionTypes.js';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import useSWR from 'swr';
 import axios from 'axios';
 
 function NewQuestion({ history }) {
@@ -13,40 +12,28 @@ function NewQuestion({ history }) {
 
     let [validInput, setValidInput] = useState({
         isError: false,
-        isSuccess: false,
         message: '',
     });
-
-    const questions = useSWR(`/api/question`);
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        let title = tittleRef.current.value;
-        let detail = detailRef.current.value;
+        let title = tittleRef.current.value.trim();
+        let detail = detailRef.current.value.trim();
         if (!title || !detail) {
             setValidInput({
                 isError: true,
-                message: 'input must not be null',
+                message: 'Input must not be null',
             });
             return;
         }
         if (typeof getCookie('id') === 'undefined') {
             setValidInput({
                 isError: true,
-                message: 'Login First',
+                message: 'Please Login First!',
             });
             return;
         }
-        questions.data.map((cell) => {
-            if (cell.title.trim() === title.trim()) {
-                setValidInput({
-                    isError: true,
-                    message: 'That title of question is already taken',
-                });
-                return;
-            }
-        });
         axios
             .post('/api/question', {
                 title: title.trim(),
@@ -54,13 +41,13 @@ function NewQuestion({ history }) {
                 author: getCookie('username'),
             })
             .then((res) => {
-                console.log(res.data);
+                // console.log(res.data);
                 history.push('/');
                 return;
             })
             .catch((err) => {
-                console.log(err.response.data);
-                console.log(err.response.status);
+                // console.log(err.response.data);
+                // console.log(err.response.status);
             });
     };
 

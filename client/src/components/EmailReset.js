@@ -7,7 +7,8 @@ function EmailReset() {
 
     let [validInput, setValidInput] = useState({
         isError: false,
-        isSuccess: false,
+        isNotFound: false,
+        isSucceed: false,
         message: '',
     });
 
@@ -16,9 +17,9 @@ function EmailReset() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const email = emailInput.current.value,
-            username = usernameInput.current.value;
-        if (email.length === 0) {
+        const email = emailInput.current.value.trim(),
+            username = usernameInput.current.value.trim();
+        if (!email || !username) {
             setValidInput({
                 isError: true,
                 message: 'Input must not be null',
@@ -34,14 +35,24 @@ function EmailReset() {
         }
         axios
             .post('/api/user/resetpassword', {
-                username: username.trim(),
-                email: email.trim(),
+                email,
+                username,
             })
             .then((res) => {
                 if (res.status === 200) {
                     setValidInput({
-                        isSuccess: true,
-                        message: 'Your email has been sent',
+                        isSucceed: true,
+                        isNotFound: false,
+                        isError: false,
+                        message: 'Check your email for instructions',
+                    });
+                }
+            })
+            .catch((err) => {
+                if (err.response.status === 404) {
+                    setValidInput({
+                        isNotFound: true,
+                        message: 'Email or Username not found!',
                     });
                 }
             });
@@ -68,24 +79,14 @@ function EmailReset() {
 
     return (
         <form className={classStylingForm} onSubmit={handleSubmit}>
-            <h1>Enter email for reset</h1>
+            <h1>Forgot your password?</h1>
             <div>
-                <label>Email</label>
-                <input
-                    ref={emailInput}
-                    defaultValue={'baonltps11095@fpt.edu.vn'}
-                    className="form-control"
-                    type="text"
-                />
+                <h5>Email</h5>
+                <input ref={emailInput} className="form-control" type="text" />
             </div>
             <div>
-                <label>Username</label>
-                <input
-                    ref={usernameInput}
-                    defaultValue={'sirbao'}
-                    className="form-control"
-                    type="text"
-                />
+                <h5>Username</h5>
+                <input ref={usernameInput} className="form-control" type="text" />
             </div>
             <div>
                 {validInput.isError && (
@@ -102,8 +103,22 @@ function EmailReset() {
                 )}
             </div>
             <div>
-                {validInput.isSuccess && (
+                {validInput.isSucceed && (
                     <div className="alert alert-success alert-dismissible my-4 fade show">
+                        <button
+                            type="button"
+                            className="close"
+                            data-dismiss="alert"
+                            onClick={removeErrorMessage}>
+                            &times;
+                        </button>
+                        {validInput.message}
+                    </div>
+                )}
+            </div>
+            <div>
+                {validInput.isNotFound && (
+                    <div className="alert alert-warning alert-dismissible my-4 fade show">
                         <button
                             type="button"
                             className="close"

@@ -4,18 +4,11 @@ import { Switch } from './StyledComponents/switchMode';
 import { getCookie } from '../redux/actions/actionTypes.js';
 
 function Header() {
-    const [isWhiteMode, setIsWhiteMode] = useState('');
-
+    let [isWhiteMode, setIsWhiteMode] = useState('');
     useEffect(() => {
         const theme = JSON.parse(localStorage.getItem('whitemode'));
         if (theme) setIsWhiteMode(theme);
     }, []);
-
-    // function displayUsername() {
-    //     if (localStorage.getItem('username') == null) return
-    //     let username = JSON.parse(localStorage.getItem('username'))
-    //     return username
-    // }
 
     return (
         <nav className="navbar navbar-expand bg-dark text-white ">

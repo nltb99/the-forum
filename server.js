@@ -24,9 +24,8 @@ db.once('open', () => console.log('Mongoose connected~'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors());
-// app.use(compression())
+app.use(compression());
 // app.use(morgan('combined'))
-//
 
 // Route
 app.use('/api', require('./controllers/questions'));

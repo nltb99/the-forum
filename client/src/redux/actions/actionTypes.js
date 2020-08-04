@@ -78,9 +78,9 @@ export const getAllQuestion = () => {
 //     )
 // }
 
-export const addComment = (title, comment) => {
+export const addComment = (id, comment) => {
     return async function(dispatch) {
-        await axios.post(`/api/comment`, { title, comment }).then((res) =>
+        await axios.patch(`/api/comment/insert`, { id, comment }).then((res) =>
             dispatch({
                 type: ADDCOMMENT,
                 payload: res.data,

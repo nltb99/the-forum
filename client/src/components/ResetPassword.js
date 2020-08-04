@@ -10,15 +10,16 @@ function ResetPassword({ location, history }) {
 
     let [validInput, setValidInput] = useState({
         isError: false,
+        isSucceed: false,
         message: '',
     });
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const password = passwordInput.current.value,
-            confirmPassword = confirmPasswordInput.current.value;
+        const password = passwordInput.current.value.trim(),
+            confirmPassword = confirmPasswordInput.current.value.trim();
 
-        if (password.length === 0 || confirmPassword.length === 0) {
+        if (!password || !confirmPassword) {
             setValidInput({
                 isError: true,
                 message: 'Input must not be null',
@@ -35,7 +36,7 @@ function ResetPassword({ location, history }) {
         if (password !== confirmPassword) {
             setValidInput({
                 isError: true,
-                message: 'Password does not match',
+                message: 'Incorrect password',
             });
             return;
         }
@@ -44,24 +45,23 @@ function ResetPassword({ location, history }) {
             headers: { Authorization: `Bearer ${urlDecode[0]}` },
         };
         axios
-            .patch('/api/user/update', { password: confirmPassword.trim() }, options)
+            .patch('/api/user/update', { password: confirmPassword }, options)
             .then((res) => {
                 if (res.status === 200) {
                     setValidInput({
                         isError: false,
-                        message: '',
+                        isSucceed: true,
+                        message: 'Your password has been changed!',
                     });
-                    history.push('/user/login');
-                    window.location.reload(true);
                 }
             })
             .catch((err) => {
                 if (err.response) {
-                    console.log(err.response.status);
+                    // console.log(err.response.status);
                 }
                 setValidInput({
                     isError: true,
-                    message: 'Error',
+                    message: 'Invalid',
                 });
                 return;
             });
@@ -91,15 +91,29 @@ function ResetPassword({ location, history }) {
             <h1>Reset your password</h1>
             <div>
                 <label>Password:</label>
-                <input ref={passwordInput} className="form-control" type="text" />
+                <input ref={passwordInput} className="form-control" type="password" />
             </div>
             <div>
                 <label>Confirm Password:</label>
-                <input ref={confirmPasswordInput} className="form-control" type="text" />
+                <input ref={confirmPasswordInput} className="form-control" type="password" />
             </div>
             <div>
                 {validInput.isError && (
                     <div className="alert alert-danger alert-dismissible my-4 fade show">
+                        <button
+                            type="button"
+                            className="close"
+                            data-dismiss="alert"
+                            onClick={removeErrorMessage}>
+                            &times;
+                        </button>
+                        {validInput.message}
+                    </div>
+                )}
+            </div>
+            <div>
+                {validInput.isSucceed && (
+                    <div className="alert alert-success alert-dismissible my-4 fade show">
                         <button
                             type="button"
                             className="close"

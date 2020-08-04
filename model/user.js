@@ -17,7 +17,7 @@ const userQandASchema = mongoose.Schema({
         type: String,
         trim: true,
         unique: true,
-        required: false,
+        required: true,
     },
     createdAt: {
         type: Date,

@@ -47,23 +47,24 @@ function Home({ initialQuestions }) {
         if (getCookie('username') === author || getCookie('username') === 'admin') {
             return (
                 <button
-                    className="btn btn-danger btn-sm"
+                    className="btn btn-secondary btn-sm"
                     onClick={async () => {
                         const url = `/api/question`;
-                        mutate(
+                        await mutate(
                             url,
                             questions?.data?.filter((e) => e._id !== id),
                             false,
                         );
                         await axios
-                            .delete(url, { data: { id: id } })
+                            .delete(url, { data: { id } })
                             .then((res) => {
                                 // console.log(res.status);
+                                // console.log(res.data);
                             })
                             .catch((err) => {
-                                console.log(err.response.data);
+                                // console.log(err.response.data);
                             });
-                        mutate(url);
+                        await mutate(url);
                     }}>
                     Delete
                 </button>
@@ -91,23 +92,29 @@ function Home({ initialQuestions }) {
                                 to={(location) => ({
                                     ...location,
                                     pathname: `/question`,
-                                    search: `?id=${cell._id}&slug=${cell.slug}`,
+                                    search: `?id=${cell._id}`,
                                 })}
                                 className="text-info">
                                 Q: {cell.title}
                             </Link>
-                            <QuantityComment isWhiteMode={isWhiteMode} id={cell._id} />
                             <InfoQuestion isWhiteMode={isWhiteMode}>
                                 <p>
+                                    {'   '}
                                     {cell.author}
                                     {'  |'}
                                 </p>
+                                <QuantityComment isWhiteMode={isWhiteMode} id={cell._id} />
                                 <p className={isWhiteMode === 'false' ? 'whiteColor' : 'darkColor'}>
+                                    {'   '}
                                     {formatDateToString(cell.createAt)}
+                                    {'  |'}
+                                </p>
+                                <p>
+                                    {'   '}
+                                    {revealDestroy(cell._id, cell.slug, cell.author)}
                                 </p>
                             </InfoQuestion>
                         </div>
-                        {revealDestroy(cell._id, cell.slug, cell.author)}
                     </div>
                 ))}
             </React.Fragment>

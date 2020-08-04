@@ -29,6 +29,11 @@ const questionSchema = mongoose.Schema({
                 trim: true,
                 required: false,
             },
+            owner: {
+                type: String,
+                trim: true,
+                required: false,
+            },
             createdCommentAt: {
                 type: Date,
                 default: Date.now,

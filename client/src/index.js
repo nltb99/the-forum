@@ -17,7 +17,16 @@ const fetcher = (...args) => axios(...args).then((res) => res.data);
 
 ReactDOM.render(
     <Provider store={store}>
-        <SWRConfig value={{ dedupingInterval: 1000, refreshWhenHidden: true, fetcher }}>
+        <SWRConfig
+            value={{
+                revalidateOnFocus: true,
+                revalidateOnMount: true,
+                dedupingInterval: 1,
+                refreshInterval: 1,
+                shouldRetryOnError: true,
+                focusThrottleInterval: 1,
+                fetcher,
+            }}>
             <App />
         </SWRConfig>
     </Provider>,

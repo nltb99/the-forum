@@ -3,6 +3,7 @@ import styled from 'styled-components';
 const InfoQuestion = styled.div`
     display: flex;
     align-items: center;
+    margin-top: 4px;
     color: ${(props) => (props.isWhiteMode === 'false' ? 'white' : 'black')};
     p {
         margin-right: 10px;
