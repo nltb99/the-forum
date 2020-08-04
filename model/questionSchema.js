@@ -5,12 +5,12 @@ const slugify = require('slugify');
 const questionSchema = mongoose.Schema({
     title: {
         type: String,
-        required: true,
-        unique: true,
         trim: true,
+        required: true,
     },
     detail: {
         type: String,
+        trim: true,
         required: true,
     },
     createAt: {
@@ -19,10 +19,25 @@ const questionSchema = mongoose.Schema({
     },
     slug: {
         type: String,
+        trim: true,
         required: true,
     },
+    comments: [
+        {
+            comment: {
+                type: String,
+                trim: true,
+                required: false,
+            },
+            createdCommentAt: {
+                type: Date,
+                default: Date.now,
+            },
+        },
+    ],
     author: {
         type: String,
+        trim: true,
         required: true,
     },
 });

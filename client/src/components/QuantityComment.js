@@ -1,13 +1,13 @@
 import React from 'react';
 import useSWR from 'swr';
 
-function QuantityComment({ slug, isWhiteMode }) {
-    const quantityOfComments = useSWR(`/api/comment/quantity/${slug}`);
+function QuantityComment({ id, isWhiteMode }) {
+    const quantity = useSWR(`/api/question/${id}`);
 
     return (
         <small className={isWhiteMode === 'false' ? 'whiteColor' : 'darkColor'}>
             {'     '}
-            {quantityOfComments?.data || 0} comments
+            {quantity?.data?.comments.length || 0} comments
         </small>
     );
 }

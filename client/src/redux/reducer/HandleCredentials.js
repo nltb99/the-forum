@@ -1,7 +1,6 @@
 import { USERLOGIN, USERREGISTER, LOADCREDENTIAL } from '../actions/actions';
 const initialsState = {
-    // token: localStorage.getItem('token'),
-    username: JSON.stringify(localStorage.getItem('username')),
+    username: "",
     msg: '',
 };
 
@@ -12,14 +11,12 @@ const HandleCredentials = (state = initialsState, action) => {
                 ...state,
             };
         case USERREGISTER:
-            // localStorage.setItem('token', action.payload.token)
             return {
                 ...state,
                 ...action.payload,
                 msg: 'Register Succeed',
             };
         case USERLOGIN:
-            localStorage.setItem('username', JSON.stringify(action.payload.username));
             return {
                 ...state,
                 ...action.payload,

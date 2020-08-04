@@ -7,8 +7,11 @@ import { Provider } from 'react-redux';
 import store from './redux/store.js';
 import { SWRConfig } from 'swr';
 import axios from 'axios';
+import { getCookie } from './redux/actions/actionTypes';
 
 axios.defaults.baseURL = 'http://localhost:5000';
+axios.defaults.headers.common['Authorization'] = `Bearer ${getCookie('tk')}`;
+axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 const fetcher = (...args) => axios(...args).then((res) => res.data);
 

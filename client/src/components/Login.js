@@ -10,7 +10,7 @@ function Login({ history }) {
 
     const authPassword = useSelector((state) => state.credentialsFalse);
 
-    let [authInput, setAuthInput] = useState({
+    let [validInput, setValidInput] = useState({
         isError: false,
         message: '',
     });
@@ -22,38 +22,33 @@ function Login({ history }) {
         e.preventDefault();
         const username = usernameInput.current.value;
         const password = passwordInput.current.value;
-        if (username.length === 0 || password.length === 0) {
-            setAuthInput({
+        if (!username || !password) {
+            setValidInput({
                 isError: true,
                 message: 'Input must not be null',
             });
             return;
         }
-        const configs = {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        };
-        axios.post('/api/user/login', { username, password }, configs).then((res) => {
+        !validInput.isError && axios.post('/api/user/login', { username, password }).then((res) => {
             if (res.status === 200) {
-                jwt.verify(res.data.token, 'access', (err, payload) => {
+                jwt.verify(res.data.token, 'access', async (err, payload) => {
                     if (err) throw err;
-                    const { _id, username } = payload;
-                    document.cookie = `username=${username}; max-age=${60 * 60 * 24 * 3}`;
-                    document.cookie = `id=${_id}; max-age=${60 * 60 * 24 * 3}`;
-                    document.cookie = `tk=${res.data.token}; max-age=${60 * 60 * 24 * 3}`;
-                    history.push('/');
-                    // window.location.reload(true);
+                    const { _id, username } = await payload;
+                    document.cookie = await `username=${username}; path=/; max-age=${60 * 60 * 24 * 3}; secure; samesite=lax`;
+                    document.cookie = await `id=${_id}; path=/; max-age=${60 * 60 * 24 * 3}; secure; samesite=lax`;
+                    document.cookie = await `tk=${res.data.token}; path=/; max-age=${60 * 60 * 24 * 3}; secure; samesite=lax`;
+                    await history.push('/');
+                    await window.location.reload(true);
                 });
             } else if (res.status === 204) {
-                setAuthInput({
+                setValidInput({
                     isError: true,
                     message: 'Username does not exists',
                 });
             } else if (res.status === 206) {
-                setAuthInput({
+                setValidInput({
                     isError: true,
-                    message: 'Password does not match',
+                    message: 'Incorrect password',
                 });
             }
         });
@@ -69,15 +64,13 @@ function Login({ history }) {
     useEffect(() => {
         const theme = JSON.parse(localStorage.getItem('whitemode'));
         setIsWhiteMode(theme);
-        // const parsedCookie = window.document.cookie.toString().length;
-        // if (parsedCookie !== 0) {
+        // if (typeof getCookie('id') === 'undefined') {
         //     history.push('/');
-        //     window.location.reload(true);
         // }
     }, []);
 
     function removeErrorMessage() {
-        setAuthInput({
+        setValidInput({
             isError: false,
             message: '',
         });
@@ -96,7 +89,7 @@ function Login({ history }) {
                 <input ref={passwordInput} className="form-control" type="password" />
             </div>
             <div>
-                {authInput.isError && (
+                {validInput.isError && (
                     <div className="alert alert-danger alert-dismissible my-4 fade show">
                         <button
                             type="button"
@@ -105,7 +98,7 @@ function Login({ history }) {
                             onClick={removeErrorMessage}>
                             &times;
                         </button>
-                        {authInput.message}
+                        {validInput.message}
                     </div>
                 )}
             </div>
@@ -124,7 +117,7 @@ function Login({ history }) {
                 )}
             </div>
             <Link to="/user/emailreset">
-                <h3>Forgot your password?</h3>
+                <h3>Forgot password?</h3>
             </Link>
             <button type="submit" className="btn btn-info btn-block mt-4">
                 Submit

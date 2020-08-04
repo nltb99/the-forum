@@ -47,6 +47,10 @@ function ResetPassword({ location, history }) {
             .patch('/api/user/update', { password: confirmPassword.trim() }, options)
             .then((res) => {
                 if (res.status === 200) {
+                    setValidInput({
+                        isError: false,
+                        message: '',
+                    });
                     history.push('/user/login');
                     window.location.reload(true);
                 }

@@ -121,14 +121,9 @@ export const isWhiteMode = () => {
 };
 
 // Check authen token user
-export const userRegister = (username, password) => {
+export const userRegister = (username, password, email) => {
     return function(dispatch) {
-        const configs = {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        };
-        axios.post('/api/user/register', { username, password }, configs).then((res) =>
+        axios.post('/api/user/register', { username, password, email }).then((res) =>
             dispatch({
                 type: USERREGISTER,
                 payload: res.data,

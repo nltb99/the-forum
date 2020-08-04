@@ -31,7 +31,7 @@ function NewQuestion({ history }) {
             });
             return;
         }
-        if (getCookie('id').toString().length === 0) {
+        if (typeof getCookie('id') === 'undefined') {
             setValidInput({
                 isError: true,
                 message: 'Login First',
@@ -47,16 +47,12 @@ function NewQuestion({ history }) {
                 return;
             }
         });
-        const configs = {
-            'Content-Type': 'application/json',
-            headers: { Authorization: `Bearer ${getCookie('tk')}` },
-        };
         axios
-            .post(
-                '/api/question',
-                { title: title.trim(), detail: detail.trim(), author: getCookie('username') },
-                configs,
-            )
+            .post('/api/question', {
+                title: title.trim(),
+                detail: detail.trim(),
+                author: getCookie('username'),
+            })
             .then((res) => {
                 console.log(res.data);
                 history.push('/');

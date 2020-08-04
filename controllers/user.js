@@ -9,37 +9,32 @@ const express = require('express'),
 const UserQandASchema = require('../model/user');
 
 route.get('/users', async (req, res) => {
-    const users = await UserQandASchema.find({});
-    await res.json(users);
+    try {
+        const users = await UserQandASchema.find({});
+        return res.status(200).json(users);
+    } catch (e) {
+        return res.status(400).json({ msg: 'Error' });
+    }
 });
 
-route.post('/register', (req, res) => {
-    const { username, password } = req.body;
-    if (!username || !password) {
-        return res.status(400).json({ msg: 'Please Enter All Field' });
-    }
-    UserQandASchema.findOne({ username }).then(async (user) => {
-        if (user) {
-            return res.status(400).json({ msg: 'User already exists' });
+route.post('/register', async (req, res) => {
+    try {
+        const { username, password, email } = await req.body;
+        if (!username || !password) {
+            return res.status(400).json({ msg: 'Input must not be null' });
         }
-
-        const newUser = await new UserQandASchema({ username, password });
-        await newUser.save().then((user) => {
-            jwt.sign(
-                { _id: user._id },
-                process.env.SECRET_JWT,
-                { expiresIn: 60 * 60 },
-                (err, token) => {
-                    if (err) throw err;
-                    const obj = {
-                        token: token,
-                        username: user.username,
-                    };
-                    res.json(obj);
-                },
-            );
+        await UserQandASchema.find({}).then(async (users) => {
+            if (users.some((e) => e.username === username))
+                return res.status(400).json({ msg: 'User already exists' });
+            if (users.some((e) => e.email === email))
+                return res.status(400).json({ msg: 'Email already exists' });
+            const newUser = await new UserQandASchema({ username, password, email });
+            await newUser.save();
+            return res.status(200).json({ msg: 'Register succeed!' });
         });
-    });
+    } catch (e) {
+        return res.status(400).json({ msg: 'Register error' });
+    }
 });
 
 route.post('/login', (req, res) => {
@@ -54,7 +49,7 @@ route.post('/login', (req, res) => {
         bcrypt.compare(password, user.password, (err, results) => {
             if (err) throw err;
             if (!results) {
-                return res.status(206).json({ msg: 'Password does not match' });
+                return res.status(206).json({ msg: 'Incorrect password' });
             } else if (results) {
                 jwt.sign(
                     { _id: user._id, username: username },
@@ -92,9 +87,9 @@ route.post('/logout', async (req, res) => {
     console.log('asd');
 });
 
-route.delete('/:id', async (req, res) => {
+route.delete('/', async (req, res) => {
     try {
-        const user = await UserQandASchema.findById({ _id: req.params.id });
+        const user = await UserQandASchema.findById({ _id: req.body.id });
         await user.delete();
         return res.status(200).json({ msg: 'Delete succeed!' });
     } catch {
@@ -125,16 +120,24 @@ route.post('/resetpassword', generateResetToken, async (req, res) => {
             },
         });
         let outputMail = `
-                <h1>Link To Refresh</h1>
-                <h1>http://localhost:3000/user/resetpassword?tk=${req.resetToken}</h1>
-                `;
+                <div style="font-family: Arial, Courier, serif;" >
+                    <h2 style="color: lightseagreen;">Wondering Site</h2>
+                    <div >
+                        <h4>Hello ${req.body.username}</h4>
+                        <h4>We received a request to reset the password for: ${req.body.email}</h4>
+                        <h4>Simple click on the button to set a new password</h4>
+                        <a href="http://localhost:3000/user/resetpassword?tk=${req.resetToken}"
+                            style="text-decoration:none;padding:10px;background-color:rgb(72,161,181);color:white;border-radius:5px;width: 200px">
+                            Reset My Password </a>
+                    </div>
+                </div>`;
 
         await transporter.sendMail(
             {
-                from: '"Bao Store" <collardoor.ver@gmail.com>',
+                from: '"Q&A" <collardoor.ver@gmail.com>',
                 to: req.body.email,
-                subject: 'Reset Password Link',
-                text: 'CCCC',
+                subject: 'Reset your Q&A password',
+                text: '',
                 html: outputMail,
             },
             (err, data) => {

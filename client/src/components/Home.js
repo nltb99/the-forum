@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { useDispatch } from 'react-redux';
-import { deleteQuestion, getCookie } from '../redux/actions/actionTypes.js';
+import { getCookie } from '../redux/actions/actionTypes.js';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 import classNames from 'classnames';
@@ -14,11 +13,7 @@ import animationLoading from '../images/loading.json';
 import QuantityComment from './QuantityComment.js';
 
 function Home({ initialQuestions }) {
-    const [actionFetchData, setActionFetchData] = useState(false);
-
     const [isWhiteMode, setIsWhiteMode] = useState('false');
-
-    const dispatch = useDispatch();
 
     const questions = useSWR(`/api/question`, { initialData: initialQuestions });
 
@@ -48,33 +43,26 @@ function Home({ initialQuestions }) {
         if (theme) setIsWhiteMode(theme);
     }, []);
 
-    function revealDestroy(id, slug) {
-        if (getCookie('username') === '\u0061\u0064\u006D\u0069\u006E') {
+    function revealDestroy(id, slug, author) {
+        if (getCookie('username') === author || getCookie('username') === 'admin') {
             return (
                 <button
                     className="btn btn-danger btn-sm"
-                    onClick={() => {
-                        setActionFetchData(!actionFetchData);
-
+                    onClick={async () => {
                         const url = `/api/question`;
                         mutate(
                             url,
                             questions?.data?.filter((e) => e._id !== id),
                             false,
                         );
-                        const configs = {
-                            'Content-Type': 'application/json',
-                            headers: { Authorization: `Bearer ${getCookie('tk')}` },
-                        };
-                        axios
-                            .delete('/api/question', { id }, configs)
+                        await axios
+                            .delete(url, { data: { id: id } })
                             .then((res) => {
-                                console.log(res.data);
+                                // console.log(res.status);
                             })
                             .catch((err) => {
                                 console.log(err.response.data);
                             });
-                        // dispatch(deleteQuestion(id, slug));
                         mutate(url);
                     }}>
                     Delete
@@ -108,7 +96,7 @@ function Home({ initialQuestions }) {
                                 className="text-info">
                                 Q: {cell.title}
                             </Link>
-                            <QuantityComment isWhiteMode={isWhiteMode} slug={cell.slug} />
+                            <QuantityComment isWhiteMode={isWhiteMode} id={cell._id} />
                             <InfoQuestion isWhiteMode={isWhiteMode}>
                                 <p>
                                     {cell.author}
@@ -119,7 +107,7 @@ function Home({ initialQuestions }) {
                                 </p>
                             </InfoQuestion>
                         </div>
-                        {revealDestroy(cell._id, cell.slug)}
+                        {revealDestroy(cell._id, cell.slug, cell.author)}
                     </div>
                 ))}
             </React.Fragment>

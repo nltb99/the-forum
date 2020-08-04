@@ -21,15 +21,17 @@ function SpecificQuestion({ match, location }) {
     const questions = useSWR(`/api/question/${id}`);
     const comments = useSWR(`/api/comment/${slug}`);
 
+    console.log(questions?.data)
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         let comment = contentComment.current.value;
 
         if (comment.length === 0) return;
 
-        mutate(`/api/comment/${slug}`, [...comments.data, comment], false);
-        await dispatch(addComment(slug, comment));
-        mutate(`/api/comment/${slug}`);
+        // mutate(`/api/comment/${slug}`, [...comments.data, comment], false);
+        // await dispatch(addComment(slug, comment));
+        // mutate(`/api/comment/${slug}`);
         contentComment.current.value = '';
     };
 
@@ -46,11 +48,11 @@ function SpecificQuestion({ match, location }) {
                 <button
                     onClick={async () => {
                         const url = `/api/comment/${slug}`;
-                        mutate(
-                            url,
-                            comments?.data?.filter((e) => e._id !== id),
-                            false,
-                        );
+                        // mutate(
+                        //     url,
+                        //     comments?.data?.filter((e) => e._id !== id),
+                        //     false,
+                        // );
                         await dispatch(deleteComment(id));
                         mutate(url);
                     }}
@@ -87,7 +89,7 @@ function SpecificQuestion({ match, location }) {
 
     return (
         <div className={classStylingSpecific}>
-            {questions.data && comments.data ? (
+            {questions.data ? (
                 <React.Fragment>
                     <div>
                         <h1>Title: {questions?.data?.title}</h1>
@@ -96,7 +98,7 @@ function SpecificQuestion({ match, location }) {
                     </div>
                     <hr className="hr-styling" />
                     <div className="container-user-comment">
-                        {comments?.data?.map((comment, index) => (
+                        {questions?.data?.comments?.map((comment, index) => (
                             <div key={index}>
                                 <h5>
                                     {comment.comment}

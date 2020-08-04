@@ -46,16 +46,19 @@ function Header() {
                     }}
                 />
                 <img src={require('../images/sun.png')} alt="" />
-                {getCookie('\u0075\u0073\u0065\u0072\u006E\u0061\u006D\u0065') !== null && (
+                {typeof getCookie('id') === 'undefined' && (
                     <Link to="/user/login">
                         <h5>Login</h5>
                     </Link>
                 )}
-                {getCookie('\u0075\u0073\u0065\u0072\u006E\u0061\u006D\u0065') !== null && (
+                {typeof getCookie('id') !== 'undefined' && (
                     <Link to="/">
                         <h5
                             onClick={() => {
-                                localStorage.removeItem('username');
+                                document.cookie = 'id=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+                                document.cookie =
+                                    'username=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+                                document.cookie = 'tk=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
                                 window.location.reload(true);
                             }}>
                             Logout
