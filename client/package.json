@@ -37,18 +37,10 @@
         "extends": "react-app"
     },
     "browserslist": {
-        "production": [
-            ">0.2%",
-            "not dead",
-            "not op_mini all"
-        ],
-        "development": [
-            "last 1 chrome version",
-            "last 1 firefox version",
-            "last 1 safari version"
-        ]
+        "production": [">0.2%", "not dead", "not op_mini all"],
+        "development": ["last 1 chrome version", "last 1 firefox version", "last 1 safari version"]
     },
-    "proxy": "http://127.0.0.1:5000",
+    "proxy": "https://127.0.0.1:5000",
     "devDependencies": {
         "enzyme": "^3.11.0",
         "enzyme-adapter-react-16": "^1.15.2"
