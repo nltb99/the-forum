@@ -101,6 +101,33 @@ function SpecificQuestion({ match, location, initialQuestion }) {
         }
     }
 
+    async function handleIncreaseLike(idQuestion, idComment) {
+        try {
+            const url = await '/api/comment/increaselike';
+            mutate(url, { id: idQuestion, idComment });
+            await axios.patch(url, { id: idQuestion, idComment }).then((res) => {
+                console.log(res.data);
+                console.log(res.status);
+            });
+            mutate(url);
+        } catch (e) {
+            console.log(e);
+        }
+    }
+    async function handleDecreaseLike(idQuestion, idComment) {
+        try {
+            const url = await '/api/comment/decreaselike';
+            mutate(url, { id: idQuestion, idComment });
+            await axios.patch(url, { id: idQuestion, idComment }).then((res) => {
+                console.log(res.data);
+                console.log(res.status);
+            });
+            mutate(url);
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
     useEffect(() => {
         const theme = JSON.parse(localStorage.getItem('whitemode'));
         setIsWhiteMode(theme);
@@ -144,6 +171,34 @@ function SpecificQuestion({ match, location, initialQuestion }) {
                                         <p className="text-info">
                                             {'   '}
                                             {comment.owner}
+                                            {'  |'}
+                                        </p>
+                                        <p
+                                            className={
+                                                isWhiteMode === 'false' ? 'whiteColor' : 'darkColor'
+                                            }>
+                                            {'   '}
+                                            <button
+                                                onClick={() =>
+                                                    handleIncreaseLike(
+                                                        question?.data?._id,
+                                                        comment._id,
+                                                    )
+                                                }>
+                                                Like
+                                            </button>
+                                            {'   '}
+                                            {comment.loveComment}
+                                            {'   '}
+                                            <button
+                                                onClick={() =>
+                                                    handleDecreaseLike(
+                                                        question?.data?._id,
+                                                        comment._id,
+                                                    )
+                                                }>
+                                                Dislike
+                                            </button>
                                             {'  |'}
                                         </p>
                                         <p className="text-info text-sm">

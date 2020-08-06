@@ -4,6 +4,8 @@
 @import './styling/switchmode.scss';
 @import './styling//auth.scss';
 
+@import url('https://fonts.googleapis.com/css2?family=Sniglet&display=swap');
+
 *::before,
 *::after,
 * {
@@ -12,6 +14,6 @@
     box-sizing: border-box;
 }
 
-// body {
-//     background-color: rgb(38, 38, 38) !important;
-// }
+body {
+    font-family: 'Sniglet', cursive;
+}

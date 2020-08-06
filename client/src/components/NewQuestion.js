@@ -3,6 +3,7 @@ import { getCookie } from '../redux/actions/actionTypes.js';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import axios from 'axios';
+import Menu from './Menu';
 
 function NewQuestion({ history }) {
     const [isWhiteMode, setIsWhiteMode] = useState('false');
@@ -71,42 +72,45 @@ function NewQuestion({ history }) {
     });
 
     return (
-        <form className={classStylingForm} onSubmit={handleSubmit}>
-            <h1>New Question</h1>
-            <div className="form-group">
-                <h3>Question</h3>
-                <input
-                    className="form-control"
-                    name="value"
-                    ref={tittleRef}
-                    placeholder="Enter new question"
-                />
-            </div>
-            <div className="form-group">
-                <h3>Details</h3>
-                <textarea
-                    ref={detailRef}
-                    placeholder="Enter Your Detail"
-                    className="form-control"></textarea>
-            </div>
-            <div>
-                {validInput.isError && (
-                    <div className="alert alert-danger alert-dismissible my-4 fade show">
-                        <button
-                            type="button"
-                            className="close"
-                            data-dismiss="alert"
-                            onClick={removeErrorMessage}>
-                            &times;
-                        </button>
-                        {validInput.message}
-                    </div>
-                )}
-            </div>
-            <button type="submit" className="btn btn-info btn-block">
-                Submit
-            </button>
-        </form>
+        <div>
+            <Menu />
+            <form className={classStylingForm} onSubmit={handleSubmit}>
+                <h1>New Question</h1>
+                <div className="form-group">
+                    <h3>Question</h3>
+                    <input
+                        className="form-control"
+                        name="value"
+                        ref={tittleRef}
+                        placeholder="Enter new question"
+                    />
+                </div>
+                <div className="form-group">
+                    <h3>Details</h3>
+                    <textarea
+                        ref={detailRef}
+                        placeholder="Enter Your Detail"
+                        className="form-control"></textarea>
+                </div>
+                <div>
+                    {validInput.isError && (
+                        <div className="alert alert-danger alert-dismissible my-4 fade show">
+                            <button
+                                type="button"
+                                className="close"
+                                data-dismiss="alert"
+                                onClick={removeErrorMessage}>
+                                &times;
+                            </button>
+                            {validInput.message}
+                        </div>
+                    )}
+                </div>
+                <button type="submit" className="btn btn-info btn-block">
+                    Submit
+                </button>
+            </form>
+        </div>
     );
 }
 

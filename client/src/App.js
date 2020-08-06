@@ -28,7 +28,6 @@ function App() {
         <React.Fragment>
             <Router>
                 <WholeBody theme={theme} />
-                <Header />
                 <Switch>
                     <Route exact path="/" component={Home}></Route>
                     <Route path="/question/new" component={NewQuestion}></Route>

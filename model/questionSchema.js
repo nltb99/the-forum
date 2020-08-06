@@ -29,6 +29,11 @@ const questionSchema = mongoose.Schema({
                 trim: true,
                 required: false,
             },
+            loveComment: {
+                type: Number,
+                default: 0,
+                required: true,
+            },
             owner: {
                 type: String,
                 trim: true,
@@ -44,6 +49,19 @@ const questionSchema = mongoose.Schema({
         type: String,
         trim: true,
         required: true,
+    },
+    loveQuestion: {
+        love: {
+            type: Number,
+            default: 0,
+            required: true,
+        },
+        whomlove: [
+            {
+                whom: String,
+                state: Boolean,
+            },
+        ],
     },
 });
 

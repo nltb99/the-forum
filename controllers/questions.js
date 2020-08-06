@@ -34,9 +34,9 @@ route.post('/question', authPrivilege, async (req, res) => {
     }
 });
 
-route.delete('/question', authPrivilege, (req, res) => {
+route.delete('/question', authPrivilege, async (req, res) => {
     try {
-        QuestionSchema.findById({ _id: req.body.id }).then((question) => {
+        return await QuestionSchema.findById({ _id: req.body.id }).then((question) => {
             if (!question) return res.status(404).json({ msg: 'Question not exists' });
             if (
                 req.role === '\u0041\u0044\u004D\u0049\u004E' ||
@@ -55,8 +55,85 @@ route.delete('/question', authPrivilege, (req, res) => {
 
 route.patch('/question', authPrivilege, async (req, res) => {
     try {
+        return await QuestionSchema.findById(req.body.id).then((question) => {
+            if (!question) return res.status(404).json({ msg: 'Question not found' });
+            if (req.username !== question.author)
+                return res.status(403).json({ msg: 'Not allow!' });
+            if (!req.body.title) question.title = req.body.title;
+            if (!req.body.detail) question.title = req.body.detail;
+            question.save();
+            return res.status(200).json({ msg: 'Update succeed!' });
+        });
     } catch (e) {
-        return res.status(404).json({ msg: 'Question not found' });
+        return res.status(404).json({ msg: 'Error' });
+    }
+});
+
+route.patch('/question/increaselike', authPrivilege, async (req, res) => {
+    try {
+        return await QuestionSchema.findById(req.body.id).then((question) => {
+            if (!question) return res.status(404).json({ msg: 'Question not found' });
+            if (req.username === null) return res.status(403).json({ msg: 'Token require' });
+            if (question.loveQuestion.whomlove.some((e) => e.whom === req.username)) {
+                let filterQuestion = question.loveQuestion.whomlove.filter(
+                    (e) => e.whom == req.username,
+                );
+                if (!filterQuestion[0].state) {
+                    // unliked
+                    question.loveQuestion.love += 1;
+                    filterQuestion.state = true;
+                    question.save();
+                    return res.status(200).json({ msg: 'Love Succeed' });
+                } else {
+                    return res.status(403).json({ msg: 'Already loved' });
+                }
+            } else {
+                question.loveQuestion.love += 2;
+                question.loveQuestion.whomlove = [
+                    ...question.loveQuestion.whomlove,
+                    { whom: req.username, state: true },
+                ];
+                question.save();
+                return res.status(200).json({ msg: 'Love Succeed' });
+            }
+        });
+    } catch (e) {
+        console.log(e);
+        return res.status(404).json({ msg: 'Error!' });
+    }
+});
+
+route.patch('/question/decreaselike', authPrivilege, async (req, res) => {
+    try {
+        return await QuestionSchema.findById(req.body.id).then((question) => {
+            if (!question) return res.status(404).json({ msg: 'Question not found' });
+            if (req.username === null) return res.status(403).json({ msg: 'Token require' });
+            if (question.loveQuestion.whomlove.some((e) => e.whom === req.username)) {
+                let filterQuestion = question.loveQuestion.whomlove.filter(
+                    (e) => e.whom == req.username,
+                );
+                if (filterQuestion[0].state) {
+                    //Liked
+                    question.loveQuestion.love += 2;
+                    filterQuestion.state = false;
+                    question.save();
+                    return res.status(200).json({ msg: 'Unlove Succeed' });
+                } else {
+                    return res.status(403).json({ msg: 'Already unloved' });
+                }
+            } else {
+                question.loveQuestion.love -= 1;
+                question.loveQuestion.whomlove = [
+                    ...question.loveQuestion.whomlove,
+                    { whom: req.username, state: true },
+                ];
+                question.save();
+                return res.status(200).json({ msg: 'Unlove Succeed' });
+            }
+        });
+    } catch (e) {
+        console.log(e);
+        return res.status(404).json({ msg: 'Error!' });
     }
 });
 
