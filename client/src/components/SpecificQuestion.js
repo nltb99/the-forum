@@ -6,16 +6,17 @@ import classNames from 'classnames';
 import useSWR, { mutate } from 'swr';
 import axios from 'axios';
 import InfoQuestion from './StyledComponents/home';
-
 import lottie from 'lottie-web';
 import animationLoading from '../images/loading.json';
+import Menu from './Menu';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faThumbsUp, faThumbsDown } from '@fortawesome/free-solid-svg-icons';
 
 function SpecificQuestion({ match, location, initialQuestion }) {
     const contentComment = useRef('');
 
     const id = location.search.match(/(?<=id=)(.+)/g)[0];
 
-    const [isWhiteMode, setIsWhiteMode] = useState('false');
     const [validInput, setValidInput] = useState({
         isError: false,
         message: '',
@@ -41,20 +42,10 @@ function SpecificQuestion({ match, location, initialQuestion }) {
                 [...question?.data?.comments, { id, comment, owner: getCookie('username') }],
                 false,
             );
-            await axios
-                .patch(url, { id, comment, owner: getCookie('username') })
-                .then((res) => {
-                    // console.log(res.status);
-                    // console.log(res.data);
-                })
-                .catch((err) => {
-                    // console.log(err.response.data);
-                });
+            await axios.patch(url, { id, comment, owner: getCookie('username') });
             mutate(url);
             contentComment.current.value = '';
-        } catch (e) {
-            // console.log(e);
-        }
+        } catch (e) {}
     };
 
     function removeErrorMessage() {
@@ -82,16 +73,7 @@ function SpecificQuestion({ match, location, initialQuestion }) {
                             question?.data?.comments?.filter((e) => e._id !== idComment),
                             false,
                         );
-                        await axios
-                            .patch(url, { id, idComment })
-                            .then((res) => {
-                                // console.log(res.status);
-                                // console.log(res.data);
-                            })
-                            .catch((err) => {
-                                // console.log(err.response.status);
-                                // console.log(err.response.data);
-                            });
+                        await axios.patch(url, { id, idComment });
                         await mutate(url);
                     }}
                     className="btn btn-secondary btn-sm">
@@ -105,10 +87,7 @@ function SpecificQuestion({ match, location, initialQuestion }) {
         try {
             const url = await '/api/comment/increaselike';
             mutate(url, { id: idQuestion, idComment });
-            await axios.patch(url, { id: idQuestion, idComment }).then((res) => {
-                console.log(res.data);
-                console.log(res.status);
-            });
+            await axios.patch(url, { id: idQuestion, idComment });
             mutate(url);
         } catch (e) {
             console.log(e);
@@ -118,20 +97,12 @@ function SpecificQuestion({ match, location, initialQuestion }) {
         try {
             const url = await '/api/comment/decreaselike';
             mutate(url, { id: idQuestion, idComment });
-            await axios.patch(url, { id: idQuestion, idComment }).then((res) => {
-                console.log(res.data);
-                console.log(res.status);
-            });
+            await axios.patch(url, { id: idQuestion, idComment });
             mutate(url);
         } catch (e) {
             console.log(e);
         }
     }
-
-    useEffect(() => {
-        const theme = JSON.parse(localStorage.getItem('whitemode'));
-        setIsWhiteMode(theme);
-    }, []);
 
     //lottie
     const _el = useRef();
@@ -148,83 +119,98 @@ function SpecificQuestion({ match, location, initialQuestion }) {
     const classStylingSpecific = classNames({
         container: true,
         'specific-question': true,
-        whiteColor: isWhiteMode === 'false',
-        darkColor: isWhiteMode === 'true',
+        whiteColor: true,
     });
 
     return (
-        <div className={classStylingSpecific}>
-            {question.data ? (
-                <React.Fragment>
-                    <div>
-                        <h1>Title: {question?.data?.title}</h1>
-                        <hr className="hr-styling" />
-                        <h4>Detail: {question?.data?.detail}</h4>
-                    </div>
-                    <hr className="hr-styling" />
-                    <div style={{ marginLeft: '10x' }}>
-                        {question?.data?.comments?.map((comment, index) => (
-                            <div key={index}>
-                                <h5>
-                                    {comment.comment}
-                                    <InfoQuestion>
-                                        <p className="text-info">
-                                            {'   '}
-                                            {comment.owner}
-                                            {'  |'}
-                                        </p>
-                                        <p
-                                            className={
-                                                isWhiteMode === 'false' ? 'whiteColor' : 'darkColor'
-                                            }>
-                                            {'   '}
-                                            <button
-                                                onClick={() =>
-                                                    handleIncreaseLike(
-                                                        question?.data?._id,
-                                                        comment._id,
-                                                    )
-                                                }>
-                                                Like
-                                            </button>
-                                            {'   '}
-                                            {comment.loveComment}
-                                            {'   '}
-                                            <button
-                                                onClick={() =>
-                                                    handleDecreaseLike(
-                                                        question?.data?._id,
-                                                        comment._id,
-                                                    )
-                                                }>
-                                                Dislike
-                                            </button>
-                                            {'  |'}
-                                        </p>
-                                        <p className="text-info text-sm">
-                                            {'   '}
-                                            {formatDateToString(comment.createdCommentAt)}
-                                            {'  |'}
-                                        </p>
-                                        <p>{revealDestroy(comment._id, comment.owner)}</p>
-                                    </InfoQuestion>
-                                </h5>
-                                <hr className="hr-styling" />
-                            </div>
-                        ))}
-                    </div>
-                    <hr className="hr-styling" />
-                    <form onSubmit={handleSubmit}>
-                        <div className="form-group">
-                            <label htmlFor="comment-user">Your Answer: </label>
-                            <textarea
-                                ref={contentComment}
-                                name="comment-user"
-                                className="form-control"></textarea>
-                        </div>
+        <div>
+            <Menu />
+            <div className={classStylingSpecific}>
+                {question?.data && (
+                    <React.Fragment>
                         <div>
+                            <h1>Title: {question?.data?.title}</h1>
+                            <h4>Detail: {question?.data?.detail}</h4>
+                        </div>
+                        <hr className="hr-styling" />
+                        <div style={{ marginLeft: '10x' }} className="comment-each">
+                            {question?.data?.comments?.map((comment, index) => (
+                                <div key={index}>
+                                        {comment.comment}
+                                        <InfoQuestion>
+                                            <p>
+                                                {'   '}
+                                                {comment.owner}
+                                                {'  |'}
+                                            </p>
+                                            <p >
+                                                {'   '}
+                                                <FontAwesomeIcon
+                                                    icon={faThumbsUp}
+                                                    color={
+                                                        comment.voteComment.whomvote.length !== 0 &&
+                                                        comment.voteComment.whomvote.filter(
+                                                            (e) => e.whom === getCookie('username'),
+                                                        ).length !== 0 &&
+                                                        comment.voteComment.whomvote.filter(
+                                                            (e) => e.whom === getCookie('username'),
+                                                        )[0].state
+                                                            ? 'red'
+                                                            : 'white'
+                                                    }
+                                                    onClick={() =>
+                                                        handleIncreaseLike(
+                                                            question?.data?._id,
+                                                            comment._id,
+                                                        )
+                                                    }
+                                                />
+                                                {'   '}
+                                                {comment.voteComment.vote}
+                                                {'   '}
+                                                <FontAwesomeIcon
+                                                    icon={faThumbsDown}
+                                                    color={
+                                                        comment.voteComment.whomvote.length !== 0 &&
+                                                        comment.voteComment.whomvote.filter(
+                                                            (e) => e.whom === getCookie('username'),
+                                                        ).length !== 0 &&
+                                                        !comment.voteComment.whomvote.filter(
+                                                            (e) => e.whom === getCookie('username'),
+                                                        )[0].state
+                                                            ? 'red'
+                                                            : 'white'
+                                                    }
+                                                    onClick={() =>
+                                                        handleDecreaseLike(
+                                                            question?.data?._id,
+                                                            comment._id,
+                                                        )
+                                                    }
+                                                />
+                                                {'  |'}
+                                            </p>
+                                            <p >
+                                                {'   '}
+                                                {formatDateToString(comment.createdCommentAt)}
+                                                {'  |'}
+                                            </p>
+                                            <p>{revealDestroy(comment._id, comment.owner)}</p>
+                                        </InfoQuestion>
+                                    <hr className="hr-styling" />
+                                </div>
+                            ))}
+                        </div>
+                        <form onSubmit={handleSubmit}>
+                            <div className="form-group">
+                                <label htmlFor="comment-user">Your Answer: </label>
+                                <textarea
+                                    ref={contentComment}
+                                    name="comment-user"
+                                    className="form-control"></textarea>
+                            </div>
                             {validInput.isError && (
-                                <div className="alert alert-danger alert-dismissible my-4 fade show">
+                                <div className="alert alert-dark alert-dismissible my-4 fade show">
                                     <button
                                         type="button"
                                         className="close"
@@ -235,18 +221,13 @@ function SpecificQuestion({ match, location, initialQuestion }) {
                                     {validInput.message}
                                 </div>
                             )}
-                        </div>
-                        <button type="submit" className="btn btn-info btn-block">
-                            Submit
-                        </button>
-                    </form>
-                </React.Fragment>
-            ) : (
-                <div className="waiting-specific-question">
-                    <br />
-                    <hr className="hr-styling" />
-                </div>
-            )}
+                            <button type="submit" className="btn btn-block submit-btn">
+                                Comment
+                            </button>
+                        </form>
+                    </React.Fragment>
+                )}
+            </div>
         </div>
     );
 }

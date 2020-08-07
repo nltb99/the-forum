@@ -1,0 +1,118 @@
+#logo path:nth-child(2) {
+    stroke-dasharray: 633;
+    stroke-dashoffset: 633;
+    animation: line-anim 3s ease forwards;
+}
+#logo path:nth-child(3) {
+    stroke-dasharray: 381;
+    stroke-dashoffset: 381;
+    animation: line-anim 3s ease forwards;
+}
+#logo path:nth-child(4) {
+    stroke-dasharray: 364;
+    stroke-dashoffset: 364;
+    animation: line-anim 3s ease forwards;
+}
+#logo path:nth-child(5) {
+    stroke-dasharray: 478;
+    stroke-dashoffset: 478;
+    animation: line-anim 3s ease forwards;
+}
+#logo path:nth-child(6) {
+    stroke-dasharray: 424;
+    stroke-dashoffset: 424;
+    animation: line-anim 3s ease forwards;
+}
+#logo path:nth-child(7) {
+    stroke-dasharray: 227;
+    stroke-dashoffset: 227;
+    animation: line-anim 3s ease forwards;
+}
+#logo path:nth-child(8) {
+    stroke-dasharray: 219;
+    stroke-dashoffset: 219;
+    animation: line-anim 3s ease forwards;
+}
+#logo path:nth-child(9) {
+    stroke-dasharray: 368;
+    stroke-dashoffset: 368;
+    animation: line-anim 3s ease forwards;
+}
+#logo path:nth-child(10) {
+    stroke-dasharray: 546;
+    stroke-dashoffset: 546;
+    animation: line-anim 3s ease forwards;
+}
+#logo path:nth-child(11) {
+    stroke-dasharray: 458;
+    stroke-dashoffset: 458;
+    animation: line-anim 3s ease forwards;
+}
+#logo path:nth-child(12) {
+    stroke-dasharray: 219;
+    stroke-dashoffset: 219;
+    animation: line-anim 3s ease forwards;
+}
+#logo path:nth-child(13) {
+    stroke-dasharray: 270;
+    stroke-dashoffset: 270;
+    animation: line-anim 3s ease forwards;
+}
+#logo path:nth-child(14) {
+    stroke-dasharray: 424;
+    stroke-dashoffset: 424;
+    animation: line-anim 3s ease forwards;
+}
+
+@keyframes line-anim {
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+#logo-container {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    background: rgb(48, 48, 48);
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    animation: after-intro 0.7s ease forwards;
+    animation-delay: 3s;
+    overflow: hidden;
+    img {
+        border-radius: 50%;
+        width: 100px;
+        height: 100px;
+    }
+}
+#logo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 70vw;
+    height: 20vh;
+    transform: translate(-50%, -50%);
+}
+@keyframes after-intro {
+    0% {
+        opacity: 1;
+        overflow: hidden;
+    }
+    50% {
+        opacity: 0.6;
+    }
+    70% {
+        opacity: 0.3;
+    }
+    100% {
+        opacity: 0;
+        visibility: collapse;
+        overflow: auto;
+        pointer-events: none;
+    }
+}

@@ -1,10 +1,9 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import classNames from 'classnames';
 import axios from 'axios';
+import Menu from './Menu';
 
 function EmailReset() {
-    const [isWhiteMode, setIsWhiteMode] = useState('false');
-
     let [validInput, setValidInput] = useState({
         isError: false,
         isNotFound: false,
@@ -68,29 +67,24 @@ function EmailReset() {
     const classStylingForm = classNames({
         container: true,
         'auth-form': true,
-        whiteColor: isWhiteMode === 'false',
-        darkColor: isWhiteMode === 'true',
+        whiteColor: true,
     });
 
-    useEffect(() => {
-        const theme = JSON.parse(localStorage.getItem('whitemode'));
-        setIsWhiteMode(theme);
-    }, []);
-
     return (
-        <form className={classStylingForm} onSubmit={handleSubmit}>
-            <h1>Forgot your password?</h1>
-            <div>
-                <h5>Email</h5>
-                <input ref={emailInput} className="form-control" type="text" />
-            </div>
-            <div>
-                <h5>Username</h5>
-                <input ref={usernameInput} className="form-control" type="text" />
-            </div>
-            <div>
+        <div>
+            <Menu />
+            <form className={classStylingForm} onSubmit={handleSubmit}>
+                <h1>Forgot your password?</h1>
+                <div>
+                    <h5>Email</h5>
+                    <input ref={emailInput} className="form-control" type="text" />
+                </div>
+                <div>
+                    <h5>Username</h5>
+                    <input ref={usernameInput} className="form-control" type="text" />
+                </div>
                 {validInput.isError && (
-                    <div className="alert alert-danger alert-dismissible my-4 fade show">
+                    <div className="alert alert-dark alert-dismissible my-4 fade show">
                         <button
                             type="button"
                             className="close"
@@ -101,10 +95,8 @@ function EmailReset() {
                         {validInput.message}
                     </div>
                 )}
-            </div>
-            <div>
                 {validInput.isSucceed && (
-                    <div className="alert alert-success alert-dismissible my-4 fade show">
+                    <div className="alert alert-info alert-dismissible my-4 fade show">
                         <button
                             type="button"
                             className="close"
@@ -115,10 +107,8 @@ function EmailReset() {
                         {validInput.message}
                     </div>
                 )}
-            </div>
-            <div>
                 {validInput.isNotFound && (
-                    <div className="alert alert-warning alert-dismissible my-4 fade show">
+                    <div className="alert alert-secondary alert-dismissible my-4 fade show">
                         <button
                             type="button"
                             className="close"
@@ -129,11 +119,11 @@ function EmailReset() {
                         {validInput.message}
                     </div>
                 )}
-            </div>
-            <button type="submit" className="btn btn-info btn-block mt-4">
-                Submit
-            </button>
-        </form>
+                <button type="submit" className="btn btn-block submit-btn mt-4">
+                    Send Mail
+                </button>
+            </form>
+        </div>
     );
 }
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { getCookie } from '../redux/actions/actionTypes.js';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
@@ -6,8 +6,6 @@ import axios from 'axios';
 import Menu from './Menu';
 
 function NewQuestion({ history }) {
-    const [isWhiteMode, setIsWhiteMode] = useState('false');
-
     const tittleRef = useRef('');
     const detailRef = useRef('');
 
@@ -42,14 +40,10 @@ function NewQuestion({ history }) {
                 author: getCookie('username'),
             })
             .then((res) => {
-                // console.log(res.data);
                 history.push('/');
                 return;
             })
-            .catch((err) => {
-                // console.log(err.response.data);
-                // console.log(err.response.status);
-            });
+            .catch((err) => {});
     };
 
     const removeErrorMessage = () => {
@@ -59,16 +53,10 @@ function NewQuestion({ history }) {
         });
     };
 
-    useEffect(() => {
-        const theme = JSON.parse(localStorage.getItem('whitemode'));
-        if (theme) setIsWhiteMode(theme);
-    }, []);
-
     const classStylingForm = classNames({
         container: true,
         'new-question': true,
-        darkColor: isWhiteMode === 'true',
-        whiteColor: isWhiteMode === 'false',
+        whiteColor: true,
     });
 
     return (
@@ -92,22 +80,20 @@ function NewQuestion({ history }) {
                         placeholder="Enter Your Detail"
                         className="form-control"></textarea>
                 </div>
-                <div>
-                    {validInput.isError && (
-                        <div className="alert alert-danger alert-dismissible my-4 fade show">
-                            <button
-                                type="button"
-                                className="close"
-                                data-dismiss="alert"
-                                onClick={removeErrorMessage}>
-                                &times;
-                            </button>
-                            {validInput.message}
-                        </div>
-                    )}
-                </div>
-                <button type="submit" className="btn btn-info btn-block">
-                    Submit
+                {validInput.isError && (
+                    <div className="alert alert-dark alert-dismissible my-4 fade show">
+                        <button
+                            type="button"
+                            className="close"
+                            data-dismiss="alert"
+                            onClick={removeErrorMessage}>
+                            &times;
+                        </button>
+                        {validInput.message}
+                    </div>
+                )}
+                <button type="submit" className="btn btn-block submit-btn">
+                    New Question
                 </button>
             </form>
         </div>

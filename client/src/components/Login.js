@@ -1,16 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useSelector } from 'react-redux';
 import classNames from 'classnames';
+import Menu from './Menu';
 import { getCookie } from '../redux/actions/actionTypes';
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
 import { Link } from 'react-router-dom';
 
 function Login({ history }) {
-    const [isWhiteMode, setIsWhiteMode] = useState('false');
-
-    const authPassword = useSelector((state) => state.credentialsFalse);
-
     let [validInput, setValidInput] = useState({
         isError: false,
         message: '',
@@ -68,13 +64,10 @@ function Login({ history }) {
     const classStylingForm = classNames({
         container: true,
         'auth-form': true,
-        whiteColor: isWhiteMode === 'false',
-        darkColor: isWhiteMode === 'true',
+        whiteColor: true,
     });
 
     useEffect(() => {
-        const theme = JSON.parse(localStorage.getItem('whitemode'));
-        setIsWhiteMode(theme);
         if (typeof getCookie('id') !== 'undefined') {
             history.push('/');
         }
@@ -85,23 +78,23 @@ function Login({ history }) {
             isError: false,
             message: '',
         });
-        authPassword.msg = '';
     }
 
     return (
-        <form className={classStylingForm} onSubmit={handleSubmit}>
-            <h1>Login</h1>
-            <div>
-                <h5>Username</h5>
-                <input ref={usernameInput} className="form-control" type="text" />
-            </div>
-            <div>
-                <h5>Password</h5>
-                <input ref={passwordInput} className="form-control" type="password" />
-            </div>
-            <div>
+        <div>
+            <Menu />
+            <form className={classStylingForm} onSubmit={handleSubmit}>
+                <h1>Login</h1>
+                <div>
+                    <h5>Username</h5>
+                    <input ref={usernameInput} className="form-control" type="text" />
+                </div>
+                <div>
+                    <h5>Password</h5>
+                    <input ref={passwordInput} className="form-control" type="password" />
+                </div>
                 {validInput.isError && (
-                    <div className="alert alert-danger alert-dismissible my-4 fade show">
+                    <div className="alert alert-dark alert-dismissible my-4 fade show">
                         <button
                             type="button"
                             className="close"
@@ -112,28 +105,14 @@ function Login({ history }) {
                         {validInput.message}
                     </div>
                 )}
-            </div>
-            <div>
-                {authPassword.msg && (
-                    <div className="alert alert-danger alert-dismissible my-4 fade show">
-                        <button
-                            type="button"
-                            className="close"
-                            data-dismiss="alert"
-                            onClick={removeErrorMessage}>
-                            &times;
-                        </button>
-                        {authPassword.msg}
-                    </div>
-                )}
-            </div>
-            <Link to="/user/emailreset">
-                <h3 style={{ marginTop: 20, fontSize: 20 }}>{'  '}Forgot password?</h3>
-            </Link>
-            <button type="submit" className="btn btn-info btn-block mt-4">
-                Submit
-            </button>
-        </form>
+                <Link to="/user/emailreset" style={{ color: 'rgb(229, 226, 221)' }}>
+                    <h3 style={{ marginTop: 20, fontSize: 20 }}>{'  '}Forgot password?</h3>
+                </Link>
+                <button type="submit" className="btn btn-block mt-4 submit-btn">
+                    Login
+                </button>
+            </form>
+        </div>
     );
 }
 

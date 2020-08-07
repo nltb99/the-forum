@@ -1,8 +1,8 @@
 @import './styling/home.scss';
 @import './styling/specificquestion.scss';
 @import './styling/newquestions.scss';
-@import './styling/switchmode.scss';
-@import './styling//auth.scss';
+@import './styling/auth.scss';
+@import './styling/header.scss';
 
 @import url('https://fonts.googleapis.com/css2?family=Sniglet&display=swap');
 
@@ -11,6 +11,7 @@
 * {
     margin: 0;
     padding: 0;
+    overflow-x: hidden;
     box-sizing: border-box;
 }
 

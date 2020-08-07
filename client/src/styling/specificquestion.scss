@@ -1,8 +1,13 @@
 .specific-question {
-    border: 1.2px solid #666;
     margin: 20px auto;
     padding: 15px;
     word-wrap: break-word;
+    background: rgb(48, 48, 48);
+    border-radius: 15px !important;
+}
+
+.comment-each {
+    font-size: 24px;
 }
 
 .waiting-specific-question {

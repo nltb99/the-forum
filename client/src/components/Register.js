@@ -1,10 +1,9 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import classNames from 'classnames';
+import Menu from './Menu';
 import axios from 'axios';
 
 function Register({ history }) {
-    const [isWhiteMode, setIsWhiteMode] = useState('false');
-
     let [validRegister, setValidRegister] = useState({
         isError: false,
         isSucceed: false,
@@ -91,38 +90,28 @@ function Register({ history }) {
     const classStylingForm = classNames({
         container: true,
         'auth-form': true,
-        whiteColor: isWhiteMode === 'false',
-        darkColor: isWhiteMode === 'true',
+        whiteColor: true,
     });
 
-    useEffect(() => {
-        const theme = JSON.parse(localStorage.getItem('whitemode'));
-        setIsWhiteMode(theme);
-    }, []);
-
     return (
-        <form className={classStylingForm} onSubmit={handleSubmit}>
-            <h1>Register</h1>
-            <div>
-                <h5>Email</h5>
-                <input
-                    ref={emailInput}
-                    defaultValue={'nakdjlj@gmail.com'}
-                    className="form-control"
-                    type="text"
-                />
-            </div>
-            <div>
-                <h5>Username</h5>
-                <input ref={usernameInput} className="form-control" type="text" />
-            </div>
-            <div>
-                <h5>Password</h5>
-                <input ref={passwordInput} className="form-control" type="password" />
-            </div>
-            <div>
+        <div>
+            <Menu />
+            <form className={classStylingForm} onSubmit={handleSubmit}>
+                <h1>Register</h1>
+                <div>
+                    <h5>Email</h5>
+                    <input ref={emailInput} className="form-control" type="text" />
+                </div>
+                <div>
+                    <h5>Username</h5>
+                    <input ref={usernameInput} className="form-control" type="text" />
+                </div>
+                <div>
+                    <h5>Password</h5>
+                    <input ref={passwordInput} className="form-control" type="password" />
+                </div>
                 {validRegister.isError && (
-                    <div className="alert alert-danger alert-dismissible my-4 fade show">
+                    <div className="alert alert-dark alert-dismissible my-4 fade show">
                         <button
                             type="button"
                             className="close"
@@ -133,10 +122,8 @@ function Register({ history }) {
                         {validRegister.message}
                     </div>
                 )}
-            </div>
-            <div>
                 {validRegister.isSucceed && (
-                    <div className="alert alert-success alert-dismissible my-4 fade show">
+                    <div className="alert alert-info alert-dismissible my-4 fade show">
                         <button
                             type="button"
                             className="close"
@@ -147,11 +134,11 @@ function Register({ history }) {
                         {validRegister.message}
                     </div>
                 )}
-            </div>
-            <button type="submit" className="btn btn-info btn-block mt-4">
-                Submit
-            </button>
-        </form>
+                <button type="submit" className="btn btn-block submit-btn mt-4">
+                    Register
+                </button>
+            </form>
+        </div>
     );
 }
 

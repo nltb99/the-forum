@@ -1,10 +1,9 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import classNames from 'classnames';
+import Menu from './Menu';
 import axios from 'axios';
 
 function ResetPassword({ location, history }) {
-    const [isWhiteMode, setIsWhiteMode] = useState('false');
-
     const passwordInput = useRef('');
     const confirmPasswordInput = useRef('');
 
@@ -74,32 +73,27 @@ function ResetPassword({ location, history }) {
         });
     };
 
-    useEffect(() => {
-        const theme = JSON.parse(localStorage.getItem('whitemode'));
-        setIsWhiteMode(theme);
-    }, []);
-
     const classStylingForm = classNames({
         container: true,
         'auth-form': true,
-        whiteColor: isWhiteMode === 'false',
-        darkColor: isWhiteMode === 'true',
+        whiteColor: true,
     });
 
     return (
-        <form className={classStylingForm} onSubmit={handleSubmit}>
-            <h1>Reset your password</h1>
-            <div>
-                <label>Password:</label>
-                <input ref={passwordInput} className="form-control" type="password" />
-            </div>
-            <div>
-                <label>Confirm Password:</label>
-                <input ref={confirmPasswordInput} className="form-control" type="password" />
-            </div>
-            <div>
+        <div>
+            <Menu />
+            <form className={classStylingForm} onSubmit={handleSubmit}>
+                <h1>Reset your password</h1>
+                <div>
+                    <label>Password:</label>
+                    <input ref={passwordInput} className="form-control" type="password" />
+                </div>
+                <div>
+                    <label>Confirm Password:</label>
+                    <input ref={confirmPasswordInput} className="form-control" type="password" />
+                </div>
                 {validInput.isError && (
-                    <div className="alert alert-danger alert-dismissible my-4 fade show">
+                    <div className="alert alert-dark alert-dismissible my-4 fade show">
                         <button
                             type="button"
                             className="close"
@@ -110,10 +104,8 @@ function ResetPassword({ location, history }) {
                         {validInput.message}
                     </div>
                 )}
-            </div>
-            <div>
                 {validInput.isSucceed && (
-                    <div className="alert alert-success alert-dismissible my-4 fade show">
+                    <div className="alert alert-info alert-dismissible my-4 fade show">
                         <button
                             type="button"
                             className="close"
@@ -124,12 +116,11 @@ function ResetPassword({ location, history }) {
                         {validInput.message}
                     </div>
                 )}
-            </div>
-
-            <button type="submit" className="btn btn-info btn-block mt-4">
-                Submit
-            </button>
-        </form>
+                <button type="submit" className="btn btn-block submit-btn mt-4">
+                    Reset Password
+                </button>
+            </form>
+        </div>
     );
 }
 

@@ -4,8 +4,9 @@ const InfoQuestion = styled.div`
     display: flex;
     align-items: center;
     margin-top: 4px;
-    color: ${(props) =>
-        props.isWhiteMode === 'false' ? 'rgb(229, 226, 221)' : 'rgb(229, 226, 221)'};
+    color: rgb(229, 226, 221);
+    font-size: 80%;
+    overflow: hidden;
     p {
         margin-right: 10px;
     }

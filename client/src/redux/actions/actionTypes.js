@@ -16,16 +16,16 @@ import {
 import axios from 'axios';
 
 // Question Action
-export const addQuestion = (title, detail, author) => {
-    return async function(dispatch) {
-        await axios.post('/api/question', { title, detail, author }).then((res) =>
-            dispatch({
-                type: ADDQUESTION,
-                payload: res.data,
-            }),
-        );
-    };
-};
+// export const addQuestion = (title, detail, author) => {
+//     return async function(dispatch) {
+//         await axios.post('/api/question', { title, detail, author }).then((res) =>
+//             dispatch({
+//                 type: ADDQUESTION,
+//                 payload: res.data,
+//             }),
+//         );
+//     };
+// };
 
 // export const countQuestion = (counting) => {
 //     return async function(dispatch) {
@@ -38,35 +38,35 @@ export const addQuestion = (title, detail, author) => {
 //     }
 // }
 
-export const deleteQuestion = (id, slug) => {
-    return async function(dispatch) {
-        await axios
-            .all([axios.delete(`/api/question/${id}`), axios.delete(`/api/comment/${slug}`)])
-            .then(
-                axios.spread((question, comment) => {
-                    dispatch({
-                        type: DELETEQUESTION,
-                        payload: {
-                            id,
-                            slug,
-                        },
-                    });
-                }),
-            );
-    };
-};
-
-export const getAllQuestion = () => {
-    return async function(dispatch) {
-        await dispatch(isLoading());
-        await axios.get('/api/question').then((res) =>
-            dispatch({
-                type: GETQUESTION,
-                payload: res.data,
-            }),
-        );
-    };
-};
+// export const deleteQuestion = (id, slug) => {
+//     return async function(dispatch) {
+//         await axios
+//             .all([axios.delete(`/api/question/${id}`), axios.delete(`/api/comment/${slug}`)])
+//             .then(
+//                 axios.spread((question, comment) => {
+//                     dispatch({
+//                         type: DELETEQUESTION,
+//                         payload: {
+//                             id,
+//                             slug,
+//                         },
+//                     });
+//                 }),
+//             );
+//     };
+// };
+//
+// export const getAllQuestion = () => {
+//     return async function(dispatch) {
+//         await dispatch(isLoading());
+//         await axios.get('/api/question').then((res) =>
+//             dispatch({
+//                 type: GETQUESTION,
+//                 payload: res.data,
+//             }),
+//         );
+//     };
+// };
 
 // Comment Action
 // export const getComment = (slug) => async (dispatch) => {
@@ -78,89 +78,88 @@ export const getAllQuestion = () => {
 //     )
 // }
 
-export const addComment = (id, comment) => {
-    return async function(dispatch) {
-        await axios.patch(`/api/comment/insert`, { id, comment }).then((res) =>
-            dispatch({
-                type: ADDCOMMENT,
-                payload: res.data,
-            }),
-        );
-    };
-};
-
-export const deleteComment = (id) => {
-    return async function(dispatch) {
-        await axios.delete(`/api/comment/specific/${id}`).then((res) =>
-            dispatch({
-                type: DELETECOMMENT,
-                payload: id,
-            }),
-        );
-    };
-};
+// export const addComment = (id, comment) => {
+//     return async function(dispatch) {
+//         await axios.patch(`/api/comment/insert`, { id, comment }).then((res) =>
+//             dispatch({
+//                 type: ADDCOMMENT,
+//                 payload: res.data,
+//             }),
+//         );
+//     };
+// };
+//
+// export const deleteComment = (id) => {
+//     return async function(dispatch) {
+//         await axios.delete(`/api/comment/specific/${id}`).then((res) =>
+//             dispatch({
+//                 type: DELETECOMMENT,
+//                 payload: id,
+//             }),
+//         );
+//     };
+// };
 
 // Handle is loading
-export const isLoading = () => {
-    return {
-        type: ISLOADING,
-    };
-};
+// export const isLoading = () => {
+//     return {
+//         type: ISLOADING,
+//     };
+// };
+//
+// // Check theme
+// export const isDarkmode = () => {
+//     return {
+//         type: ISDARKMODE,
+//     };
+// };
+//
+// export const isWhiteMode = () => {
+//     return {
+//         type: ISWHITEMODE,
+//     };
+// };
 
-// Check theme
-export const isDarkmode = () => {
-    return {
-        type: ISDARKMODE,
-    };
-};
+// export const userRegister = (username, password, email) => {
+//     return function(dispatch) {
+//         axios.post('/api/user/register', { username, password, email }).then((res) =>
+//             dispatch({
+//                 type: USERREGISTER,
+//                 payload: res.data,
+//             }),
+//         );
+//     };
+// };
 
-export const isWhiteMode = () => {
-    return {
-        type: ISWHITEMODE,
-    };
-};
+// export const userLogin = (username, password) => {
+//     return async function(dispatch) {
+//         const configs = {
+//             headers: {
+//                 'Content-Type': 'application/json',
+//             },
+//         };
+//         await axios
+//             .post('/api/user/login', { username, password }, configs)
+//             .then((res) => {
+//                 dispatch({
+//                     type: USERLOGIN,
+//                     payload: res.data,
+//                 });
+//             })
+//             .catch((err) => {
+//                 dispatch({
+//                     type: LOGINFAIL,
+//                     payload: 'Password does not match',
+//                 });
+//             });
+//     };
+// };
 
-// Check authen token user
-export const userRegister = (username, password, email) => {
-    return function(dispatch) {
-        axios.post('/api/user/register', { username, password, email }).then((res) =>
-            dispatch({
-                type: USERREGISTER,
-                payload: res.data,
-            }),
-        );
-    };
-};
-
-export const userLogin = (username, password) => {
-    return async function(dispatch) {
-        const configs = {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        };
-        await axios
-            .post('/api/user/login', { username, password }, configs)
-            .then((res) => {
-                dispatch({
-                    type: USERLOGIN,
-                    payload: res.data,
-                });
-            })
-            .catch((err) => {
-                dispatch({
-                    type: LOGINFAIL,
-                    payload: 'Password does not match',
-                });
-            });
-    };
-};
-
-export const loadCredential = () => {
-    return {
-        type: LOADCREDENTIAL,
-    };
-};
+// export const loadCredential = () => {
+//     return {
+//         type: LOADCREDENTIAL,
+//     };
+// };
 
 export const getCookie = (name) => {
     let matches = document.cookie.match(

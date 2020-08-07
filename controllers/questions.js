@@ -74,23 +74,23 @@ route.patch('/question/increaselike', authPrivilege, async (req, res) => {
         return await QuestionSchema.findById(req.body.id).then((question) => {
             if (!question) return res.status(404).json({ msg: 'Question not found' });
             if (req.username === null) return res.status(403).json({ msg: 'Token require' });
-            if (question.loveQuestion.whomlove.some((e) => e.whom === req.username)) {
-                let filterQuestion = question.loveQuestion.whomlove.filter(
+            if (question.voteQuestion.whomvote.some((e) => e.whom == req.username)) {
+                let filterQuestion = question.voteQuestion.whomvote.filter(
                     (e) => e.whom == req.username,
                 );
                 if (!filterQuestion[0].state) {
                     // unliked
-                    question.loveQuestion.love += 1;
-                    filterQuestion.state = true;
+                    question.voteQuestion.vote += 2;
+                    filterQuestion[0].state = true;
                     question.save();
                     return res.status(200).json({ msg: 'Love Succeed' });
                 } else {
                     return res.status(403).json({ msg: 'Already loved' });
                 }
             } else {
-                question.loveQuestion.love += 2;
-                question.loveQuestion.whomlove = [
-                    ...question.loveQuestion.whomlove,
+                question.voteQuestion.vote += 1;
+                question.voteQuestion.whomvote = [
+                    ...question.voteQuestion.whomvote,
                     { whom: req.username, state: true },
                 ];
                 question.save();
@@ -98,7 +98,6 @@ route.patch('/question/increaselike', authPrivilege, async (req, res) => {
             }
         });
     } catch (e) {
-        console.log(e);
         return res.status(404).json({ msg: 'Error!' });
     }
 });
@@ -108,31 +107,30 @@ route.patch('/question/decreaselike', authPrivilege, async (req, res) => {
         return await QuestionSchema.findById(req.body.id).then((question) => {
             if (!question) return res.status(404).json({ msg: 'Question not found' });
             if (req.username === null) return res.status(403).json({ msg: 'Token require' });
-            if (question.loveQuestion.whomlove.some((e) => e.whom === req.username)) {
-                let filterQuestion = question.loveQuestion.whomlove.filter(
+            if (question.voteQuestion.whomvote.some((e) => e.whom === req.username)) {
+                let filterQuestion = question.voteQuestion.whomvote.filter(
                     (e) => e.whom == req.username,
                 );
                 if (filterQuestion[0].state) {
                     //Liked
-                    question.loveQuestion.love += 2;
-                    filterQuestion.state = false;
+                    question.voteQuestion.vote -= 2;
+                    filterQuestion[0].state = false;
                     question.save();
                     return res.status(200).json({ msg: 'Unlove Succeed' });
                 } else {
                     return res.status(403).json({ msg: 'Already unloved' });
                 }
             } else {
-                question.loveQuestion.love -= 1;
-                question.loveQuestion.whomlove = [
-                    ...question.loveQuestion.whomlove,
-                    { whom: req.username, state: true },
+                question.voteQuestion.vote -= 1;
+                question.voteQuestion.whomvote = [
+                    ...question.voteQuestion.whomvote,
+                    { whom: req.username, state: false },
                 ];
                 question.save();
                 return res.status(200).json({ msg: 'Unlove Succeed' });
             }
         });
     } catch (e) {
-        console.log(e);
         return res.status(404).json({ msg: 'Error!' });
     }
 });

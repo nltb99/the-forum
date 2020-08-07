@@ -1,8 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Switch } from './StyledComponents/switchMode';
 import { getCookie } from '../redux/actions/actionTypes.js';
-import avt from '../images/square.png';
+import avt from '../images/sketch_me.png';
 
 function Menu() {
     const turnOffUnderline = {
@@ -12,7 +11,9 @@ function Menu() {
     return (
         <div className="header">
             <div className="over_header">
-                <img src={avt} alt="" />
+                <Link to="/" style={turnOffUnderline}>
+                    <img src={avt} alt="author" />
+                </Link>
                 <p>
                     {typeof getCookie('id') === 'undefined' && (
                         <Link to="/user/login" style={turnOffUnderline}>
@@ -39,43 +40,17 @@ function Menu() {
                     </Link>
                 </p>
             </div>
-            <h1 className="cover">Wondering Site</h1>
+            <Link to="/" style={turnOffUnderline}>
+                <h1 className="cover">Wondering Site</h1>
+            </Link>
             <div className="menu">
                 <Link to="/question/new" style={turnOffUnderline}>
                     <h5 className="menu_cell">New Question?</h5>
                 </Link>
             </div>
-            <h5 className="menu_cell">ಠ_ಠ</h5>
+            <h3 className="menu_cell">ಠ_ಠ</h3>
         </div>
     );
 }
 
 export default Menu;
-
-// <p>
-//     {typeof getCookie('id') === 'undefined' && (
-//         <Link to="/user/login" style={turnOffUnderline}>
-//             login
-//         </Link>
-//     )}
-//     {typeof getCookie('id') !== 'undefined' && (
-//         <Link
-//             to="/"
-//             style={turnOffUnderline}
-//             onClick={() => {
-//                 document.cookie =
-//                     'id=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-//                 document.cookie =
-//                     'username=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-//                 document.cookie =
-//                     'tk=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-//                 window.location.reload(true);
-//             }}>
-//             logout
-//         </Link>
-//     )}
-//     /
-//     <Link to="/user/register" style={turnOffUnderline}>
-//         register
-//     </Link>
-// </p>

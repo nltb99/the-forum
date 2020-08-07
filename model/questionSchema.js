@@ -2,6 +2,36 @@ const express = require('express');
 const mongoose = require('mongoose');
 const slugify = require('slugify');
 
+const commentSchema = mongoose.Schema({
+    comment: {
+        type: String,
+        trim: true,
+        required: false,
+    },
+    owner: {
+        type: String,
+        trim: true,
+        required: false,
+    },
+    voteComment: {
+        vote: {
+            type: Number,
+            default: 0,
+            required: true,
+        },
+        whomvote: [
+            {
+                whom: String,
+                state: Boolean,
+            },
+        ],
+    },
+    createdCommentAt: {
+        type: Date,
+        default: Date.now,
+    },
+});
+
 const questionSchema = mongoose.Schema({
     title: {
         type: String,
@@ -22,41 +52,19 @@ const questionSchema = mongoose.Schema({
         trim: true,
         required: true,
     },
-    comments: [
-        {
-            comment: {
-                type: String,
-                trim: true,
-                required: false,
-            },
-            loveComment: {
-                type: Number,
-                default: 0,
-                required: true,
-            },
-            owner: {
-                type: String,
-                trim: true,
-                required: false,
-            },
-            createdCommentAt: {
-                type: Date,
-                default: Date.now,
-            },
-        },
-    ],
+    comments: [commentSchema],
     author: {
         type: String,
         trim: true,
         required: true,
     },
-    loveQuestion: {
-        love: {
+    voteQuestion: {
+        vote: {
             type: Number,
             default: 0,
             required: true,
         },
-        whomlove: [
+        whomvote: [
             {
                 whom: String,
                 state: Boolean,

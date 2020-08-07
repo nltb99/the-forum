@@ -1,24 +1,21 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { getCookie } from '../redux/actions/actionTypes.js';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 import classNames from 'classnames';
-import InfoQuestion from './StyledComponents/home';
 import useSWR, { mutate } from 'swr';
 import axios from 'axios';
 import lottie from 'lottie-web';
 import animationLoading from '../images/loading.json';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faThumbsUp, faThumbsDown } from '@fortawesome/free-solid-svg-icons';
+import InfoQuestion from './StyledComponents/home';
 import QuantityComment from './QuantityComment.js';
 import Menu from './Menu';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCoffee, faThumbsUp, faThumbsDown } from '@fortawesome/free-solid-svg-icons';
 
 function Home({ initialQuestions }) {
-    const [isWhiteMode, setIsWhiteMode] = useState('false');
-
     const questions = useSWR(`/api/question`, { initialData: initialQuestions });
 
-    //lottie
     const _el = useRef();
     useEffect(() => {
         lottie.loadAnimation({
@@ -39,11 +36,6 @@ function Home({ initialQuestions }) {
         }
     }
 
-    useEffect(() => {
-        const theme = JSON.parse(localStorage.getItem('whitemode'));
-        if (theme) setIsWhiteMode(theme);
-    }, []);
-
     function revealDestroy(id, slug, author) {
         if (getCookie('username') === author || getCookie('username') === 'admin') {
             return (
@@ -56,15 +48,7 @@ function Home({ initialQuestions }) {
                             questions?.data?.filter((e) => e._id !== id),
                             false,
                         );
-                        await axios
-                            .delete(url, { data: { id } })
-                            .then((res) => {
-                                // console.log(res.status);
-                                // console.log(res.data);
-                            })
-                            .catch((err) => {
-                                // console.log(err.response.data);
-                            });
+                        await axios.delete(url, { data: { id } });
                         await mutate(url);
                     }}>
                     Delete
@@ -75,26 +59,28 @@ function Home({ initialQuestions }) {
 
     async function handleIncreaseLike(idQuestion) {
         try {
-            const url = await '/api/question/increaselike';
-            mutate(url, { id: idQuestion });
-            await axios.patch(url, { id: idQuestion }).then((res) => {
-                console.log(res.data);
-                console.log(res.status);
-            });
-            mutate(url);
+            if (typeof getCookie('id') === 'undefined') {
+                alert('Please Login First');
+            } else {
+                const url = await '/api/question/increaselike';
+                mutate(url, { id: idQuestion });
+                await axios.patch(url, { id: idQuestion });
+                mutate(url);
+            }
         } catch (e) {
             console.log(e);
         }
     }
     async function handleDecreaseLike(idQuestion) {
         try {
-            const url = await '/api/question/decreaselike';
-            mutate(url, { id: idQuestion });
-            await axios.patch(url, { id: idQuestion }).then((res) => {
-                console.log(res.data);
-                console.log(res.status);
-            });
-            mutate(url);
+            if (typeof getCookie('id') === 'undefined') {
+                alert('Please Login First');
+            } else {
+                const url = await '/api/question/decreaselike';
+                mutate(url, { id: idQuestion });
+                await axios.patch(url, { id: idQuestion });
+                mutate(url);
+            }
         } catch (e) {
             console.log(e);
         }
@@ -102,17 +88,14 @@ function Home({ initialQuestions }) {
 
     const styleEachQuestion = classNames({
         'question-each': true,
-        'background-common-light': isWhiteMode === 'true',
-        'background-common-dark': isWhiteMode === 'false',
+        'background-common-light': true,
     });
 
     return (
         <div>
             <Menu />
             <div className="container home-route">
-                <h1 className={isWhiteMode === 'false' ? 'text-white' : 'text-dark'}>
-                    Questions ({questions?.data?.length})
-                </h1>
+                <h1 className={'text-dark'}>Questions ({questions?.data?.length})</h1>
                 <React.Fragment>
                     {questions?.data?.map((cell, index) => (
                         <div className={styleEachQuestion} key={index}>
@@ -123,47 +106,62 @@ function Home({ initialQuestions }) {
                                         pathname: `/question`,
                                         search: `?id=${cell._id}`,
                                     })}
-                                    className="text-info">
+                                    className="question-each-title text-info">
                                     {cell.title}
                                 </Link>
-                                <div className="darkColor">
+                                <div className="whiteColor">
                                     {cell.detail
                                         .split(' ')
                                         .slice(0, 3)
                                         .join(' ')}
                                     ...
                                 </div>
-                                <InfoQuestion isWhiteMode={isWhiteMode}>
+                                <InfoQuestion>
                                     <p>
-                                        {'   '}
-                                        by {cell.author}
+                                        {'   '}by {cell.author}
                                         {'  |'}
                                     </p>
-                                    <QuantityComment isWhiteMode={isWhiteMode} id={cell._id} />
-                                    <p
-                                        className={
-                                            isWhiteMode === 'false' ? 'whiteColor' : 'darkColor'
-                                        }>
+                                    <QuantityComment id={cell._id} />
+                                    <p className={'whiteColor'}>
                                         {'   '}
                                         <FontAwesomeIcon
                                             icon={faThumbsUp}
-                                            color="white"
+                                            className="thumbs-icon"
+                                            color={
+                                                cell.voteQuestion.whomvote.length !== 0 &&
+                                                cell.voteQuestion.whomvote.filter(
+                                                    (e) => e.whom === getCookie('username'),
+                                                ).length !== 0 &&
+                                                cell.voteQuestion.whomvote.filter(
+                                                    (e) => e.whom === getCookie('username'),
+                                                )[0].state
+                                                    ? 'red'
+                                                    : 'white'
+                                            }
                                             onClick={() => handleIncreaseLike(cell._id)}
                                         />
-                                        {'   '}
-                                        {cell.loveQuestion}
-                                        {'   '}
+                                        {'    '}
+                                        {cell.voteQuestion.vote}
+                                        {'    '}
                                         <FontAwesomeIcon
                                             icon={faThumbsDown}
+                                            className="thumbs-icon"
                                             onClick={() => handleDecreaseLike(cell._id)}
-                                            color="red"
+                                            color={
+                                                cell.voteQuestion.whomvote.length !== 0 &&
+                                                cell.voteQuestion.whomvote.filter(
+                                                    (e) => e.whom === getCookie('username'),
+                                                ).length !== 0 &&
+                                                !cell.voteQuestion.whomvote.filter(
+                                                    (e) => e.whom === getCookie('username'),
+                                                )[0].state
+                                                    ? 'red'
+                                                    : 'white'
+                                            }
                                         />
                                         {'  |'}
                                     </p>
-                                    <p
-                                        className={
-                                            isWhiteMode === 'false' ? 'whiteColor' : 'darkColor'
-                                        }>
+                                    <p className={'whiteColor'}>
                                         {'   '}
                                         {formatDateToString(cell.createAt)}
                                         {'  |'}
