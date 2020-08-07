@@ -48,7 +48,7 @@ function Menu() {
                     <h5 className="menu_cell">New Question?</h5>
                 </Link>
             </div>
-            <h3 className="menu_cell">ಠ_ಠ</h3>
+            <h3 className="overflow-off">ಠ_ಠ</h3>
         </div>
     );
 }

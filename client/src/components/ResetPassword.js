@@ -55,9 +55,6 @@ function ResetPassword({ location, history }) {
                 }
             })
             .catch((err) => {
-                if (err.response) {
-                    // console.log(err.response.status);
-                }
                 setValidInput({
                     isError: true,
                     message: 'Invalid',
@@ -83,7 +80,7 @@ function ResetPassword({ location, history }) {
         <div>
             <Menu />
             <form className={classStylingForm} onSubmit={handleSubmit}>
-                <h1>Reset your password</h1>
+                <h1 className="overflow-off">Reset your password</h1>
                 <div>
                     <label>Password:</label>
                     <input ref={passwordInput} className="form-control" type="password" />

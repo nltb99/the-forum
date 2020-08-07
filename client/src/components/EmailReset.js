@@ -74,7 +74,7 @@ function EmailReset() {
         <div>
             <Menu />
             <form className={classStylingForm} onSubmit={handleSubmit}>
-                <h1>Forgot your password?</h1>
+                <h1 className="overflow-off">Forgot your password?</h1>
                 <div>
                     <h5>Email</h5>
                     <input ref={emailInput} className="form-control" type="text" />

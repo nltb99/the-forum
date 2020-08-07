@@ -129,74 +129,74 @@ function SpecificQuestion({ match, location, initialQuestion }) {
                 {question?.data && (
                     <React.Fragment>
                         <div>
-                            <h1>Title: {question?.data?.title}</h1>
-                            <h4>Detail: {question?.data?.detail}</h4>
+                            <h1 className="overflow-off">Title: {question?.data?.title}</h1>
+                            <h4 className="overflow-off">Detail: {question?.data?.detail}</h4>
                         </div>
                         <hr className="hr-styling" />
                         <div style={{ marginLeft: '10x' }} className="comment-each">
                             {question?.data?.comments?.map((comment, index) => (
                                 <div key={index}>
-                                        {comment.comment}
-                                        <InfoQuestion>
-                                            <p>
-                                                {'   '}
-                                                {comment.owner}
-                                                {'  |'}
-                                            </p>
-                                            <p >
-                                                {'   '}
-                                                <FontAwesomeIcon
-                                                    icon={faThumbsUp}
-                                                    color={
-                                                        comment.voteComment.whomvote.length !== 0 &&
-                                                        comment.voteComment.whomvote.filter(
-                                                            (e) => e.whom === getCookie('username'),
-                                                        ).length !== 0 &&
-                                                        comment.voteComment.whomvote.filter(
-                                                            (e) => e.whom === getCookie('username'),
-                                                        )[0].state
-                                                            ? 'red'
-                                                            : 'white'
-                                                    }
-                                                    onClick={() =>
-                                                        handleIncreaseLike(
-                                                            question?.data?._id,
-                                                            comment._id,
-                                                        )
-                                                    }
-                                                />
-                                                {'   '}
-                                                {comment.voteComment.vote}
-                                                {'   '}
-                                                <FontAwesomeIcon
-                                                    icon={faThumbsDown}
-                                                    color={
-                                                        comment.voteComment.whomvote.length !== 0 &&
-                                                        comment.voteComment.whomvote.filter(
-                                                            (e) => e.whom === getCookie('username'),
-                                                        ).length !== 0 &&
-                                                        !comment.voteComment.whomvote.filter(
-                                                            (e) => e.whom === getCookie('username'),
-                                                        )[0].state
-                                                            ? 'red'
-                                                            : 'white'
-                                                    }
-                                                    onClick={() =>
-                                                        handleDecreaseLike(
-                                                            question?.data?._id,
-                                                            comment._id,
-                                                        )
-                                                    }
-                                                />
-                                                {'  |'}
-                                            </p>
-                                            <p >
-                                                {'   '}
-                                                {formatDateToString(comment.createdCommentAt)}
-                                                {'  |'}
-                                            </p>
-                                            <p>{revealDestroy(comment._id, comment.owner)}</p>
-                                        </InfoQuestion>
+                                    {comment.comment}
+                                    <InfoQuestion>
+                                        <p>
+                                            {'   '}
+                                            {comment.owner}
+                                            {'  |'}
+                                        </p>
+                                        <p>
+                                            {'   '}
+                                            <FontAwesomeIcon
+                                                icon={faThumbsUp}
+                                                color={
+                                                    comment.voteComment.whomvote.length !== 0 &&
+                                                    comment.voteComment.whomvote.filter(
+                                                        (e) => e.whom === getCookie('username'),
+                                                    ).length !== 0 &&
+                                                    comment.voteComment.whomvote.filter(
+                                                        (e) => e.whom === getCookie('username'),
+                                                    )[0].state
+                                                        ? 'red'
+                                                        : 'white'
+                                                }
+                                                onClick={() =>
+                                                    handleIncreaseLike(
+                                                        question?.data?._id,
+                                                        comment._id,
+                                                    )
+                                                }
+                                            />
+                                            {'   '}
+                                            {comment.voteComment.vote}
+                                            {'   '}
+                                            <FontAwesomeIcon
+                                                icon={faThumbsDown}
+                                                color={
+                                                    comment.voteComment.whomvote.length !== 0 &&
+                                                    comment.voteComment.whomvote.filter(
+                                                        (e) => e.whom === getCookie('username'),
+                                                    ).length !== 0 &&
+                                                    !comment.voteComment.whomvote.filter(
+                                                        (e) => e.whom === getCookie('username'),
+                                                    )[0].state
+                                                        ? 'red'
+                                                        : 'white'
+                                                }
+                                                onClick={() =>
+                                                    handleDecreaseLike(
+                                                        question?.data?._id,
+                                                        comment._id,
+                                                    )
+                                                }
+                                            />
+                                            {'  |'}
+                                        </p>
+                                        <p>
+                                            {'   '}
+                                            {formatDateToString(comment.createdCommentAt)}
+                                            {'  |'}
+                                        </p>
+                                        <p>{revealDestroy(comment._id, comment.owner)}</p>
+                                    </InfoQuestion>
                                     <hr className="hr-styling" />
                                 </div>
                             ))}

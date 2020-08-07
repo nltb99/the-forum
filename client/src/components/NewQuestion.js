@@ -63,7 +63,7 @@ function NewQuestion({ history }) {
         <div>
             <Menu />
             <form className={classStylingForm} onSubmit={handleSubmit}>
-                <h1>New Question</h1>
+                <h1 className="overflow-off">New Question</h1>
                 <div className="form-group">
                     <h3>Question</h3>
                     <input

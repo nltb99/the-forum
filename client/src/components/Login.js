@@ -84,7 +84,7 @@ function Login({ history }) {
         <div>
             <Menu />
             <form className={classStylingForm} onSubmit={handleSubmit}>
-                <h1>Login</h1>
+                <h1 className="overflow-off">Login</h1>
                 <div>
                     <h5>Username</h5>
                     <input ref={usernameInput} className="form-control" type="text" />

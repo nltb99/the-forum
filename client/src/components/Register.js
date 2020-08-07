@@ -97,7 +97,7 @@ function Register({ history }) {
         <div>
             <Menu />
             <form className={classStylingForm} onSubmit={handleSubmit}>
-                <h1>Register</h1>
+                <h1 className="overflow-off">Register</h1>
                 <div>
                     <h5>Email</h5>
                     <input ref={emailInput} className="form-control" type="text" />

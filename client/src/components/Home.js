@@ -95,7 +95,7 @@ function Home({ initialQuestions }) {
         <div>
             <Menu />
             <div className="container home-route">
-                <h1 className={'text-dark'}>Questions ({questions?.data?.length})</h1>
+                <h1 className="overflow-off">Questions ({questions?.data?.length})</h1>
                 <React.Fragment>
                     {questions?.data?.map((cell, index) => (
                         <div className={styleEachQuestion} key={index}>
