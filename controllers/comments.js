@@ -58,7 +58,7 @@ route.patch('/comment/increaselike', authPrivilege, async (req, res) => {
                     question.save();
                     return res.status(200).json({ msg: 'Vote up comment succeed' });
                 } else {
-                    return res.status(403).json({ msg: 'Already voted' });
+                    return res.status(204);
                 }
             } else {
                 commentsFilter.voteComment.vote += 1;
@@ -94,7 +94,7 @@ route.patch('/comment/decreaselike', authPrivilege, async (req, res) => {
                     question.save();
                     return res.status(200).json({ msg: 'Vote down comment succeed' });
                 } else {
-                    return res.status(403).json({ msg: 'Already voted' });
+                    return res.status(204);
                 }
             } else {
                 commentsFilter.voteComment.vote -= 1;

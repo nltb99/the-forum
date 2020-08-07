@@ -21,10 +21,8 @@ ReactDOM.render(
             value={{
                 revalidateOnFocus: true,
                 revalidateOnMount: true,
-                dedupingInterval: 1,
-                refreshInterval: 1,
+                // refreshInterval: 1000,
                 shouldRetryOnError: true,
-                focusThrottleInterval: 1,
                 fetcher,
             }}>
             <App />

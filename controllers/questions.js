@@ -85,7 +85,7 @@ route.patch('/question/increaselike', authPrivilege, async (req, res) => {
                     question.save();
                     return res.status(200).json({ msg: 'Love Succeed' });
                 } else {
-                    return res.status(403).json({ msg: 'Already loved' });
+                    return res.status(204);
                 }
             } else {
                 question.voteQuestion.vote += 1;
@@ -118,7 +118,7 @@ route.patch('/question/decreaselike', authPrivilege, async (req, res) => {
                     question.save();
                     return res.status(200).json({ msg: 'Unlove Succeed' });
                 } else {
-                    return res.status(403).json({ msg: 'Already unloved' });
+                    return res.status(204);
                 }
             } else {
                 question.voteQuestion.vote -= 1;

@@ -57,11 +57,12 @@ function Home({ initialQuestions }) {
         }
     }
 
-    async function handleIncreaseLike(idQuestion) {
+    async function handleIncreaseVote(idQuestion, whomvote) {
         try {
+            const filterWhomVote = await whomvote.filter((e) => e.whom === getCookie('username'));
             if (typeof getCookie('id') === 'undefined') {
                 alert('Please Login First');
-            } else {
+            } else if (filterWhomVote.length === 0 || !filterWhomVote[0].state) {
                 const url = await '/api/question/increaselike';
                 mutate(url, { id: idQuestion });
                 await axios.patch(url, { id: idQuestion });
@@ -71,11 +72,12 @@ function Home({ initialQuestions }) {
             console.log(e);
         }
     }
-    async function handleDecreaseLike(idQuestion) {
+    async function handleDecreaseVote(idQuestion, whomvote) {
         try {
+            const filterWhomVote = await whomvote.filter((e) => e.whom === getCookie('username'));
             if (typeof getCookie('id') === 'undefined') {
                 alert('Please Login First');
-            } else {
+            } else if (filterWhomVote.length === 0 || filterWhomVote[0].state) {
                 const url = await '/api/question/decreaselike';
                 mutate(url, { id: idQuestion });
                 await axios.patch(url, { id: idQuestion });
@@ -95,7 +97,7 @@ function Home({ initialQuestions }) {
         <div>
             <Menu />
             <div className="container home-route">
-                <h1 className="overflow-off">Questions ({questions?.data?.length})</h1>
+                <h1 className="overflow-off">Questions {questions?.data?.length}</h1>
                 <React.Fragment>
                     {questions?.data?.map((cell, index) => (
                         <div className={styleEachQuestion} key={index}>
@@ -138,7 +140,12 @@ function Home({ initialQuestions }) {
                                                     ? 'red'
                                                     : 'white'
                                             }
-                                            onClick={() => handleIncreaseLike(cell._id)}
+                                            onClick={() =>
+                                                handleIncreaseVote(
+                                                    cell._id,
+                                                    cell.voteQuestion.whomvote,
+                                                )
+                                            }
                                         />
                                         {'    '}
                                         {cell.voteQuestion.vote}
@@ -146,7 +153,12 @@ function Home({ initialQuestions }) {
                                         <FontAwesomeIcon
                                             icon={faThumbsDown}
                                             className="thumbs-icon"
-                                            onClick={() => handleDecreaseLike(cell._id)}
+                                            onClick={() =>
+                                                handleDecreaseVote(
+                                                    cell._id,
+                                                    cell.voteQuestion.whomvote,
+                                                )
+                                            }
                                             color={
                                                 cell.voteQuestion.whomvote.length !== 0 &&
                                                 cell.voteQuestion.whomvote.filter(
@@ -175,9 +187,7 @@ function Home({ initialQuestions }) {
                         </div>
                     ))}
                 </React.Fragment>
-                {!questions.data && (
-                    <div style={{ width: '100px', textAlign: 'center' }} ref={_el}></div>
-                )}
+                {!questions.data && <div className="spinner-border"></div>}
             </div>
         </div>
     );
@@ -190,3 +200,5 @@ Home.getInitialProps = async (ctx) => {
     const json = res.data;
     return { initialQuestions: json };
 };
+
+// <div style={{ width: '100px', textAlign: 'center' }} ref={_el}></div>

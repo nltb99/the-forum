@@ -83,22 +83,32 @@ function SpecificQuestion({ match, location, initialQuestion }) {
         }
     }
 
-    async function handleIncreaseLike(idQuestion, idComment) {
+    async function handleIncreaseVote(idQuestion, idComment, whomvote) {
         try {
-            const url = await '/api/comment/increaselike';
-            mutate(url, { id: idQuestion, idComment });
-            await axios.patch(url, { id: idQuestion, idComment });
-            mutate(url);
+            const filterWhomVote = await whomvote.filter((e) => e.whom === getCookie('username'));
+            if (typeof getCookie('id') === 'undefined') {
+                alert('Please Login First');
+            } else if (filterWhomVote.length === 0 || !filterWhomVote[0].state) {
+                const url = await '/api/comment/increaselike';
+                mutate(url, { id: idQuestion, idComment });
+                await axios.patch(url, { id: idQuestion, idComment });
+                mutate(url);
+            }
         } catch (e) {
             console.log(e);
         }
     }
-    async function handleDecreaseLike(idQuestion, idComment) {
+    async function handleDecreaseVote(idQuestion, idComment, whomvote) {
         try {
-            const url = await '/api/comment/decreaselike';
-            mutate(url, { id: idQuestion, idComment });
-            await axios.patch(url, { id: idQuestion, idComment });
-            mutate(url);
+            const filterWhomVote = await whomvote.filter((e) => e.whom === getCookie('username'));
+            if (typeof getCookie('id') === 'undefined') {
+                alert('Please Login First');
+            } else if (filterWhomVote.length === 0 || filterWhomVote[0].state) {
+                const url = await '/api/comment/decreaselike';
+                mutate(url, { id: idQuestion, idComment });
+                await axios.patch(url, { id: idQuestion, idComment });
+                mutate(url);
+            }
         } catch (e) {
             console.log(e);
         }
@@ -146,6 +156,7 @@ function SpecificQuestion({ match, location, initialQuestion }) {
                                         <p>
                                             {'   '}
                                             <FontAwesomeIcon
+                                                className="thumbs-icon"
                                                 icon={faThumbsUp}
                                                 color={
                                                     comment.voteComment.whomvote.length !== 0 &&
@@ -159,9 +170,10 @@ function SpecificQuestion({ match, location, initialQuestion }) {
                                                         : 'white'
                                                 }
                                                 onClick={() =>
-                                                    handleIncreaseLike(
+                                                    handleIncreaseVote(
                                                         question?.data?._id,
                                                         comment._id,
+                                                        comment.voteComment.whomvote,
                                                     )
                                                 }
                                             />
@@ -169,6 +181,7 @@ function SpecificQuestion({ match, location, initialQuestion }) {
                                             {comment.voteComment.vote}
                                             {'   '}
                                             <FontAwesomeIcon
+                                                className="thumbs-icon"
                                                 icon={faThumbsDown}
                                                 color={
                                                     comment.voteComment.whomvote.length !== 0 &&
@@ -182,9 +195,10 @@ function SpecificQuestion({ match, location, initialQuestion }) {
                                                         : 'white'
                                                 }
                                                 onClick={() =>
-                                                    handleDecreaseLike(
+                                                    handleDecreaseVote(
                                                         question?.data?._id,
                                                         comment._id,
+                                                        comment.voteComment.whomvote,
                                                     )
                                                 }
                                             />
