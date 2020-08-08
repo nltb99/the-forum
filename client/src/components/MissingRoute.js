@@ -5,7 +5,9 @@ function MissingRoute() {
     return (
         <div>
             <Menu />
-            <h1>Missing Route</h1>
+            <h1 className="container" style={{ textAlign: 'center', marginTop: 20 }}>
+                Missing Route
+            </h1>
         </div>
     );
 }

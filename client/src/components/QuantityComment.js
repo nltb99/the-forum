@@ -14,7 +14,7 @@ function QuantityComment({ id }) {
     );
 }
 QuantityComment.propTypes = {
-    id: PropTypes.number.isRequired,
+    id: Number,
 };
 
 export default QuantityComment;
