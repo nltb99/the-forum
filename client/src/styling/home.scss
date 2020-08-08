@@ -11,6 +11,7 @@
     .over_header {
         display: flex;
         justify-content: space-between;
+        align-items: center;
         width: 90%;
         margin: auto;
         img {
@@ -19,6 +20,20 @@
         }
         p {
             font-size: 1.3em;
+        }
+    }
+    .below_header {
+        display: flex;
+        flex-direction: column;
+        justify-items: center;
+        align-items: center;
+        margin-top: 20px;
+        .below_header-cell {
+            font-size: 24px;
+            font-weight: 500;
+            &:hover {
+                text-decoration: line-through;
+            }
         }
     }
     .header_text {
@@ -37,21 +52,6 @@
         font-size: 10vw;
         color: rgb(49, 49, 49);
         overflow: hidden;
-    }
-    .menu {
-        margin: auto;
-        display: flex;
-        width: 500px;
-        justify-content: space-around;
-        .menu_cell {
-            color: rgb(49, 49, 49);
-            text-decoration: none;
-            font-size: 25px;
-            overflow: hidden;
-            &:hover {
-                text-decoration: line-through;
-            }
-        }
     }
 }
 

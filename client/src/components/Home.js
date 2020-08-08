@@ -42,7 +42,7 @@ function Home({ initialQuestions }) {
                 <button
                     className="btn btn-secondary btn-sm"
                     onClick={async () => {
-                        const url = `/api/question`;
+                        const url = await `/api/question`;
                         await mutate(
                             url,
                             questions?.data?.filter((e) => e._id !== id),
@@ -97,7 +97,7 @@ function Home({ initialQuestions }) {
         <div>
             <Menu />
             <div className="container home-route">
-                <h1 className="overflow-off">Questions {questions?.data?.length}</h1>
+                <h3 className="overflow-off">Questions {questions?.data?.length}</h3>
                 <React.Fragment>
                     {questions?.data?.map((cell, index) => (
                         <div className={styleEachQuestion} key={index}>
@@ -118,6 +118,7 @@ function Home({ initialQuestions }) {
                                         .join(' ')}
                                     ...
                                 </div>
+                                <hr className="hr-styling" />
                                 <InfoQuestion>
                                     <p>
                                         {'   '}by {cell.author}

@@ -1,5 +1,6 @@
 import React from 'react';
 import useSWR from 'swr';
+import PropTypes from 'prop-types';
 
 function QuantityComment({ id }) {
     const quantity = useSWR(`/api/question/${id}`);
@@ -12,5 +13,8 @@ function QuantityComment({ id }) {
         </p>
     );
 }
+QuantityComment.propTypes = {
+    id: PropTypes.number.isRequired,
+};
 
 export default QuantityComment;

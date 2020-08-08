@@ -1,9 +1,11 @@
 import React from 'react';
+import Menu from './Menu';
 
 function MissingRoute() {
     return (
         <div>
-            <h1>Missing</h1>
+            <Menu />
+            <h1>Missing Route</h1>
         </div>
     );
 }

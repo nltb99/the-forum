@@ -40,15 +40,15 @@ function Menu() {
                     </Link>
                 </p>
             </div>
-            <Link to="/" style={turnOffUnderline}>
-                <h1 className="cover">Wondering Site</h1>
-            </Link>
-            <div className="menu">
-                <Link to="/question/new" style={turnOffUnderline}>
-                    <h5 className="menu_cell">New Question?</h5>
+            <div className="below_header">
+                <Link to="/" style={turnOffUnderline}>
+                    <h1 className="cover">Wondering Site</h1>
                 </Link>
+                <Link to="/question/new" style={turnOffUnderline}>
+                    <h5 className="below_header-cell">New Question?</h5>
+                </Link>
+                <h3 className="overflow-off">ಠ_ಠ</h3>
             </div>
-            <h3 className="overflow-off">ಠ_ಠ</h3>
         </div>
     );
 }

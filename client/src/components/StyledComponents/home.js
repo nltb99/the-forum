@@ -3,6 +3,7 @@ import styled from 'styled-components';
 const InfoQuestion = styled.div`
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
     margin-top: 4px;
     color: rgb(229, 226, 221);
     font-size: 80%;

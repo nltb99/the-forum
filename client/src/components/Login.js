@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
-import classNames from 'classnames';
-import Menu from './Menu';
+import { Link } from 'react-router-dom';
 import { getCookie } from '../redux/actions/actionTypes';
+import classNames from 'classnames';
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
-import { Link } from 'react-router-dom';
+import Menu from './Menu';
 
 function Login({ history }) {
     let [validInput, setValidInput] = useState({
@@ -105,8 +105,8 @@ function Login({ history }) {
                         {validInput.message}
                     </div>
                 )}
-                <Link to="/user/emailreset" style={{ color: 'rgb(229, 226, 221)' }}>
-                    <h3 style={{ marginTop: 20, fontSize: 20 }}>{'  '}Forgot password?</h3>
+                <Link to="/user/emailreset" className="forgot-password">
+                    <h3 style={{ fontSize: 20, marginTop: 15 }}>{'  '}Forgot password?</h3>
                 </Link>
                 <button type="submit" className="btn btn-block mt-4 submit-btn">
                     Login
