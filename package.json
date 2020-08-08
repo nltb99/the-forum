@@ -1,5 +1,5 @@
 {
-    "name": "firstMernStack",
+    "name": "wondering-tb",
     "version": "1.0.0",
     "description": "",
     "main": "server.js",
@@ -20,11 +20,10 @@
         "redis": "^3.0.2",
         "slugify": "^1.4.0",
         "url": "^0.11.0",
-        "uuid": "^8.1.0"
-    },
-    "devDependencies": {
+        "uuid": "^8.1.0",
         "nodemon": "^2.0.3"
     },
+    "devDependencies": {},
     "scripts": {
         "start": "node server.js",
         "devServer": "nodemon server.js",
