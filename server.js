@@ -22,7 +22,7 @@ db.once('open', () => console.log('Mongoose connected~'));
 
 // Middlewares
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.use(compression());
 app.use(morgan('tiny'));
@@ -35,7 +35,7 @@ app.use('/api/user', require('./controllers/user'));
 // Serve static files in production
 if (process.env.NODE_ENV === 'production') {
     //Set static folder
-    app.use(express.static(path.join(__dirname, 'client/build'), { maxAge: '1d' }));
+    app.use(express.static(path.join(__dirname, 'client/build'), { maxAge: '30d' }));
 
     // Set load specific html for client
     app.get('*', (req, res) => {
