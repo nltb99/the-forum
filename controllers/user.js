@@ -127,7 +127,7 @@ route.post('/resetpassword', generateResetToken, (req, res) => {
                             <div >
                                 <h4>Hello ${req.body.username}</h4>
                                 <h4>Simple click on the button to set a new password</h4>
-                                <a href="https://wondering.herokuapp.com/user/resetpassword?tk=${req.resetToken}"
+                                <a href="https://wonderingsite.herokuapp.com/user/resetpassword?tk=${req.resetToken}"
                                     style="text-decoration:none;padding:10px;background-color:rgb(72,161,181);color:white;border-radius:5px;width: 200px">
                                     Reset My Password </a>
                             </div>

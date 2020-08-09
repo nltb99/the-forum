@@ -96,7 +96,7 @@ function EmailReset() {
                     </div>
                 )}
                 {validInput.isSucceed && (
-                    <div className="alert alert-info alert-dismissible my-4 fade show">
+                    <div className="alert alert-dark alert-dismissible my-4 fade show">
                         <button
                             type="button"
                             className="close"
@@ -108,7 +108,7 @@ function EmailReset() {
                     </div>
                 )}
                 {validInput.isNotFound && (
-                    <div className="alert alert-secondary alert-dismissible my-4 fade show">
+                    <div className="alert alert-dark alert-dismissible my-4 fade show">
                         <button
                             type="button"
                             className="close"

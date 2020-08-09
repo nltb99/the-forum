@@ -123,7 +123,7 @@ function Register({ history }) {
                     </div>
                 )}
                 {validRegister.isSucceed && (
-                    <div className="alert alert-info alert-dismissible my-4 fade show">
+                    <div className="alert alert-dark alert-dismissible my-4 fade show">
                         <button
                             type="button"
                             className="close"

@@ -102,7 +102,7 @@ function ResetPassword({ location, history }) {
                     </div>
                 )}
                 {validInput.isSucceed && (
-                    <div className="alert alert-info alert-dismissible my-4 fade show">
+                    <div className="alert alert-dark alert-dismissible my-4 fade show">
                         <button
                             type="button"
                             className="close"
