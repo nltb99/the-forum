@@ -9,7 +9,7 @@ import { SWRConfig } from 'swr';
 import axios from 'axios';
 import { getCookie } from './redux/actions/actionTypes';
 
-axios.defaults.baseURL = 'http://localhost:4000';
+// axios.defaults.baseURL = 'http://localhost:4000';
 axios.defaults.headers.common['Authorization'] = `Bearer ${getCookie('tk')}`;
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
