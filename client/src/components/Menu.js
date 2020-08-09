@@ -42,7 +42,7 @@ function Menu() {
             </div>
             <div className="below_header">
                 <Link to="/" style={turnOffUnderline}>
-                    <h1 className="cover overflow-off">Wondering Site</h1>
+                    <h1 className="cover">Wondering Site</h1>
                 </Link>
                 <Link to="/question/new" style={turnOffUnderline} className="overflow-off">
                     <h5 className="below_header-cell">New Question?</h5>
