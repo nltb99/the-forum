@@ -18,7 +18,6 @@ function Home({ initialQuestions }) {
 
     const _el = useRef();
     useEffect(() => {
-        axios.get('/api/question').then((res) => console.log(res.data));
         lottie.loadAnimation({
             container: _el.current,
             renderer: 'svg',
