@@ -65,7 +65,7 @@ function NewQuestion({ history }) {
             <form className={classStylingForm} onSubmit={handleSubmit}>
                 <h1 className="overflow-off">New Question</h1>
                 <div className="form-group">
-                    <h3>Question</h3>
+                    <h5>Question</h5>
                     <input
                         className="form-control"
                         name="value"
@@ -74,7 +74,7 @@ function NewQuestion({ history }) {
                     />
                 </div>
                 <div className="form-group">
-                    <h3>Details</h3>
+                    <h5>Details</h5>
                     <textarea
                         ref={detailRef}
                         placeholder="Enter Your Detail"
