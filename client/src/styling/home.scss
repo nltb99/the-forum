@@ -82,4 +82,7 @@
 
 .thumbs-icon {
     cursor: pointer;
+    &:hover {
+        color: red;
+    }
 }
