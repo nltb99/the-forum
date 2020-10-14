@@ -32,6 +32,7 @@ function EmailReset() {
             });
             return;
         }
+        return;
         axios
             .post('/api/user/resetpassword', {
                 email,

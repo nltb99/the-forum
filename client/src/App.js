@@ -1,21 +1,21 @@
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import './App.css';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
-import NewQuestion from './components/NewQuestion.js';
-import Home from './components/Home.js';
-import SpecificQuestion from './components/SpecificQuestion.js';
-import Login from './components/Login';
-import Register from './components/Register';
-import EmailReset from './components/EmailReset';
-import ResetPassword from './components/ResetPassword';
-import MissingRoute from './components/MissingRoute.js';
-import WholeBody from './components/StyledComponents/wholebody';
-import Logo from './components/Logo';
+const NewQuestion = lazy(() => import('./components/NewQuestion'));
+const Home = lazy(() => import('./components/Home'));
+const SpecificQuestion = lazy(() => import('./components/SpecificQuestion'));
+const Login = lazy(() => import('./components/Login'));
+const Register = lazy(() => import('./components/Register'));
+const EmailReset = lazy(() => import('./components/EmailReset'));
+const ResetPassword = lazy(() => import('./components/ResetPassword'));
+const MissingRoute = lazy(() => import('./components/MissingRoute'));
+const WholeBody = lazy(() => import('./components/StyledComponents/wholebody'));
+const Logo = lazy(() => import('./components/Logo'));
 
 function App() {
     return (
-        <React.Fragment>
+        <Suspense fallback={<div>Loading...</div>}>
             {sessionStorage.getItem('intro') === null && <Logo />}
             <Router>
                 <WholeBody />
@@ -30,7 +30,7 @@ function App() {
                     <Route exact path="*" component={MissingRoute}></Route>
                 </Switch>
             </Router>
-        </React.Fragment>
+        </Suspense>
     );
 }
 
